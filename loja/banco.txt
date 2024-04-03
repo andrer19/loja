@@ -1,0 +1,1 @@
+javax.persistence.jdbc.url = jdbc:mysql://localhost:3306/loja?useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true
