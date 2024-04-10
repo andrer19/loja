@@ -79,7 +79,6 @@ public class listadecliente extends JDialog {
 	JTextField pesquisar;
 	Cadcli p = new Cadcli();
 	CadcliBean c = new CadcliBean();
-	int idcliente;
 	AcessoBean aces1 = new AcessoBean();
 	Acesso acesso = new Acesso();
 
@@ -93,7 +92,6 @@ public class listadecliente extends JDialog {
 		contentPane = new JPanel();
 		contentPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		contentPane.setLayout(null);
 		setTitle("CLIENTES");
 		setLocationRelativeTo(null);
@@ -340,6 +338,19 @@ public class listadecliente extends JDialog {
 		botoes.add(btnexcluir);
 		aces1.espacobotao(botoes);
 
+		JButton btnpedidos = new JButton();
+		btnpedidos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listapedidos();
+			}
+		});
+		btnpedidos.setIcon(new ImageIcon(listadecliente.class.getResource("/imagens/vendas.png")));
+		aces1.butonfundo(btnpedidos);
+		btnpedidos.setToolTipText("VISUALIZAR PEDIDOS DE VENDAS ANTIGOS");
+		if (aces1.mostramodulo("PEDIDOSANTIGO", u) == true) {
+			botoes.add(btnpedidos);
+		}
+
 		pesquisar.requestFocus();
 		table.changeSelection(0, 0, false, false);
 
@@ -393,8 +404,31 @@ public class listadecliente extends JDialog {
 				JOptionPane.showMessageDialog(null, "ERRO AO ADCIONAR O CLIENTE " + e.getMessage());
 				aces1.demologger.error("ERRO AO ADCIONAR O CLIENTE " + e.getMessage());
 			}
-		}else {
-			JOptionPane.showMessageDialog(null, "Selecione um cliente !!!!!!!!!!");
+		} else {
+			JOptionPane.showMessageDialog(null, "SELECIONE UM CLIENTE !!!!!!!!!!");
 		}
+	}
+
+	public void listapedidos() {
+
+		if (table.getSelectedRow() != -1 && table.getRowCount() > 0) {
+			int linhaSel = table.convertRowIndexToModel(table.getSelectedRow());
+
+			Long idT = Long.parseLong(listacliente.getValueAt(linhaSel, 0).toString());
+			try {
+
+				new listapedidocporliente(idT).setVisible(true);
+				table.requestFocus();
+				table.changeSelection(0, 0, false, false);
+
+			} catch (Exception e) {
+
+				JOptionPane.showMessageDialog(null, "ERRO LISTAR PEDIDO DE VENDAS POR CLIENTE " + e.getMessage());
+				aces1.demologger.error("ERRO LISTAR PEDIDO DE VENDAS POR CLIENTE " + e.getMessage());
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "SELECIONE UM CLIENTE !!!!!!!!!!");
+		}
+
 	}
 }

@@ -196,7 +196,28 @@ public class PdsaicRepository {
 		EntityManagerUtil.conexao();
 		EntityManagerUtil.begin();
 		Query query = EntityManagerUtil.manager.createQuery(
-				"select x from Pdsaic x where x.emissao >= '" + datestring.format(c.getTime()) + "' and x.sql_deleted = 'F' order by x.numdoc desc");
+		"select x from Pdsaic x where x.emissao >= '" + datestring.format(c.getTime()) + "' and x.sql_deleted = 'F' order by x.numdoc desc");
+		pdsaics = query.getResultList();
+
+		EntityManagerUtil.commit();
+		EntityManagerUtil.close();
+
+		return pdsaics;
+	}
+	
+	public List<Pdsaic> Listapedidoantigos(Long idcliente) {
+		List<Pdsaic> pdsaics = new ArrayList<Pdsaic>();
+		SimpleDateFormat formato = new SimpleDateFormat();
+		Locale local1 = new Locale("pt", "BR");
+		DateFormat datestring = new SimpleDateFormat("yyyy-MM-dd", local1);
+		GregorianCalendar c = new GregorianCalendar();
+		c.setTime(repoacesso.dataatual());
+		c.add(Calendar.DAY_OF_MONTH, -120);
+
+		EntityManagerUtil.conexao();
+		EntityManagerUtil.begin();
+		Query query = EntityManagerUtil.manager.createQuery(
+				"select x from Pdsaic x where x.emissao < '" + datestring.format(c.getTime()) + "' and x.cliente = " + idcliente + " and x.sql_deleted = 'F' order by x.numdoc desc");
 		pdsaics = query.getResultList();
 
 		EntityManagerUtil.commit();

@@ -12,7 +12,9 @@ import javax.swing.JOptionPane;
 
 import repositorios.CadcliRepository;
 import repositorios.CadproRepository;
+import repositorios.PdsaicRepository;
 import entidades.Cadcli;
+import entidades.Pdsaic;
 import filter.EntityManagerUtil;
 
 @ManagedBean
@@ -20,6 +22,7 @@ public class CadcliBean {
 
 	Cadcli cadcli = new Cadcli();
 	public List<Cadcli> cadclis;
+	AcessoBean aces1 = new AcessoBean();
 
 	public void adiciona(Cadcli p) {
 		EntityManagerUtil.conexao();
@@ -28,7 +31,8 @@ public class CadcliBean {
 		try {
 			repository.grava(p);
 		} catch (Throwable t) {
-			JOptionPane.showMessageDialog(null, "Erro adiciona cliente bean: " + t.getMessage());
+			JOptionPane.showMessageDialog(null, "Erro adiciona cliente bean " + t.getMessage());
+			aces1.demologger.error("Erro adiciona cliente bean " + t.getMessage());
 			EntityManagerUtil.rollback();
 		} finally {
 			EntityManagerUtil.close();
@@ -43,6 +47,7 @@ public class CadcliBean {
 			this.cadcli = repository.procura(id);
 		} catch (Throwable t) {
 			JOptionPane.showMessageDialog(null, "Erro altera cliente bean: " + t.getMessage());
+			aces1.demologger.error("ERRO ALTERA CLIENTE BEAN " + t.getMessage());
 			EntityManagerUtil.rollback();
 		} finally {
 			EntityManagerUtil.close();
@@ -60,6 +65,7 @@ public class CadcliBean {
 			cadcli1 = repository.getLista();
 		} catch (Throwable t) {
 			JOptionPane.showMessageDialog(null, "Erro lista cliente bean: " + t.getMessage());
+			aces1.demologger.error("ERRO LISTA CLIENTE BEAN " + t.getMessage());
 			EntityManagerUtil.rollback();
 		} finally {
 			EntityManagerUtil.close();
@@ -77,12 +83,31 @@ public class CadcliBean {
 			cadcli1 = repository.getListaativos();
 		} catch (Throwable t) {
 			JOptionPane.showMessageDialog(null, "Erro lista cliente Ativos bean: " + t.getMessage());
+			aces1.demologger.error("ERRO LISTA CLIENTES ATIVOS BEAN " + t.getMessage());
 			EntityManagerUtil.rollback();
 		} finally {
 			EntityManagerUtil.close();
 		}
 
 		return cadcli1;
+	}
+	
+	public List<Pdsaic> Listapedidoantigos(Long idcliente) {
+		EntityManagerUtil.conexao();
+		List<Pdsaic> pedidocliente = new ArrayList<Pdsaic>();
+		PdsaicRepository repository = new PdsaicRepository(EntityManagerUtil.manager);
+		
+		try {
+			pedidocliente = repository.Listapedidoantigos(idcliente);
+		} catch (Throwable t) {
+			JOptionPane.showMessageDialog(null, "Erro lista Pedidos cliente bean: " + t.getMessage());
+			aces1.demologger.error("ERRO LISTA PEDIDOS POR CLIENTE BEAN " + t.getMessage());
+			EntityManagerUtil.rollback();
+		} finally {
+			EntityManagerUtil.close();
+		}
+		
+		return pedidocliente;
 	}
 
 	public void remove(Long id) {
@@ -93,6 +118,7 @@ public class CadcliBean {
 			repository.removeatualiza(id);
 		} catch (Throwable t) {
 			JOptionPane.showMessageDialog(null, "Erro remove cliente bean: " + t.getMessage());
+			aces1.demologger.error("ERRO REMOVE CLIENTE BEAN " + t.getMessage());
 			EntityManagerUtil.rollback();
 		} finally {
 			EntityManagerUtil.close();
@@ -108,6 +134,7 @@ public class CadcliBean {
 			c = repocliente.procuracodigo(codigo.trim());
 		} catch (Throwable t) {
 			JOptionPane.showMessageDialog(null, "Erro buscacliente bean: " + t.getMessage());
+			aces1.demologger.error("ERRO BUSCA CLIENTE BEAN " + t.getMessage());
 			EntityManagerUtil.rollback();
 		} finally {
 			EntityManagerUtil.close();
