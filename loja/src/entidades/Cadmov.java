@@ -20,45 +20,15 @@ public class Cadmov {
 	@Index(name = "idx_id")
 	private Long id;
 	
-	@Column(columnDefinition="Double(19,4)")
-	private Double qtmov, qtant, qtatu;
-	
-	@Column(columnDefinition="Double(14,4)")
-	private Double vrunit, vrtot;
-	
-	@Column(length=13)
+	@Column(nullable=false,columnDefinition = "varchar(255)  default ''")
+	@Index(name = "idx_produto")
 	private String codpro;
 	
-	@Column(length=2)
-	private String codemp, un;
- 
-	@Column(length=10)
-	private String numdoc, item;
+	@Column(nullable=false,columnDefinition = "varchar(255)  default ''")
+	private String codemp, un,numdoc, item,serie,codforcli,descpro, descpro1,tpmov,locest,descricao,hist,tipoest;
 	
-	@Column(length=3)
-	private String serie;
-	
-	@Column(length=6)
-	private String codforcli;
-	
-	@Column(length=70)
-	private String descpro, descpro1;
-	
-	@Column(length=1)
-	private String tpmov;
-	
-	@Column(length=4)
-	private String locest;
-	
-	@Column(length=20)
-	private String descricao;
-	
-	@Column(length=40)
-	private String hist;
-	
-	@Column(length=9)
-	private String tipoest;
-	
+	@Column(nullable=false,columnDefinition = "Double default 0")
+	private Double qtmov, qtant, qtatu,vrunit, vrtot;
 	
 	@Temporal(TemporalType.DATE)
 	private Date dtmov;

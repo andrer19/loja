@@ -39,6 +39,7 @@ import entidades.Usuario;
 import filter.EntityManagerUtil;
 import repositorios.LogusuRepository;
 import Grafico.geral.Letramaiuscula;
+import Grafico.geral.MonetarioDocument;
 import Jm.JMascara;
 import beans.AcessoBean;
 import beans.CadcliBean;
@@ -67,6 +68,7 @@ public class cadastrocliente extends JDialog {
 	AcessoBean aces1 = new AcessoBean();
 		
 	LogusuRepository repositorylog = new LogusuRepository(EntityManagerUtil.manager);
+	private JTextField txentrega;
 
 	public cadastrocliente(final Cadcli cadcli, Usuario u, Acesso acesso) throws Exception {
 
@@ -342,6 +344,27 @@ public class cadastrocliente extends JDialog {
 		});
 		radioinativo.setBounds(191, 212, 74, 20);
 		contentPane.add(radioinativo);
+		
+		JLabel lbltxentrega = new JLabel("TAXA ENTREGA");
+		aces1.padraojlabel(lbltxentrega);
+		lbltxentrega.setBounds(290, 215, 98, 14);
+		contentPane.add(lbltxentrega);
+		
+		txentrega = new JTextField();
+		txentrega.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		txentrega.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
+					obs.requestFocus();
+					obs.setCaretPosition(0);
+				}
+			}
+		});
+		aces1.liberado(txentrega);
+		txentrega.setDocument(new MonetarioDocument());
+		txentrega.setBounds(390, 212, 70, 20);
+		contentPane.add(txentrega);
 
 		JLabel lblobs = new JLabel("OBSERVAÇÃO");
 		aces1.padraojlabel(lblobs);
@@ -405,6 +428,7 @@ public class cadastrocliente extends JDialog {
 		btnsair.setIcon(new ImageIcon(listadecliente.class.getResource("/imagens/fechar.png")));
 		aces1.butonfundo(btnsair);
 		contentPane.add(btnsair);
+			
 
 		if (cadcli.getIdcadcli() != null) {
 
@@ -450,6 +474,7 @@ public class cadastrocliente extends JDialog {
 			email.setText(cadcli.getEMAIL().trim());
 			obs.setText(cadcli.getOBS().trim());
 			site.setText(cadcli.getSITE().trim());
+			aces1.moedabanco(cadcli.getTxent(), txentrega);
 
 		}
 		addWindowListener(new WindowAdapter() {
@@ -542,6 +567,7 @@ public class cadastrocliente extends JDialog {
 			if (!radioinativo.isSelected() && !radioinativo.isSelected()) {
 				cadastro.setATIVO(true);
 			}
+			cadastro.setTxent(Double.parseDouble(aces1.gravamoedadouble(txentrega.getText())));
 
 			if (cadastro.getRAZAO().isEmpty() || cadastro.getDESCCLI().isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Dados em branco");

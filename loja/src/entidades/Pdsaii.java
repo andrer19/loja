@@ -30,17 +30,14 @@ public class Pdsaii {
 	@Index(name = "idx_produto")
 	private String produto;
 	
-	@Column(nullable=false,columnDefinition = "varchar(3)  default ''")
-	private String codemp, un,item;
+	@Column(nullable=false,columnDefinition = "varchar(255)  default ''")
+	private String descpro,codemp, un,item;
 	
-	@Column(nullable=false,columnDefinition="Double(14,4) default 0")
+	@Column(nullable=false,columnDefinition="Double default 0")
 	private Double quantidade,unitario,vrtot,vrdesc;
 	
 	@Column(nullable=false,columnDefinition = "varchar(400)  default ''")
 	private String obs;
-	
-	@Column(nullable=false,columnDefinition = "varchar(150)  default ''")
-	private String descpro;
 	
 	@Temporal(TemporalType.DATE)
 	private Date dtatend,prazo, emissao;

@@ -109,7 +109,7 @@ public class CadcliRepository {
 
 		EntityManagerUtil.conexao();
 		EntityManagerUtil.begin();
-		Query query = EntityManagerUtil.manager.createQuery("SELECT x FROM Cadcli x WHERE x.sql_deleted = 'F'");
+		Query query = EntityManagerUtil.manager.createQuery("SELECT x FROM Cadcli x WHERE x.sql_deleted = 'F' order by x.id DESC");
 		if (!query.getResultList().isEmpty()) {
 			cadcli1 = query.getResultList();
 		}

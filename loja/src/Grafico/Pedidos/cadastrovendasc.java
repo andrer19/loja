@@ -193,6 +193,7 @@ public class cadastrovendasc extends JDialog {
 						cadclip = f1.procura(f.getIdcadcli());
 						cliente.setText(cadclip.getCODCLI());
 						desccli.setText(cadclip.getDESCCLI());
+						aces1.moedabanco(cadclip.getTxent(), txentrega);
 						aces1.bloqueado(emissao);
 						try {
 							emissao.setText(aces1.retornadatastring(aces1.dataatual()));

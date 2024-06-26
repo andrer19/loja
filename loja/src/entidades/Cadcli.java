@@ -36,7 +36,7 @@ public class Cadcli {
 	
 	@Column(nullable=false,columnDefinition = "Double default 0")
 	private Double MCOMPRA,NIVEL,RAMAL,GRUPO,SUB_GRUPO,PICM,PIPI,NUMTITULO,LIMCRED,PVENDEDOR,PGERENTE,CONDPAG,MALA,STATUS,A1_METR,
-	A1_MSALDO,A1_NROCOM,A1_NROPAG,A1_ATR,A1_MATR,FRETE;
+	A1_MSALDO,A1_NROCOM,A1_NROPAG,A1_ATR,A1_MATR,FRETE,txent;
 	
 	@Column(nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean BOX1,BOX2,BOX3,BOX4,BOXCOB1,BOXCOB2,BOXENT1,BOXENT2,EXPORTA
@@ -142,6 +142,7 @@ public class Cadcli {
     	A1_ATR = 0.0;
     	A1_MATR = 0.0;
     	FRETE = 0.0;
+    	txent  = 0.0;
     	BOX1 = false;
     	BOX2 = false;
     	BOX3 = false;
@@ -1039,9 +1040,13 @@ public class Cadcli {
 	public void setINATIVO(Boolean iNATIVO) {
 		INATIVO = iNATIVO;
 	}
-	
-    
-    
-	
 
+	public Double getTxent() {
+		return txent;
+	}
+
+	public void setTxent(Double txent) {
+		this.txent = txent;
+	}
+	
 }
