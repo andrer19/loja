@@ -365,6 +365,8 @@ public class cadastrocliente extends JDialog {
 		txentrega.setDocument(new MonetarioDocument());
 		txentrega.setBounds(390, 212, 70, 20);
 		contentPane.add(txentrega);
+		
+		
 
 		JLabel lblobs = new JLabel("OBSERVAÇÃO");
 		aces1.padraojlabel(lblobs);
