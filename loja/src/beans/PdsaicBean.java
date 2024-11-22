@@ -76,7 +76,8 @@ public class PdsaicBean {
 
 		PdsaicRepository repository = new PdsaicRepository(EntityManagerUtil.manager);
 		try {
-			pdsaic1 = repository.getLista();
+			//pdsaic1 = repository.getLista();
+			pdsaic1 = repository.Listapedidosnativo();
 		} catch (Throwable t) {
 			JOptionPane.showMessageDialog(null, "Erro lista venda bean: " + t.getMessage());
 			EntityManagerUtil.rollback();

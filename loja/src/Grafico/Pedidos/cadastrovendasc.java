@@ -113,8 +113,7 @@ public class cadastrovendasc extends JDialog {
 	AcessoBean aces1 = new AcessoBean();
 	private Long idp;
 	List<Pdsaii> pdsaiiremove = new ArrayList<Pdsaii>();
-	Locale locale = new Locale("pt", "BR");
-	NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+	
 	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	DecimalFormat decimal = new DecimalFormat("0.00");
 	DecimalFormat decimalqtde = new DecimalFormat("0");
@@ -324,13 +323,11 @@ public class cadastrovendasc extends JDialog {
 							String iditem = ci.getItem().toString() + 1;
 							listapdsaii.addRow(
 									new Object[] { null, pi.getItem(), pi.getProduto(), pi.getDescpro(), pi.getUn(),
-											currencyFormatter.format(pi.getUnitario()).toString().replace("R$", "")
-													.trim(),
-											currencyFormatter.format(pi.getVrtot()).toString().replace("R$", "").trim(),
+											aces1.valordinheiro(pi.getUnitario()),aces1.valordinheiro(pi.getVrtot()),
 											decimalqtde.format(pi.getQuantidade()) });
 							qttotal.setText(quantidadeTotal());
-							vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
-							vrmercadoria.setText(aces1.formataMoeda(totalmercadoria()).replace("R$", ""));
+							vrtotal.setText(aces1.valordinheiro(valorTotal()));
+							vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
 							table.setRowSelectionAllowed(true);
 							int linha = listapdsaii.getRowCount();
 							int conta = linha - 1;
@@ -404,10 +401,8 @@ public class cadastrovendasc extends JDialog {
 								for (Pdsaii com : listapdsaii1) {
 									listapdsaii.addRow(new Object[] { com.getIdpdsaii(), com.getItem(),
 											com.getProduto(), com.getDescpro(), com.getUn(),
-											currencyFormatter.format(com.getUnitario()).toString().replace("R$", "")
-													.trim(),
-											currencyFormatter.format(com.getVrtot()).toString().replace("R$", "")
-													.trim(),
+											aces1.valordinheiro(com.getUnitario()),
+											aces1.valordinheiro(com.getVrtot()),
 											decimalqtde.format(com.getQuantidade()), com.getPrazo() });
 
 								}
@@ -415,8 +410,8 @@ public class cadastrovendasc extends JDialog {
 								table.setModel(listapdsaii);
 								table.changeSelection(linha, 0, false, false);
 								qttotal.setText(quantidadeTotal());
-								vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
-								vrmercadoria.setText(aces1.formataMoeda(totalmercadoria()).replace("R$", ""));
+								vrtotal.setText(aces1.valordinheiro(valorTotal()));
+								vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
 								table.changeSelection(0, 0, false, false);
 
 							}
@@ -743,8 +738,8 @@ public class cadastrovendasc extends JDialog {
 			} else {
 				aces1.moedabanco(p.getTxent(), txentrega);
 			}
-			vrmercadoria.setText(aces1.formataMoeda(totalmercadoria()).replace("R$", ""));
-			vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
+			vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
+			vrtotal.setText(aces1.valordinheiro(valorTotal()));
 			obs.setText(p.getOBS().trim());
 			vendedor.setText(p.getVendedor().trim());
 			cadclip = p.getCliente();
@@ -829,8 +824,7 @@ public class cadastrovendasc extends JDialog {
 
 			for (Pdsaii com : list) {
 				listapdsaii.addRow(new Object[] { com.getIdpdsaii(), com.getItem(), com.getProduto().trim(), com.getDescpro().trim(),
-						com.getUn().trim(), currencyFormatter.format(com.getUnitario()).toString().replace("R$", "").trim(),
-						currencyFormatter.format(com.getVrtot()).toString().replace("R$", "").trim(),
+						com.getUn().trim(), aces1.valordinheiro(com.getUnitario()),aces1.valordinheiro(com.getVrtot()),
 						decimalqtde.format(com.getQuantidade()), com.getPrazo() });
 
 			}
@@ -850,7 +844,7 @@ public class cadastrovendasc extends JDialog {
 		DecimalFormat decimal = new DecimalFormat("0.00");
 		Double Orcamento = 0.0;
 		for (int i = 0; i < listapdsaii.getRowCount(); i++) {
-			Orcamento += Double.parseDouble(aces1.gravamoedadouble(listapdsaii.getValueAt(i, 6).toString().trim()));
+			Orcamento += Double.parseDouble((listapdsaii.getValueAt(i, 6).toString().replace(".", "").replace(",", ".")));
 		}
 		
 		if (txentrega.getText() != null && !txentrega.getText().isEmpty()) {
@@ -1047,15 +1041,13 @@ public class cadastrovendasc extends JDialog {
 					listapdsaii.setValueAt(produto, linhaSel, 2);
 					listapdsaii.setValueAt(descpro, linhaSel, 3);
 					listapdsaii.setValueAt(un, linhaSel, 4);
-					listapdsaii.setValueAt(currencyFormatter.format(unitario).toString().replace("R$", "").trim(),
-							linhaSel, 5);
-					listapdsaii.setValueAt(currencyFormatter.format(vrtotal1).toString().replace("R$", "").trim(),
-							linhaSel, 6);
+					listapdsaii.setValueAt(aces1.valordinheiro(Double.parseDouble(unitario.toString())),linhaSel, 5);
+					listapdsaii.setValueAt(aces1.valordinheiro(Double.parseDouble(vrtotal1.toString())),linhaSel, 6);
 					listapdsaii.setValueAt(decimalqtde.format(quantidade), linhaSel, 7);
 					table.changeSelection(linhaSel, 0, false, false);
 					qttotal.setText(quantidadeTotal());
-					vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
-					vrmercadoria.setText(aces1.formataMoeda(totalmercadoria()).replace("R$", ""));
+					vrtotal.setText(aces1.valordinheiro(valorTotal()));
+					vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
 				}
 
 			} catch (Exception e) {

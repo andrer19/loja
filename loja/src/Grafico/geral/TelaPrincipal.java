@@ -49,6 +49,7 @@ import Grafico.Pedidos.listadecompras;
 import Grafico.Pedidos.listadevendas;
 import Grafico.Produto.*;
 import Grafico.cademp.Listaempresa;
+import Grafico.serviços.listadeordemserviços;
 import Grafico.usuario.alterasenhaususario;
 import Grafico.usuario.listadeusuario;
 import Grafico.Cadcli.listadecliente;
@@ -102,6 +103,7 @@ public class TelaPrincipal extends JFrame {
 	private JButton btncadusuario;
 	private JButton btnalerasenha;
 	private JButton btnlicenca;
+	private JButton btnordemservico;
 	private JToolBar menus;
 	private JMenuBar menusuario;
 	public static String rotinau = "USUARIO";
@@ -118,6 +120,7 @@ public class TelaPrincipal extends JFrame {
 	public static String rotinacademp = "EMPRESA";
 	public static String rotinafor = "FORNECEDOR";
 	public static String rotinaven = "PEDIDOVENDAS";
+	public static String rotinaordemserv = "ORDEMSERVICO";
 	
 	BufferedImage b;
 	Rectangle2D rect;
@@ -369,7 +372,7 @@ public class TelaPrincipal extends JFrame {
 			btncliente.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/imagens/clientes.png")));
 			btncliente.addKeyListener(new KeyAdapter() {
 				@Override
-				public void keyReleased(KeyEvent e) {
+				public void keyPressed(KeyEvent e) {
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 						try {
 							new listadecliente(u).setVisible(true);
@@ -394,6 +397,47 @@ public class TelaPrincipal extends JFrame {
 				btncliente.setEnabled(true);
 			} else {
 				btncliente.setEnabled(false);
+			}
+			
+		}
+		
+		if (aces1.mostramodulo(rotinaordemserv, u) == true) {
+			btnordemservico = new JButton();
+			GridBagConstraints gbc_btnordemservico = new GridBagConstraints();
+			aces1.gbcbuton(gbc_btnordemservico);
+			menus.add(btnordemservico, gbc_btnordemservico);
+			aces1.butonfundopaginaincial(btnordemservico);
+			btnordemservico.setToolTipText("ORDEM DE SERVIÇO");
+			btnordemservico.setText(rotinaordemserv);
+			aces1.butoninicial(btnordemservico);
+			btnordemservico.setIcon(new ImageIcon(TelaPrincipal.class.getResource("/imagens/ordemservico.png")));
+			btnordemservico.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						try {
+							new listadeordemserviços(u).setVisible(true);
+						} catch (Exception e1) {
+							JOptionPane.showMessageDialog(null, "ERRO ORDEM DE SERVIÇO " + e1.getMessage());
+						}
+					}
+				}
+			});
+			btnordemservico.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+
+					try {
+						new listadeordemserviços(u).setVisible(true);
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "ERRO ORDEM DE SERVIÇO " + e.getMessage());
+					}
+				}
+			});
+			
+			if (aces1.validaacesso(u, rotinaordemserv) == true) {
+				btnordemservico.setEnabled(true);
+			} else {
+				btnordemservico.setEnabled(false);
 			}
 			
 		}

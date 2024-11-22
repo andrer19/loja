@@ -7,11 +7,13 @@ import java.util.Date;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 import beans.AcessoBean;
 import entidades.CriaExcel;
+import entidades.Entidadegenerica;
 import javafx.scene.control.ProgressBar;
 
 public class Barradeprogresso extends Thread {
@@ -58,6 +60,17 @@ JProgressBar bar = new JProgressBar();
 		
 		try {
 			cexcel.criarexcelcompra("pedidocompra", data1, data2);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void relatpadrao(String tabelar,String abar,Date data1, Date data2,Entidadegenerica genr, String titulor) throws Exception {	
+		CriaExcel cexcel = new CriaExcel();
+		//JOptionPane.showMessageDialog(null, "TABELA " + tabelar + " idcliente " + genr.getSql_rowid());
+		try {
+			cexcel.criarexcelpadrao(tabelar, abar, data1, data2, genr,titulor);//("pedidocompra", data1, data2);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

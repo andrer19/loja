@@ -74,9 +74,6 @@ public class cadastravendasi extends JDialog {
 	CadproBean pbean = new CadproBean();
 	AcessoBean aces1 = new AcessoBean();
 	Double precop = 0.0;
-	
-	Locale locale = new Locale("pt", "BR");
-	NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
 
 	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	
@@ -266,7 +263,7 @@ public class cadastravendasi extends JDialog {
 							double unitario1 = Double.parseDouble(aces1.gravamoedadouble(unitario.getText().trim()));
 							double quantidade1 = Double.parseDouble(quantidade.getText().replace(",", ".").trim());
 							double valor = unitario1 * quantidade1;
-							vrmercadoria.setText(currencyFormatter.format(valor).toString().replace("R$", "").trim());
+							vrmercadoria.setText(aces1.valordinheiro(valor));
 							aces1.bloqueado(unitario);
 							btncadastrar.setEnabled(true);
 							btncadastrar.requestFocus();

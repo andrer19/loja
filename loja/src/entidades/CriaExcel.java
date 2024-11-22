@@ -52,7 +52,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import Grafico.geral.Barradeprogresso;
+import beans.AcessoBean;
 import filter.EntityManagerUtil;
+import repositorios.EntidadeRepository;
 import repositorios.PdentcRepository;
 import repositorios.PdentiRepository;
 import repositorios.PdsaiiRepository;
@@ -66,6 +68,10 @@ public class CriaExcel {
 	
 	@PersistenceContext(unitName = "play")
 	private EntityManager manager;
+	
+	int contador = 0, linha = 0;
+	public Integer icontagem = 0;
+	AcessoBean aces1 = new AcessoBean();
 
 	public void cabecarioexcel(Workbook wb, Sheet sheet, String[] titles, String nomearquivo, String titulo, int linha,
 			Date data1, Date data2, Map<String, CellStyle> styles) throws IOException {
@@ -228,40 +234,6 @@ public class CriaExcel {
 			}
 
 			if (dif == true) {
-				/*
-				 * row = sheetVendas.createRow(contador++);
-				 * 
-				 * Cell cellbranco = row.createCell(cellnum++);
-				 * cellbranco.setCellValue("SUBTOTAL");
-				 * cellbranco.setCellStyle(styles.get("somafinal"));
-				 * 
-				 * Cell cellbranco1 = row.createCell(cellnum++);
-				 * cellbranco1.setCellStyle(styles.get("somafinal"));
-				 * 
-				 * Cell cellbranco2 = row.createCell(cellnum++);
-				 * cellbranco2.setCellStyle(styles.get("somafinal"));
-				 * 
-				 * Cell cellbranco3 = row.createCell(cellnum++);
-				 * cellbranco3.setCellStyle(styles.get("somafinal"));
-				 * 
-				 * Cell cellbranco4 = row.createCell(cellnum++);
-				 * cellbranco4.setCellStyle(styles.get("somafinal"));
-				 * 
-				 * Cell celltextototal = row.createCell(cellnum++);
-				 * celltextototal.setCellStyle(styles.get("somafinal"));
-				 * 
-				 * int mescla = contador - 1; sheetVendas.addMergedRegion(new
-				 * CellRangeAddress(mescla, mescla, 0, 5));
-				 * 
-				 * Cell cellbranco5 = row.createCell(cellnum++);
-				 * cellbranco5.setCellStyle(styles.get("somafinal"));
-				 * 
-				 * Cell cellsomatotal = row.createCell(cellnum++);
-				 * cellsomatotal.setCellType(Cell.CELL_TYPE_NUMERIC);
-				 * cellsomatotal.setCellValue(convertValorToMoney(somasubtotal));
-				 * cellsomatotal.setCellStyle(styles.get("somafinal"));
-				 */
-
 				somasubtotal = pdsaii.getVrtot();
 			}
 
@@ -376,6 +348,91 @@ public class CriaExcel {
 		}
 
 	}
+	
+	
+	//==================================================================
+	
+	public void criarexcelpadrao(String tabela,String aba, Date datai, Date dataf,Entidadegenerica valores, String titulo) throws Exception {
+
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet(aba);
+		List<Entidadegenerica> listaentidade = new ArrayList<Entidadegenerica>();
+		EntityManager manager = this.getManager();
+		EntidadeRepository repository = new EntidadeRepository(manager);
+
+		int rownum = 0;
+		Double somatotal = 0.0, somasubtotal = 0.0;
+		String[] titulos = null;
+		Row row = null;
+		int contador = 0;
+		int cellnum = 0;
+		String ped = "", formpagto = "";
+		OutputStream out = null;
+		ExcelFileToRead = "C:/loja/" + aba +".xlsx";
+
+		Locale local1 = new Locale("pt", "BR");
+		DateFormat datestring = new SimpleDateFormat("dd/MM/yyyy", local1);
+		DecimalFormat df = new DecimalFormat("###,##0.00");
+		DecimalFormat f = new DecimalFormat("#.##");
+		Map<String, CellStyle> styles = createStyles(workbook);
+
+		if (tabela.equals("relatclientetotal")) {
+			rownum = 4;
+			titulos = new String[] { "ULTIMO PEDIDO", "DATA","CODIGO", "CLIENTE", "TOTAL"};
+			
+			
+			listaentidade = repository.listaclientetotal(valores.sql_rowid, datai, dataf);
+		}
+
+		cabecarioexcel(workbook, sheet, titulos, aba, "RELATORIO " + titulo.toUpperCase(),
+				rownum, datai, dataf, styles);
+
+		contador = rownum;
+		row = sheet.createRow(contador - 1);
+		row.setHeightInPoints(20);
+		Cell headerCell;
+
+		for (int i = 0; i < titulos.length; i++) {
+			headerCell = row.createCell(i);
+			headerCell.setCellValue(titulos[i]);
+			headerCell.setCellStyle(styles.get("titulos"));
+
+		}
+
+		
+
+		for (Entidadegenerica gen : listaentidade) {
+			icontagem++;
+			preencheexcelsomentelista(sheet, rownum, titulos, workbook, gen, row, tabela, styles);
+		}
+
+
+		if (tabela.equals("relatclientetotal")) {
+			sheet.setColumnWidth(0, 15 * 256); // 30 characters wide
+			sheet.setColumnWidth(1, 12 * 256);
+			sheet.setColumnWidth(2, 12 * 256);
+			sheet.setColumnWidth(3, 40 * 256);
+			sheet.setColumnWidth(4, 12 * 256);
+		}
+
+		try {
+			out = new FileOutputStream(ExcelFileToRead);
+			//out = new BufferedOutputStream(new FileOutputStream(ExcelFileToRead));
+			workbook.write(out);
+			out.flush();
+			out.close();
+			JOptionPane.showMessageDialog(null, "Arquivo Excel criado com sucesso!");
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Arquivo não encontrado!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Erro na edição do arquivo!");
+		}
+
+	}
+
  
 	    
 	    //=================================================================
@@ -450,40 +507,6 @@ public class CriaExcel {
 				}
 
 				if (dif == true) {
-					/*
-					 * row = sheetVendas.createRow(contador++);
-					 * 
-					 * Cell cellbranco = row.createCell(cellnum++);
-					 * cellbranco.setCellValue("SUBTOTAL");
-					 * cellbranco.setCellStyle(styles.get("somafinal"));
-					 * 
-					 * Cell cellbranco1 = row.createCell(cellnum++);
-					 * cellbranco1.setCellStyle(styles.get("somafinal"));
-					 * 
-					 * Cell cellbranco2 = row.createCell(cellnum++);
-					 * cellbranco2.setCellStyle(styles.get("somafinal"));
-					 * 
-					 * Cell cellbranco3 = row.createCell(cellnum++);
-					 * cellbranco3.setCellStyle(styles.get("somafinal"));
-					 * 
-					 * Cell cellbranco4 = row.createCell(cellnum++);
-					 * cellbranco4.setCellStyle(styles.get("somafinal"));
-					 * 
-					 * Cell celltextototal = row.createCell(cellnum++);
-					 * celltextototal.setCellStyle(styles.get("somafinal"));
-					 * 
-					 * int mescla = contador - 1; sheetVendas.addMergedRegion(new
-					 * CellRangeAddress(mescla, mescla, 0, 5));
-					 * 
-					 * Cell cellbranco5 = row.createCell(cellnum++);
-					 * cellbranco5.setCellStyle(styles.get("somafinal"));
-					 * 
-					 * Cell cellsomatotal = row.createCell(cellnum++);
-					 * cellsomatotal.setCellType(Cell.CELL_TYPE_NUMERIC);
-					 * cellsomatotal.setCellValue(convertValorToMoney(somasubtotal));
-					 * cellsomatotal.setCellStyle(styles.get("somafinal"));
-					 */
-
 					somasubtotal = pdenti.getVrtot();
 				}
 
@@ -598,6 +621,41 @@ public class CriaExcel {
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println("Erro na edição do arquivo!");
+			}
+
+		}
+		
+		
+		//========================================================================
+		
+		public void preencheexcelsomentelista(Sheet sheet, int rownum, String[] titulos, Workbook wb, Entidadegenerica p1,
+				Row row, String tabela, Map<String, CellStyle> styles) throws Exception {
+
+			DecimalFormat df = new DecimalFormat("###,##0.00");
+			Locale local1 = new Locale("pt", "BR");
+			DateFormat datestring = new SimpleDateFormat("dd/MM/yyyy", local1);
+			DateFormat dateehorastring = new SimpleDateFormat("dd/MM/yyyy HH:MM:SS", local1);
+
+			if (contador == 0) {
+				contador = rownum;
+			} else {
+				contador = contador + 1;
+			}
+			// r = contador;
+			row = sheet.createRow(contador);
+			row.setHeightInPoints(15);
+			for (int j = 0; j < titulos.length; j++) {
+				Cell cell = row.createCell(j);
+				cell.setCellStyle(styles.get("itemlista"));
+			}
+
+			if (tabela.equals("relatclientetotal")) {
+				row.getCell(0).setCellValue(p1.getNumdoc().trim());
+				row.getCell(1).setCellValue(datestring.format(p1.getData()));
+				row.getCell(2).setCellValue(p1.getCodclifor().trim());
+				row.getCell(3).setCellValue(p1.getDescclifor().trim());
+				row.getCell(4).setCellValue("R$ " + aces1.valordinheiro(p1.getValortotal()));
+				
 			}
 
 		}

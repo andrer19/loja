@@ -34,6 +34,7 @@ import javax.faces.bean.ManagedBean;
 import javax.persistence.EntityManager;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -45,9 +46,11 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.MaskFormatter;
 
 import org.apache.poi.ss.formula.functions.T;
@@ -283,6 +286,13 @@ public class AcessoBean {
 	}
 
 	// ==================================funcaopadrao==========================================================
+
+	public String valordinheiro(Double valor) {
+
+		String d = new DecimalFormat("#,##0.00").format(valor);
+
+		return d;
+	}
 
 	public String caminho() {
 		String ip = "localhost";
@@ -640,6 +650,16 @@ public class AcessoBean {
 		cor.setBackground(new java.awt.Color(211, 211, 211));
 		cor.setBorder(new LineBorder(Color.BLACK));
 	}
+	
+	public void bloqueadoJComboBox(JComboBox cor) {
+		cor.setEditable(false);
+		cor.setForeground(Color.blue);
+		cor.setEnabled(false);
+		UIManager.put("ComboBox.disabledbackground", new ColorUIResource(Color.DARK_GRAY));
+		UIManager.put("ComboBox.disabledForeground", new ColorUIResource(Color.blue)); 
+		UIManager.put("ComboBox.disabledTitledBorder", new ColorUIResource(Color.red));
+		cor.setOpaque(true);
+	}
 
 	public JButton butonfundo(final JButton cor) {
 		cor.setBorder(new BevelBorder(BevelBorder.RAISED));
@@ -775,6 +795,12 @@ public class AcessoBean {
 		branco.copy(); // copiar
 		branco.setLineWrap(true);
 		branco.setFont(new Font("Arial", Font.PLAIN, 14));
+	}
+	
+	public void liberadoJComboBox(JComboBox branco) {
+		branco.setForeground(Color.blue);
+		branco.setEnabled(true);
+		
 	}
 
 	public void letras(JTextField branco) {
@@ -918,7 +944,6 @@ public class AcessoBean {
 
 	public String[] listasiglasuf() {
 		String[] ufs = new String[27];
-		;
 
 		ufs[0] = "AC";
 		ufs[1] = "AP";
@@ -949,6 +974,19 @@ public class AcessoBean {
 		ufs[26] = "TO";
 
 		return ufs;
+
+	}
+	
+	public String[] listaformapagamento() {
+		String[] formas = new String[5];
+
+		formas[0] = "DINHEIRO";
+		formas[1] = "CARTÃO CREDITO";
+		formas[2] = "CARTÃO DEBITO";
+		formas[3] = "PIX";
+		formas[4] = "CHEQUE";
+
+		return formas;
 
 	}
 

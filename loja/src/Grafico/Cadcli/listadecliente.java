@@ -3,6 +3,8 @@ package Grafico.Cadcli;
 import Grafico.Produto.listadeproduto;
 import Grafico.geral.Letramaiuscula;
 import Grafico.geral.TelaPrincipal;
+import Grafico.relatorio.Telarelatpadrao;
+import Grafico.relatorio.Telarelatvendas;
 import Jm.JMascara;
 
 import java.awt.Color;
@@ -22,6 +24,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
@@ -65,6 +68,7 @@ public class listadecliente extends JDialog {
 	public JTable table;
 	private JPanel contentPane;
 	private JToolBar botoes;
+	JButton btncrelatclientetotal,btnexcluir,btnIncluir;
 	DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
 	public DefaultTableModel listacliente = new DefaultTableModel() {
 		@Override
@@ -233,7 +237,7 @@ public class listadecliente extends JDialog {
 		table.getColumnModel().getColumn(5).setMinWidth(0);
 		table.getColumnModel().getColumn(5).setMaxWidth(0);
 
-		final JButton btnIncluir = new JButton();
+		btnIncluir = new JButton();
 		btnIncluir.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -291,7 +295,7 @@ public class listadecliente extends JDialog {
 		botoes.add(btnIncluir);
 		aces1.espacobotao(botoes);
 
-		JButton btnexcluir = new JButton();
+		btnexcluir = new JButton();
 		if (acesso.getExclusao() == true) {
 			btnexcluir.addActionListener(new ActionListener() {
 				@SuppressWarnings("unused")
@@ -337,6 +341,25 @@ public class listadecliente extends JDialog {
 		aces1.butonfundo(btnexcluir);
 		botoes.add(btnexcluir);
 		aces1.espacobotao(botoes);
+		
+		btncrelatclientetotal = new JButton();
+		btncrelatclientetotal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				try {
+					//new Telarelatpadrao("CLIENTE", "relatclientetotal").setVisible(true);
+					new Telarelatpadrao("CLIENTE", "relatclientetotal").telapadrao.setVisible(true);
+				} catch (ParseException e) {
+					JOptionPane.showMessageDialog(null, "ERRO ABRIR TELA RELATORIO DE CLIENTE TOTAL: " + e.getMessage());
+					aces1.demologger.error("ERRO ABRIR TELA RELATORIO DE CLIENTE TOTAL: " + e.getMessage());
+				}
+
+			}
+		});
+		btncrelatclientetotal.setToolTipText("RELATORIO TOTAL DE VENDAS POR CLIENTE");
+		aces1.butonfundo(btncrelatclientetotal);
+		btncrelatclientetotal.setIcon(new ImageIcon(listadecliente.class.getResource("/imagens/relatorio.png")));
+		botoes.add(btncrelatclientetotal);
 
 		JButton btnpedidos = new JButton();
 		btnpedidos.addActionListener(new ActionListener() {
@@ -350,6 +373,8 @@ public class listadecliente extends JDialog {
 		if (aces1.mostramodulo("PEDIDOSANTIGO", u) == true) {
 			botoes.add(btnpedidos);
 		}
+		
+		
 
 		pesquisar.requestFocus();
 		table.changeSelection(0, 0, false, false);

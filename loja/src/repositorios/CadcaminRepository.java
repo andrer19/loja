@@ -61,15 +61,15 @@ public class CadcaminRepository {
 	public List<Cadcamin> getLista() {
 		List<Cadcamin> cadcamin1 = new ArrayList<Cadcamin>();
 
-		//EntityManagerUtil.conexao();
-		//EntityManagerUtil.begin();
+		EntityManagerUtil.conexao();
+		EntityManagerUtil.begin();
 		Query query = EntityManagerUtil.manager.createQuery("SELECT x FROM Cadcamin x WHERE x.sql_deleted = 'F'");
 		if (!query.getResultList().isEmpty()) {
 			cadcamin1 = query.getResultList();
 		}
 
-		//EntityManagerUtil.commit();
-		//EntityManagerUtil.close();
+		EntityManagerUtil.commit();
+		EntityManagerUtil.close();
 
 		return cadcamin1;
 

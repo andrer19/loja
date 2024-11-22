@@ -59,28 +59,11 @@ public class cadastracaminho extends JDialog {
 	private JTextField usuario;
 	private JTextField senha;
 
-	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the frame.
-	 * 
-	 * @param u
-	 * @param emp
-	 * 
-	 * @param id2
-	 * @param id
-	 * @param usuario
-	 * @param emp
-	 * @param cao
-	 * @param cao
-	 * @throws Exception
-	 */
+	
 	public cadastracaminho(final Cadcamin camin, Usuario u) throws Exception {
 
 		setTitle("CAMINHO");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(aces1.imagemicone()));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage(aces1.imagemicone()));
 		setResizable(false);
 		setModal(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -101,11 +84,6 @@ public class cadastracaminho extends JDialog {
 		caminho.setBounds(100, 8, 241, 23);
 		aces1.liberado(caminho);
 		contentPane.add(caminho);
-
-		/*
-		 * JLabel label = new JLabel(""); label.setBounds(102, 187, 46, 14);
-		 * contentPane.add(label);
-		 */
 
 		JLabel lblip = new JLabel("IP CONEX\u00C3O:");
 		lblip.setForeground(Color.BLACK);
@@ -227,15 +205,6 @@ public class cadastracaminho extends JDialog {
 		};
 		rootPane.registerKeyboardAction(cancelAction, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
 
-	}
-
-	private MaskFormatter setNumero(String numero) {
-		MaskFormatter mask = null;
-		try {
-			mask = new MaskFormatter(numero);
-		} catch (java.text.ParseException ex) {
-		}
-		return mask;
 	}
 
 	public void gravacaminho(Cadcamin e2) {

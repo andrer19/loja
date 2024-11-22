@@ -205,6 +205,43 @@ public class PdsaicRepository {
 		return pdsaics;
 	}
 	
+	public List<Pdsaic> Listapedidosnativo() {
+		List<Pdsaic> pdsaics = new ArrayList<Pdsaic>();
+		Pdsaic pedidosaida = new Pdsaic();
+		SimpleDateFormat formato = new SimpleDateFormat();
+		Locale local1 = new Locale("pt", "BR");
+		DateFormat datestring = new SimpleDateFormat("yyyy-MM-dd", local1);
+		GregorianCalendar c = new GregorianCalendar();
+		c.setTime(repoacesso.dataatual());
+		c.add(Calendar.DAY_OF_MONTH, -120);
+
+		EntityManagerUtil.conexao();
+		EntityManagerUtil.begin();
+		Query query = EntityManagerUtil.manager.createNativeQuery(
+		"select p.idpdsaic,p.numdoc,c.codcli,c.desccli,p.emissao,p.formpagto,p.vrtot "
+		+ " from Pdsaic p "
+		+ " INNER JOIN cadcli c ON p.cliente = c.idcadcli "
+		+ " where p.emissao >= '" + datestring.format(c.getTime()) + "' and p.sql_deleted = 'F' order by p.numdoc desc;");
+		List<Object[]> result = query.getResultList();
+		for (Object[] row : result) {
+			pedidosaida = new Pdsaic();
+			pedidosaida.setIdpdsaic(Long.parseLong(row[0].toString()));
+			pedidosaida.setNumdoc((String) row[1]);
+			pedidosaida.setPedido((String) row[2]);
+			pedidosaida.setContato((String) row[3]);
+			pedidosaida.setEmissao((Date) row[4]);
+			pedidosaida.setFormpagto((String) row[5]);
+			pedidosaida.setVrtot((Double) row[6]);
+			pdsaics.add(pedidosaida);
+
+		}
+
+		EntityManagerUtil.commit();
+		EntityManagerUtil.close();
+
+		return pdsaics;
+	}
+	
 	public List<Pdsaic> Listapedidoantigos(Long idcliente) {
 		List<Pdsaic> pdsaics = new ArrayList<Pdsaic>();
 		SimpleDateFormat formato = new SimpleDateFormat();

@@ -117,8 +117,7 @@ public class cadastrocomprasc extends JDialog {
 	private Long idp;
 
 	List<Pdenti> pdentiremove = new ArrayList<Pdenti>();
-	Locale locale = new Locale("pt", "BR");
-	NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+	
 	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	DecimalFormat decimal = new DecimalFormat("0.00");
 	DecimalFormat decimalqtde = new DecimalFormat("0");
@@ -385,12 +384,12 @@ public class cadastrocomprasc extends JDialog {
 								String iditem = ci.getItem() + 1;
 								listapdenti.addRow(new Object[] { null, pi.getItem(), pi.getProduto(), pi.getDescpro(),
 										pi.getUn(),
-										currencyFormatter.format(pi.getUnitario()).toString().replace("R$", "").trim(),
-										currencyFormatter.format(pi.getVrtot()).toString().replace("R$", "").trim(),
+										aces1.valordinheiro(pi.getUnitario()),
+										aces1.valordinheiro(pi.getVrtot()),
 										decimalqtde.format(pi.getQuantidade()), pi.getPrazo() });
 								qttotal.setText(quantidadeTotal());
-								vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
-								vrmercadoria.setText(aces1.formataMoeda(totalmercadoria()).replace("R$", ""));
+								vrtotal.setText(aces1.valordinheiro(valorTotal()));
+								vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
 								table.setRowSelectionAllowed(true);
 								int linha = listapdenti.getRowCount();
 								int conta = linha - 1;
@@ -474,10 +473,8 @@ public class cadastrocomprasc extends JDialog {
 									for (Pdenti com : listapdenti1) {
 										listapdenti.addRow(new Object[] { com.getIdpdenti(), com.getItem(),
 												com.getProduto(), com.getDescpro(), com.getUn(),
-												currencyFormatter.format(com.getUnitario()).toString().replace("R$", "")
-														.trim(),
-												currencyFormatter.format(com.getVrtot()).toString().replace("R$", "")
-														.trim(),
+												aces1.valordinheiro(com.getUnitario()),
+												aces1.valordinheiro(com.getVrtot()),
 												decimalqtde.format(com.getQuantidade()), com.getPrazo() });
 
 									}
@@ -485,8 +482,8 @@ public class cadastrocomprasc extends JDialog {
 									table.setModel(listapdenti);
 									table.changeSelection(linha, 0, false, false);
 									qttotal.setText(quantidadeTotal());
-									vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
-									vrmercadoria.setText(aces1.formataMoeda(totalmercadoria()).replace("R$", ""));
+									vrtotal.setText(aces1.valordinheiro(valorTotal()));
+									vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
 									table.changeSelection(0, 0, false, false);
 								}
 							} else {
@@ -781,8 +778,8 @@ public class cadastrocomprasc extends JDialog {
 
 		for (Pdenti com : list) {
 			listapdenti.addRow(new Object[] { com.getIdpdenti(), com.getItem(), com.getProduto(), com.getDescpro(),
-					com.getUn(), currencyFormatter.format(com.getUnitario()).toString().replace("R$", "").trim(),
-					currencyFormatter.format(com.getVrtot()).toString().replace("R$", "").trim(),
+					com.getUn(),aces1.valordinheiro(com.getUnitario()),
+					aces1.valordinheiro(com.getVrtot()),
 					decimalqtde.format(com.getQuantidade()), com.getPrazo() });
 
 		}
@@ -802,7 +799,7 @@ public class cadastrocomprasc extends JDialog {
 	private Double valorTotal() {
 		Double total = 0.0;
 		for (int i = 0; i < listapdenti.getRowCount(); i++) {
-			total += Double.parseDouble(aces1.gravamoedadouble(listapdenti.getValueAt(i, 6).toString().trim()));
+			total += Double.parseDouble((listapdenti.getValueAt(i, 6).toString().replace(".", "").replace(",", ".")));
 		}
 		return total;
 	}
@@ -810,7 +807,7 @@ public class cadastrocomprasc extends JDialog {
 	private Double totalmercadoria() {
 		Double Orcamento = 0.0;
 		for (int i = 0; i < listapdenti.getRowCount(); i++) {
-			Orcamento += Double.parseDouble(aces1.gravamoedadouble(listapdenti.getValueAt(i, 6).toString().trim()));
+			Orcamento += Double.parseDouble((listapdenti.getValueAt(i, 6).toString().replace(".", "").replace(",", ".")));
 		}
 
 		return Orcamento;
@@ -995,16 +992,14 @@ public class cadastrocomprasc extends JDialog {
 					listapdenti.setValueAt(produto, linhaSel, 2);
 					listapdenti.setValueAt(descpro, linhaSel, 3);
 					listapdenti.setValueAt(un, linhaSel, 4);
-					listapdenti.setValueAt(currencyFormatter.format(unitario).toString().replace("R$", "").trim(),
-							linhaSel, 5);
-					listapdenti.setValueAt(currencyFormatter.format(vrtotal1).toString().replace("R$", "").trim(),
-							linhaSel, 6);
+					listapdenti.setValueAt(aces1.valordinheiro(Double.parseDouble(unitario.toString())),linhaSel, 5);
+					listapdenti.setValueAt(aces1.valordinheiro(Double.parseDouble(vrtotal1.toString())),linhaSel, 6);
 					listapdenti.setValueAt(decimalqtde.format(quantidade), linhaSel, 7);
 					listapdenti.setValueAt(prazo, linhaSel, 8);
 					table.changeSelection(linhaSel, 0, false, false);
 					qttotal.setText(quantidadeTotal());
-					vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
-					vrmercadoria.setText(aces1.formataMoeda(totalmercadoria()).replace("R$", ""));
+					vrtotal.setText(aces1.valordinheiro(valorTotal()));
+					vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "ERRO AO GRAVAR O ITEM NO PEDIDO DE COMPAS " + e.getMessage());

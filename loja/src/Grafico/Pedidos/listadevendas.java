@@ -470,10 +470,17 @@ public class listadevendas extends JDialog {
 		DecimalFormatSymbols REAL = new DecimalFormatSymbols(BRAZIL);
 		DecimalFormat moeda = new DecimalFormat("###,###,##0.00", REAL);
 
-		for (Pdsaic com : list) {
+		/*for (Pdsaic com : list) {
 
 			listavendas.addRow(new Object[] { com.getIdpdsaic(), com.getNumdoc(), com.getCliente().getCODCLI(),
 					com.getCliente().getDESCCLI(), datestring.format(com.getEmissao()), com.getFormpagto(),
+					moeda.format(com.getVrtot()) });
+
+		}*/
+		for (Pdsaic com : list) {
+
+			listavendas.addRow(new Object[] { com.getIdpdsaic(), com.getNumdoc(), com.getPedido(),
+					com.getContato(), datestring.format(com.getEmissao()), com.getFormpagto(),
 					moeda.format(com.getVrtot()) });
 
 		}

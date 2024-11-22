@@ -91,7 +91,6 @@ public class ListaCaminhos extends JDialog {
 				null, null));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		contentPane.setLayout(null);
 		setTitle("CAMINHOS");
 		setLocationRelativeTo(null);
 		

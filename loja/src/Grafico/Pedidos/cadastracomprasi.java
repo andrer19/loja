@@ -67,9 +67,6 @@ public class cadastracomprasi extends JDialog {
 
 	JButton btncadastrar, btnlimpar;
 
-	Locale locale = new Locale("pt", "BR");
-	NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
-
 	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 	Double precop = 0.0;
@@ -233,14 +230,10 @@ public class cadastracomprasi extends JDialog {
 						unitario.requestFocus();
 					} else {
 
-						Double precof = 0.0;
-						Double preco1 = (getPrecop() / 100) * 10;
-						precof = getPrecop() + preco1;
-
 						double unitario1 = Double.parseDouble(aces1.gravamoedadouble(unitario.getText().trim()));
 						double quantidade1 = Double.parseDouble(quantidade.getText().replace(",", ".").trim());
 						double valor = unitario1 * quantidade1;
-						vrmercadoria.setText(currencyFormatter.format(valor).toString().replace("R$", "").trim());
+						vrmercadoria.setText(aces1.valordinheiro(valor));
 						aces1.bloqueado(unitario);
 						btncadastrar.setEnabled(true);
 						btncadastrar.requestFocus();
@@ -308,7 +301,7 @@ public class cadastracomprasi extends JDialog {
 			quantidade.setText(String.format("%.0f", ci.getQuantidade()));
 			descpro.setText(ci.getDescpro());
 			aces1.moedabanco(ci.getUnitario(), unitario);
-			vrmercadoria.setText(aces1.formataMoeda(ci.getVrtot()).replace("R$", ""));
+			vrmercadoria.setText(aces1.valordinheiro(ci.getVrtot()));
 			aces1.bloqueado(produto);
 			aces1.bloqueado(quantidade);
 			aces1.bloqueado(unitario);
