@@ -459,8 +459,8 @@ public class cadastroordemservc extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent etx) {
 				if (etx.getKeyCode() == KeyEvent.VK_TAB || etx.getKeyCode() == KeyEvent.VK_ENTER) {
-					aces1.liberadojTextArea(obs);
-					obs.requestFocus();
+					aces1.liberadojTextArea(obscliente);
+					obscliente.requestFocus();
 
 				}
 			}
@@ -469,29 +469,10 @@ public class cadastroordemservc extends JDialog {
 		formapagamento.setBounds(330, 269, 130, 20);
 		contentPane.add(formapagamento);
 		
-		lblobs = new JLabel("OBSERVAÇÃO");
-		aces1.padraojlabel(lblobs);
-		lblobs.setBounds(145, 310, 90, 14);
-		contentPane.add(lblobs);
-
-		obs = new JTextArea(new TTextAreaDocument(400));
-		obs.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
-		obs.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
-					aces1.liberadojTextArea(obscliente);
-					obscliente.requestFocus();
-				}
-			}
-		});
-		aces1.bloqueadojTextArea(obs);
-		obs.setBounds(4, 324, 357, 115);
-		contentPane.add(obs);
 		
 		lblobscliente = new JLabel("RELATO DO CLIENTE");
 		aces1.padraojlabel(lblobscliente);
-		lblobscliente.setBounds(490, 310, 159, 14);
+		lblobscliente.setBounds(125, 310, 140, 14);
 		contentPane.add(lblobscliente);
 		
 		obscliente = new JTextArea(new TTextAreaDocument(400));
@@ -500,15 +481,34 @@ public class cadastroordemservc extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
+					aces1.liberadojTextArea(obs);
+					obs.requestFocus();
+				}
+			}
+		});
+		aces1.bloqueadojTextArea(obscliente);
+		obscliente.setBounds(4, 324, 357, 115);
+		contentPane.add(obscliente);
+
+		lblobs = new JLabel("DETALHES");
+		aces1.padraojlabel(lblobs);
+		lblobs.setBounds(490, 310, 159, 14);
+		contentPane.add(lblobs);
+
+		obs = new JTextArea(new TTextAreaDocument(400));
+		obs.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		obs.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
 					btncadastrar.setEnabled(true);
 					btncadastrar.requestFocus();
 				}
 			}
 		});
-		aces1.bloqueadojTextArea(obscliente);
-		obscliente.setBounds(367, 324, 357, 115);
-		contentPane.add(obscliente);
-
+		aces1.bloqueadojTextArea(obs);
+		obs.setBounds(367, 324, 357, 115);
+		contentPane.add(obs);
 
 		btncadastrar = new JButton();
 		btncadastrar.addKeyListener(new KeyAdapter() {

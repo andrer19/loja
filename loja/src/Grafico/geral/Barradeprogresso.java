@@ -68,11 +68,9 @@ JProgressBar bar = new JProgressBar();
 	
 	public void relatpadrao(String tabelar,String abar,Date data1, Date data2,Entidadegenerica genr, String titulor) throws Exception {	
 		CriaExcel cexcel = new CriaExcel();
-		//JOptionPane.showMessageDialog(null, "TABELA " + tabelar + " idcliente " + genr.getSql_rowid());
 		try {
-			cexcel.criarexcelpadrao(tabelar, abar, data1, data2, genr,titulor);//("pedidocompra", data1, data2);
+			cexcel.criarexcelpadrao(tabelar, abar, data1, data2, genr,titulor);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

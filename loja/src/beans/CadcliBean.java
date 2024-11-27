@@ -11,9 +11,11 @@ import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
 import repositorios.CadcliRepository;
+import repositorios.CadoscRepository;
 import repositorios.CadproRepository;
 import repositorios.PdsaicRepository;
 import entidades.Cadcli;
+import entidades.Cadosc;
 import entidades.Pdsaic;
 import filter.EntityManagerUtil;
 
@@ -91,24 +93,6 @@ public class CadcliBean {
 
 		return cadcli1;
 	}
-	
-	public List<Pdsaic> Listapedidoantigos(Long idcliente) {
-		EntityManagerUtil.conexao();
-		List<Pdsaic> pedidocliente = new ArrayList<Pdsaic>();
-		PdsaicRepository repository = new PdsaicRepository(EntityManagerUtil.manager);
-		
-		try {
-			pedidocliente = repository.Listapedidoantigos(idcliente);
-		} catch (Throwable t) {
-			JOptionPane.showMessageDialog(null, "Erro lista Pedidos cliente bean: " + t.getMessage());
-			aces1.demologger.error("ERRO LISTA PEDIDOS POR CLIENTE BEAN " + t.getMessage());
-			EntityManagerUtil.rollback();
-		} finally {
-			EntityManagerUtil.close();
-		}
-		
-		return pedidocliente;
-	}
 
 	public void remove(Long id) {
 		EntityManagerUtil.conexao();
@@ -142,6 +126,42 @@ public class CadcliBean {
 
 		return c;
 
+	}
+	
+	public List<Pdsaic> Listapedidoantigos(Long idcliente) {
+		EntityManagerUtil.conexao();
+		List<Pdsaic> pedidocliente = new ArrayList<Pdsaic>();
+		PdsaicRepository repository = new PdsaicRepository(EntityManagerUtil.manager);
+		
+		try {
+			pedidocliente = repository.Listapedidoantigos(idcliente);
+		} catch (Throwable t) {
+			JOptionPane.showMessageDialog(null, "Erro lista Pedidos cliente bean: " + t.getMessage());
+			aces1.demologger.error("ERRO LISTA PEDIDOS POR CLIENTE BEAN " + t.getMessage());
+			EntityManagerUtil.rollback();
+		} finally {
+			EntityManagerUtil.close();
+		}
+		
+		return pedidocliente;
+	}
+	
+	public List<Cadosc> Listaservicoantigos(Long idcliente) {
+		EntityManagerUtil.conexao();
+		List<Cadosc> servicocliente = new ArrayList<Cadosc>();
+		CadoscRepository repository = new CadoscRepository(EntityManagerUtil.manager);
+		
+		try {
+			servicocliente = repository.Listaservicoantigos(idcliente);
+		} catch (Throwable t) {
+			JOptionPane.showMessageDialog(null, "ERRO LISTA SERVIÇOS POR CLIENTE BEAN " + t.getMessage());
+			aces1.demologger.error("ERRO LISTA SERVIÇOS POR CLIENTE BEAN " + t.getMessage());
+			EntityManagerUtil.rollback();
+		} finally {
+			EntityManagerUtil.close();
+		}
+		
+		return servicocliente;
 	}
 
 	// =====================================================================================

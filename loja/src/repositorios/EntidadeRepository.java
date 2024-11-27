@@ -55,6 +55,40 @@ public class EntidadeRepository{
 		EntityManagerUtil.close();
 
 		return listas;
+	}
+	
+	public List<Entidadegenerica> listaordemservico(Date datai, Date dataf) throws Exception {
+		listas = new ArrayList<Entidadegenerica>();
+		Entidadegenerica ent1 = new Entidadegenerica();
+		
+		Locale local1 = new Locale("pt", "BR");
+		DateFormat datestring = new SimpleDateFormat("yyyy-MM-dd", local1);
+		Double valorf = 0.0;
+
+		EntityManagerUtil.conexao();
+		EntityManagerUtil.begin();
+		Query query = EntityManagerUtil.manager
+				.createNativeQuery("select si.emissao,si.numdoc,c.codcli, c.desccli,si.descricao,si.vrtot from Cadosi si"
+						+ " INNER JOIN cadosc sc ON si.ordemc = sc.id INNER JOIN Cadcli c ON sc.cliente = c.idcadcli"
+						+ " where si.emissao >= '"+ datestring.format(datai) + "' and si.emissao <= '"+ datestring.format(dataf) + "'"
+						+ " and si.sql_deleted = 'F' ORDER BY si.numdoc,si.emissao DESC;");
+		List<Object[]> result = query.getResultList();
+		for (Object[] row : result) {
+			ent1 = new Entidadegenerica();
+			
+			ent1.setData((Date) row[0]);
+			ent1.setNumdoc((String) row[1]);
+			ent1.setCodclifor((String) row[2]);
+			ent1.setDescclifor((String) row[3]);
+			ent1.setDesc((String) row[4]);
+			ent1.setValortotal((Double) row[5]);
+			listas.add(ent1);
+
+		}
+		EntityManagerUtil.commit();
+		EntityManagerUtil.close();
+
+		return listas;
 	}	
 	
 	public Double validanumero(String p) {

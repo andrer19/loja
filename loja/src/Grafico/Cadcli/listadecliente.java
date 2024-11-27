@@ -68,7 +68,7 @@ public class listadecliente extends JDialog {
 	public JTable table;
 	private JPanel contentPane;
 	private JToolBar botoes;
-	JButton btncrelatclientetotal,btnexcluir,btnIncluir;
+	JButton btncrelatclientetotal,btnexcluir,btnIncluir,btnpedidos,btnservicos;
 	DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
 	public DefaultTableModel listacliente = new DefaultTableModel() {
 		@Override
@@ -360,8 +360,9 @@ public class listadecliente extends JDialog {
 		aces1.butonfundo(btncrelatclientetotal);
 		btncrelatclientetotal.setIcon(new ImageIcon(listadecliente.class.getResource("/imagens/relatorio.png")));
 		botoes.add(btncrelatclientetotal);
+		aces1.espacobotao(botoes);
 
-		JButton btnpedidos = new JButton();
+		btnpedidos = new JButton();
 		btnpedidos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listapedidos();
@@ -372,6 +373,21 @@ public class listadecliente extends JDialog {
 		btnpedidos.setToolTipText("VISUALIZAR PEDIDOS DE VENDAS ANTIGOS");
 		if (aces1.mostramodulo("PEDIDOSANTIGO", u) == true) {
 			botoes.add(btnpedidos);
+			aces1.espacobotao(botoes);
+		}
+		
+		btnservicos = new JButton();
+		btnservicos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listaservico();
+			}
+		});
+		btnservicos.setIcon(new ImageIcon(listadecliente.class.getResource("/imagens/ordemservico.png")));
+		aces1.butonfundo(btnservicos);
+		btnservicos.setToolTipText("VISUALIZAR ORDEM DE SERVIÇOS ANTIGOS");
+		if (aces1.mostramodulo("SERVICOSANTIGO", u) == true) {
+			botoes.add(btnservicos);
+			aces1.espacobotao(botoes);
 		}
 		
 		
@@ -450,6 +466,29 @@ public class listadecliente extends JDialog {
 
 				JOptionPane.showMessageDialog(null, "ERRO LISTAR PEDIDO DE VENDAS POR CLIENTE " + e.getMessage());
 				aces1.demologger.error("ERRO LISTAR PEDIDO DE VENDAS POR CLIENTE " + e.getMessage());
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "SELECIONE UM CLIENTE !!!!!!!!!!");
+		}
+
+	}
+	
+	public void listaservico() {
+
+		if (table.getSelectedRow() != -1 && table.getRowCount() > 0) {
+			int linhaSel = table.convertRowIndexToModel(table.getSelectedRow());
+
+			Long idT = Long.parseLong(listacliente.getValueAt(linhaSel, 0).toString());
+			try {
+
+				new listaservicocporliente(idT).setVisible(true);
+				table.requestFocus();
+				table.changeSelection(0, 0, false, false);
+
+			} catch (Exception e) {
+
+				JOptionPane.showMessageDialog(null, "ERRO LISTAR ORDEM DE SERVIÇO POR CLIENTE " + e.getMessage());
+				aces1.demologger.error("ERRO LISTAR ORDEM DE SERVIÇO POR CLIENTE " + e.getMessage());
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "SELECIONE UM CLIENTE !!!!!!!!!!");

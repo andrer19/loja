@@ -135,7 +135,7 @@ public class CadosiBean {
 		CadempRepository repository = new CadempRepository(EntityManagerUtil.manager);
 		RelatorioPadraoBean relat = new RelatorioPadraoBean();
 		
-		String nomearquivo  = "pedvendasA4";		
+		String nomearquivo  = "ordems";		
 		cademp = repository.buscaempresa();
 		Map<String, Object> parametros = new HashMap<>();
 		

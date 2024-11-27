@@ -565,7 +565,7 @@ public class listadevendas extends JDialog {
 			int linha = table.getSelectedRow();
 			try {
 
-				pedidoimp = pedidobean.procura(Long.parseLong(listavendas.getValueAt(linha, 0).toString()));
+				pedidoimp = pedidobean.procura(Long.parseLong(table.getValueAt(linha, 0).toString()));
 
 				DecimalFormat df = new DecimalFormat("###.#");
 
@@ -577,7 +577,7 @@ public class listadevendas extends JDialog {
 
 				String nomearquivo = pedidoimp.getNumdoc().toString();
 				Map<String, Object> parametros = new HashMap<>();
-				parametros.put("pedido", pedidoimp.getNumdoc());
+				parametros.put("id", pedidoimp.getIdpdsaic());
 				parametros.put("logo", aces1.retornalogorelat());
 				parametros.put("razao", empresa.getRazao());
 				parametros.put("enderempresa", empresa.getEnder() + "," + empresa.getNum() + " - " + empresa.getBairro()
@@ -650,9 +650,10 @@ public class listadevendas extends JDialog {
 
 	public void imprimirpedidoA4() {
 		if (table.getSelectedRow() != -1 && table.getRowCount() > 0) {
+			int linha = table.getSelectedRow();
 			int linhaSel = table.convertRowIndexToModel(table.getSelectedRow());
 			try {
-				itens.imprimirA4(Long.parseLong(table.getValueAt(linhaSel, 0).toString()));
+				itens.imprimirA4(Long.parseLong(table.getValueAt(linha, 0).toString()));
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "ERRO AO IMPRIMIR PEDIDO DE VENDA A4 " + e.getMessage());
 				aces1.demologger.error("ERRO AO IMPRIMIR PEDIDO DE VENDA A4 " + e.getMessage());

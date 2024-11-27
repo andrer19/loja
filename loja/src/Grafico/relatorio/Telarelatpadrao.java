@@ -66,7 +66,7 @@ import beans.LocalBean;
 import beans.Usuariobean;
 
 @SuppressWarnings("serial")
-public class Telarelatpadrao{
+public class Telarelatpadrao {
 	JButton btnrelat;
 	JPanel contentPane;
 	public static JFormattedTextField datainicial, datafinal;
@@ -90,15 +90,15 @@ public class Telarelatpadrao{
 		telapadrao.setResizable(false);
 		telapadrao.setModal(true);
 		telapadrao.setTitle("                                                                       TELA RELATÓRIO");
-		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		telapadrao.setBounds(470, 250, 561, 232);
 		contentPane = new JPanel();
-		telapadrao.setIconImage(Toolkit.getDefaultToolkit().getImage(aces1.caminhoireport() + "\\LOJA\\imagens\\logoinicial.png"));
+		telapadrao.setIconImage(
+				Toolkit.getDefaultToolkit().getImage(aces1.caminhoireport() + "\\LOJA\\imagens\\logoinicial.png"));
 		telapadrao.setContentPane(contentPane);
 		contentPane.setLayout(null);
 		aces1.fundotela(contentPane);
 		telapadrao.setLocationRelativeTo(null);
-		
+
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		df.setLenient(false);
 
@@ -154,8 +154,15 @@ public class Telarelatpadrao{
 				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
 					try {
 						df.parse(datafinal.getText());
-						aces1.liberado(codcli);
-						codcli.requestFocus();
+						if (clifor.trim().equals("CLIENTE")) {
+							aces1.liberado(codcli);
+							codcli.requestFocus();
+						}
+
+						if (clifor.trim().isEmpty()) {
+							btnrelat.setEnabled(true);
+							btnrelat.requestFocus();
+						}
 						btnfim = true;
 					} catch (ParseException ex) {
 						JOptionPane.showMessageDialog(null, "Data Inválida");
@@ -174,7 +181,7 @@ public class Telarelatpadrao{
 		lblcliente.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblcliente.setBounds(26, 82, 110, 19);
 		if (clifor.trim().equals("CLIENTE")) {
-		contentPane.add(lblcliente);
+			contentPane.add(lblcliente);
 		}
 
 		codcli = new JTextField();
@@ -319,6 +326,11 @@ public class Telarelatpadrao{
 			titulo = "total venda por cliente";
 			genp.setSql_rowid(cli.getIdcadcli());
 		}
+		
+		if (tabelap.trim().equals("relatordemservico")) {
+			abap = "SERVICOS";
+			titulo = "ordem de serviço";
+		}
 
 		try {
 			datai1 = formato.parse(datainicial.getText());
@@ -370,21 +382,21 @@ public class Telarelatpadrao{
 		}
 
 	}
-	
+
 	private void titleAlign(JDialog frame) {
 
-        Font font = frame.getFont();
+		Font font = frame.getFont();
 
-        String currentTitle = frame.getTitle().trim();
-        FontMetrics fm = frame.getFontMetrics(font);
-        int frameWidth = frame.getWidth();
-        int titleWidth = fm.stringWidth(currentTitle);
-        int spaceWidth = fm.stringWidth(" ");
-        int centerPos = (frameWidth / 2) - (titleWidth / 2);
-        int spaceCount = centerPos / spaceWidth;
-        String pad = "";
-        pad = String.format("%" + (spaceCount - 14) + "s", pad);
-        frame.setTitle(pad + currentTitle);
+		String currentTitle = frame.getTitle().trim();
+		FontMetrics fm = frame.getFontMetrics(font);
+		int frameWidth = frame.getWidth();
+		int titleWidth = fm.stringWidth(currentTitle);
+		int spaceWidth = fm.stringWidth(" ");
+		int centerPos = (frameWidth / 2) - (titleWidth / 2);
+		int spaceCount = centerPos / spaceWidth;
+		String pad = "";
+		pad = String.format("%" + (spaceCount - 14) + "s", pad);
+		frame.setTitle(pad + currentTitle);
 
-    }
+	}
 }

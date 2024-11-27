@@ -3,6 +3,7 @@ package Grafico.serviços;
 import Grafico.Cadcli.listadecliente;
 import Grafico.geral.Letramaiuscula;
 import Grafico.geral.TelaPrincipal;
+import Grafico.relatorio.Telarelatpadrao;
 import Lazy.GenericLazyDataTable;
 import Lazy.GenericService;
 import Lazy.PdsaicService;
@@ -35,6 +36,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
@@ -74,12 +76,14 @@ import Configuracao.RelatorioPadraoBean;
 import beans.AcessoBean;
 import beans.CadcaminBean;
 import beans.CadoscBean;
+import beans.CadosiBean;
 import beans.PdsaicBean;
 import beans.PdsaiiBean;
 import entidades.Acesso;
 import entidades.Cadcamin;
 import entidades.Cademp;
 import entidades.Cadosc;
+import entidades.Cadosi;
 import entidades.Pdsaic;
 import entidades.Pdsaii;
 import entidades.Usuario;
@@ -115,9 +119,9 @@ public class listadeordemserviços extends JDialog {
 	JTextField pesquisar;
 
 	Cadosc ordem = new Cadosc();
-	Pdsaii I = new Pdsaii();
+	Cadosi I = new Cadosi();
 	CadoscBean ordembean = new CadoscBean();
-	PdsaiiBean itens = new PdsaiiBean();
+	CadosiBean itens = new CadosiBean();
 	AcessoBean aces1 = new AcessoBean();
 	CadcaminBean caminbean = new CadcaminBean();
 	Cadcamin caminho = new Cadcamin();
@@ -127,6 +131,7 @@ public class listadeordemserviços extends JDialog {
 	DateFormat datestring = new SimpleDateFormat("dd/MM/yyyy", local1);
 
 	LogusuRepository repositorylog = new LogusuRepository(EntityManagerUtil.manager);
+	private JButton btncrelatordemserv;
 
 	public listadeordemserviços(final Usuario u) throws Exception {
 		setModal(true);
@@ -394,6 +399,23 @@ public class listadeordemserviços extends JDialog {
 		aces1.butonfundo(btnimprimirA4);
 		botoes.add(btnimprimirA4);
 		aces1.espacobotao(botoes);
+		
+		btncrelatordemserv = new JButton();
+		btncrelatordemserv.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				try {
+					new Telarelatpadrao("", "relatordemservico").telapadrao.setVisible(true);
+				} catch (ParseException e) {
+					JOptionPane.showMessageDialog(null, "ERRO ABRIR TELA RELATORIO DE ORDEM DE SERVIÇO " + e.getMessage());
+					aces1.demologger.error("ERRO ABRIR TELA RELATORIO DE ORDEM DE SERVIÇO " + e.getMessage());
+				}
+
+			}
+		});
+		btncrelatordemserv.setToolTipText("RELATORIO ORDEM DE SERVIÇO");
+		btncrelatordemserv.setIcon(new ImageIcon(listadeordemserviços.class.getResource("/imagens/relatorio.png")));
+		botoes.add(btncrelatordemserv);
 
 		btnpedidoemail = new JButton();
 		if (aces1.mostramodulo("EMAILORDEMSERVICO", u) == true) {
@@ -528,35 +550,35 @@ public class listadeordemserviços extends JDialog {
 
 		Cademp empresa = new Cademp();
 		EnviaEmail mail = new EnviaEmail();
-		Pdsaic pedidoimp = new Pdsaic();
-		PdsaicBean pedidobean = new PdsaicBean();
+		Cadosc ordemimp = new Cadosc();
+		CadoscBean ordemimpbean = new CadoscBean();
 
 		if (table.getSelectedRow() != -1 && table.getRowCount() > 0) {
 			int linha = table.getSelectedRow();
 			try {
 
-				pedidoimp = pedidobean.procura(Long.parseLong(listaservicos.getValueAt(linha, 0).toString()));
+				ordemimp = ordemimpbean.procura(Long.parseLong(table.getValueAt(linha, 0).toString()));
 
 				DecimalFormat df = new DecimalFormat("###.#");
 
-				String jrmlx = "pedvendasA4";
+				String jrmlx = "ordems";
 				RelatorioPadraoBean relat = new RelatorioPadraoBean();
 				caminho = caminbean.caminhofixo();
 
 				empresa = aces1.empresabanco();
 
-				String nomearquivo = pedidoimp.getNumdoc().toString();
+				String nomearquivo = ordemimp.getNumdoc().toString();
 				Map<String, Object> parametros = new HashMap<>();
-				parametros.put("pedido", pedidoimp.getNumdoc());
+				parametros.put("id", ordemimp.getId());
 				parametros.put("logo", aces1.retornalogorelat());
 				parametros.put("razao", empresa.getRazao());
-				parametros.put("enderempresa", empresa.getEnder() + "," + empresa.getNum() + " - " + empresa.getBairro()
-						+ " - " + empresa.getCidade());
+				parametros.put("enderempresa",
+						empresa.getEnder() + "," + empresa.getNum() + " - " + empresa.getBairro() + " - " + empresa.getCidade());
 				parametros.put("foneempresa", empresa.getFone());
 				parametros.put("data", aces1.datastring());
 				parametros.put("hora", aces1.hora());
-				parametros.put("enderempresa", empresa.getEnder() + ", " + empresa.getNum() + " - "
-						+ empresa.getBairro() + " - " + empresa.getCidade() + " - " + empresa.getEstado());
+				parametros.put("enderempresa", empresa.getEnder() + ", " + empresa.getNum() + " - " + empresa.getBairro() + " - "
+						+ empresa.getCidade() + " - " + empresa.getEstado());
 
 				relat.PDFSEMVISUALIZAR(parametros, jrmlx, nomearquivo, "\\pdf\\");
 				File arquivo = new File("\\\\" + caminho.getCaminho() + "\\pdf\\" + nomearquivo + ".pdf");
@@ -567,13 +589,13 @@ public class listadeordemserviços extends JDialog {
 					JOptionPane.showMessageDialog(null, "EMPRESA SEM E-MAIL DE ENVIO CONFIGURADO !!!!!");
 
 				} else {
-					if (pedidoimp.getCliente().getEMAIL() != null && !pedidoimp.getCliente().getEMAIL().isEmpty()) {
+					if (ordemimp.getCliente().getEMAIL() != null && !ordemimp.getCliente().getEMAIL().isEmpty()) {
 
-						if (mail.emailpedidovenda(empresa.getFantasia().trim(), empresa.getSmtp().trim(),
+						if (mail.emailordemservico(empresa.getFantasia().trim(), empresa.getSmtp().trim(),
 								empresa.getPorta().trim(), empresa.getSenha().trim(), empresa.getEmail().trim(), false,
 								"\\\\" + caminho.getCaminho() + "\\pdf\\" + nomearquivo + ".pdf",
-								pedidoimp.getNumdoc().trim(), pedidoimp.getCliente().getRAZAO().trim(),
-								pedidoimp.getCliente().getEMAIL()) == true) {
+								ordemimp.getNumdoc().trim(), ordemimp.getCliente().getRAZAO().trim(),
+								ordemimp.getCliente().getEMAIL()) == true) {
 
 							JOptionPane.showMessageDialog(null, "ORDEM DE SERVIÇO ENVIADO COM SUCESSO POR E-MAIL !!!!!");
 

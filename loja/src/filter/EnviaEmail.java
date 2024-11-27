@@ -138,6 +138,63 @@ public class EnviaEmail {
 		}
 		return verifica;
 	}
+	
+	
+	public Boolean emailordemservico(String empresa, String smtp, String porta, String senha, String email1,
+			boolean autentica, String arquivo, String pedido, String cliente, String emails) {
+		Boolean verifica = false;
+		try {
+			MultiPartEmail email = new MultiPartEmail();
+			StringBuilder sb = new StringBuilder("");
+			String virgula = ",";
+
+			// cria o anexo.
+			EmailAttachment attachment = new EmailAttachment();
+			attachment.setPath(arquivo); // caminho da imagem
+			attachment.setDisposition(EmailAttachment.ATTACHMENT);
+			attachment.setDescription(pedido);
+			attachment.setName(arquivo + ".pdf");
+
+			email.setHostName(smtp);
+			email.setSmtpPort(Integer.parseInt(porta));
+			email.setAuthentication(email1, senha);
+			email.setSSLOnConnect(autentica);
+
+			String dados = emails;
+			String[] tokens = dados.split(";");
+
+			sb.append(
+					"|-----------------------------------------------------------------------------------------------------------------| \n");
+			sb.append(cliente + ", ORDEM DE SERVIÇO POR EMAIL NUMERO " + pedido + ", EMITIDO POR " + empresa + "\n");
+			sb.append(
+					"|-----------------------------------------------------------------------------------------------------------------| \n");
+			sb.append(this.empresa.getRazao().trim() + " \n");
+			sb.append(this.empresa.getEnder().trim() + ", " + this.empresa.getNum().trim() + " - "
+					+ this.empresa.getBairro().trim() + " - " + this.empresa.getCidade().trim() + " - "
+					+ this.empresa.getEstado().trim() + " \n");
+
+			email.setFrom(email1);
+			email.setSubject("ORDEM DE SERVIÇO NUMERO " + pedido);
+			email.setMsg(sb.toString());
+			email.attach(attachment);
+			int linhas = tokens.length;
+			String destinatario = "";
+			for (String token : tokens) {
+				destinatario = token;
+			}
+			
+			email.addTo(destinatario);
+			email.addCc(tokens);
+			email.send();
+			verifica = true;
+		} catch (EmailException e) {
+			Logger.getLogger(EnviaEmail.class.getName()).log(Level.SEVERE, null, e.getMessage());
+		} catch (IllegalCharsetNameException x) {
+			Logger.getLogger(EnviaEmail.class.getName()).log(Level.SEVERE, null, x.getMessage());
+		}
+		return verifica;
+	}
+
 
 	
 

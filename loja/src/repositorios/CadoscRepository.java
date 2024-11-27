@@ -20,7 +20,7 @@ import entidades.Usuario;
 import filter.EntityManagerUtil;
 
 public class CadoscRepository {
-	
+
 	AcessoRepository repoacesso = new AcessoRepository(EntityManagerUtil.manager);
 
 	public CadoscRepository(EntityManager manager) {
@@ -34,7 +34,7 @@ public class CadoscRepository {
 		EntityManagerUtil.manager.persist(cadosc);
 		EntityManagerUtil.commit();
 		EntityManagerUtil.close();
-		
+
 		if (cadosc.getNumdoc().equals(null) || cadosc.getNumdoc().isEmpty()) {
 			cadosc.setNumdoc(String.format("%06d", Integer.parseInt(cadosc.getId().toString())));
 			EntityManagerUtil.conexao();
@@ -43,11 +43,10 @@ public class CadoscRepository {
 			EntityManagerUtil.commit();
 			EntityManagerUtil.close();
 
-			repositorylog
-					.adicionaLog(
-							"INCLUSAO", "ORDEM DE SERVIÇO " + cadosc.getNumdoc() + " CLIENTE "
-									+ cadosc.getCliente().getCODCLI().trim() + " " + cadosc.getCliente().getDESCCLI().trim(),
-									cadosc.getId(), u);
+			repositorylog.adicionaLog(
+					"INCLUSAO", "ORDEM DE SERVIÇO " + cadosc.getNumdoc() + " CLIENTE "
+							+ cadosc.getCliente().getCODCLI().trim() + " " + cadosc.getCliente().getDESCCLI().trim(),
+					cadosc.getId(), u);
 		}
 	}
 
@@ -63,7 +62,7 @@ public class CadoscRepository {
 				+ cadosc.getCliente().getCODCLI() + " " + cadosc.getCliente().getDESCCLI(), cadosc.getId(), u);
 
 	}
-	
+
 	public Cadosc procura(Long id) {
 		Cadosc cadosc = new Cadosc();
 		EntityManagerUtil.conexao();
@@ -74,7 +73,7 @@ public class CadoscRepository {
 
 		return cadosc;
 	}
-	
+
 	public void removeatualiza(Long id, Usuario u) {
 
 		Cadosc cadosc1 = new Cadosc();
@@ -101,15 +100,11 @@ public class CadoscRepository {
 			EntityManagerUtil.commit();
 			EntityManagerUtil.close();
 		}
-		
-		repositorylog
-		.adicionaLog(
-				"EXCLUSAO", "ORDEM DE SERVIÇO " + cadosc1.getNumdoc() + " CLIENTE "
-						+ cadosc1.getCliente().getCODCLI() + " " + cadosc1.getCliente().getDESCCLI(),
-						cadosc1.getId(), u);
+
+		repositorylog.adicionaLog("EXCLUSAO", "ORDEM DE SERVIÇO " + cadosc1.getNumdoc() + " CLIENTE "
+				+ cadosc1.getCliente().getCODCLI() + " " + cadosc1.getCliente().getDESCCLI(), cadosc1.getId(), u);
 
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public List<Cadosc> getLista() {
@@ -125,10 +120,9 @@ public class CadoscRepository {
 		EntityManagerUtil.conexao();
 		EntityManagerUtil.begin();
 		Query query = EntityManagerUtil.manager.createNativeQuery(
-		"select p.id,p.numdoc,c.codcli,c.desccli,p.emissao,p.formpagto,p.vrtot "
-		+ " from Cadosc p "
-		+ " INNER JOIN cadcli c ON p.cliente = c.idcadcli "
-		+ " where p.emissao >= '" + datestring.format(c.getTime()) + "' and p.sql_deleted = 'F' order by p.numdoc desc;");
+				"select p.id,p.numdoc,c.codcli,c.desccli,p.emissao,p.formpagto,p.vrtot " + " from Cadosc p "
+						+ " INNER JOIN cadcli c ON p.cliente = c.idcadcli " + " where p.emissao >= '"
+						+ datestring.format(c.getTime()) + "' and p.sql_deleted = 'F' order by p.numdoc desc;");
 		List<Object[]> result = query.getResultList();
 		for (Object[] row : result) {
 			ordem = new Cadosc();
@@ -150,5 +144,29 @@ public class CadoscRepository {
 
 	}
 
+	public List<Cadosc> Listaservicoantigos(Long idcliente) {
+		List<Cadosc> cadoscs = new ArrayList<Cadosc>();
+		SimpleDateFormat formato = new SimpleDateFormat();
+		Locale local1 = new Locale("pt", "BR");
+		DateFormat datestring = new SimpleDateFormat("yyyy-MM-dd", local1);
+		GregorianCalendar c = new GregorianCalendar();
+		c.setTime(repoacesso.dataatual());
+		c.add(Calendar.DAY_OF_MONTH, -120);
+
+		EntityManagerUtil.conexao();
+		EntityManagerUtil.begin();
+		Query query = EntityManagerUtil.manager
+				.createQuery("select x from Cadosc x where x.emissao < '" + datestring.format(c.getTime())
+						+ "' and x.cliente = " + idcliente + " and x.sql_deleted = 'F' order by x.numdoc desc");
+
+		if (!query.getResultList().isEmpty()) {
+			cadoscs = query.getResultList();
+		}
+
+		EntityManagerUtil.commit();
+		EntityManagerUtil.close();
+
+		return cadoscs;
+	}
 
 }
