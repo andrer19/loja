@@ -293,6 +293,11 @@ public class cadastrovendasc extends JDialog {
 				if (isCellSelected(rowIndex, vColIndex)) {
 					c.setBackground(aces1.corcomponente());
 				}
+				
+				if (table.getValueAt(rowIndex, 9).equals(true)) {
+					c.setForeground(new Color(194, 175, 112));
+				}
+				
 				return c;
 			}
 		};
@@ -324,7 +329,7 @@ public class cadastrovendasc extends JDialog {
 							listapdsaii.addRow(
 									new Object[] { null, pi.getItem(), pi.getProduto(), pi.getDescpro(), pi.getUn(),
 											aces1.valordinheiro(pi.getUnitario()),aces1.valordinheiro(pi.getVrtot()),
-											decimalqtde.format(pi.getQuantidade()) });
+											decimalqtde.format(pi.getQuantidade()), pi.getPrazo(), pi.getTroca() });
 							qttotal.setText(quantidadeTotal());
 							vrtotal.setText(aces1.valordinheiro(valorTotal()));
 							vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
@@ -390,6 +395,8 @@ public class cadastrovendasc extends JDialog {
 									mudaitem.setVrtot(Double.parseDouble(
 											aces1.gravamoedadouble(listapdsaii.getValueAt(x, 6).toString())));
 									mudaitem.setQuantidade(Double.parseDouble(listapdsaii.getValueAt(x, 7).toString()));
+									mudaitem.setPrazo((Date) listapdsaii.getValueAt(x, 8));
+									mudaitem.setTroca((Boolean) listapdsaii.getValueAt(x, 9));
 									mudaitem.setPedido(pedido.getText());
 									listapdsaii1.add(mudaitem);
 									mudaitem = new Pdsaii();
@@ -403,7 +410,7 @@ public class cadastrovendasc extends JDialog {
 											com.getProduto(), com.getDescpro(), com.getUn(),
 											aces1.valordinheiro(com.getUnitario()),
 											aces1.valordinheiro(com.getVrtot()),
-											decimalqtde.format(com.getQuantidade()), com.getPrazo() });
+											decimalqtde.format(com.getQuantidade()), com.getPrazo(),com.getTroca() });
 
 								}
 
@@ -450,6 +457,7 @@ public class cadastrovendasc extends JDialog {
 		listapdsaii.addColumn("VALORTOTAL");
 		listapdsaii.addColumn("QUANTIDADE");
 		listapdsaii.addColumn("Prazo");
+		listapdsaii.addColumn("TROCA");
 
 		// JOptionPane.showMessageDialog(null, "Pedido: " + pedidi);
 		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
@@ -474,6 +482,8 @@ public class cadastrovendasc extends JDialog {
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
 		table.getColumnModel().getColumn(8).setMinWidth(0);
 		table.getColumnModel().getColumn(8).setMaxWidth(0);
+		table.getColumnModel().getColumn(9).setMinWidth(0);
+		table.getColumnModel().getColumn(9).setMaxWidth(0);
 
 		JLabel lblvrtotal = new JLabel("VALOR TOTAL");
 		aces1.padraojlabel(lblvrtotal);
@@ -758,7 +768,7 @@ public class cadastrovendasc extends JDialog {
 		if (listapdsaii.getRowCount() == 0) {
 			Pdsaii pi = new Pdsaii();
 			listapdsaii.addRow(new Object[] { pi.getIdpdsaii(), pi.getItem(), pi.getProduto(), pi.getDescpro(),
-					pi.getUn(), pi.getUnitario(), pi.getVrtot(), pi.getQuantidade(), pi.getPrazo() });
+					pi.getUn(), pi.getUnitario(), pi.getVrtot(), pi.getQuantidade(), pi.getPrazo(), pi.getTroca() });
 		}
 		table.changeSelection(0, 0, false, false);
 
@@ -820,12 +830,12 @@ public class cadastrovendasc extends JDialog {
 
 		PdsaiiBean lista = new PdsaiiBean();
 		if (idpedido != null) {
-			List<Pdsaii> list = (List<Pdsaii>) lista.getPdsaiis(idpedido);
+			List<Pdsaii> list = lista.getPdsaiis(idpedido);
 
 			for (Pdsaii com : list) {
 				listapdsaii.addRow(new Object[] { com.getIdpdsaii(), com.getItem(), com.getProduto().trim(), com.getDescpro().trim(),
 						com.getUn().trim(), aces1.valordinheiro(com.getUnitario()),aces1.valordinheiro(com.getVrtot()),
-						decimalqtde.format(com.getQuantidade()), com.getPrazo() });
+						decimalqtde.format(com.getQuantidade()), com.getPrazo(),com.getTroca() });
 
 			}
 		}
@@ -952,6 +962,8 @@ public class cadastrovendasc extends JDialog {
 						ciitem.setVrtot(
 								Double.parseDouble(aces1.gravamoedadouble(listapdsaii.getValueAt(x, 6).toString())));
 						ciitem.setQuantidade(Double.parseDouble(listapdsaii.getValueAt(x, 7).toString()));
+						ciitem.setPrazo((Date) listapdsaii.getValueAt(x, 8));
+						ciitem.setTroca((Boolean) listapdsaii.getValueAt(x, 9));
 						ciitem.setEmissao(cadastro.getEmissao());
 						listapdenti1.add(ciitem);
 						ciitem.setPedc(cadastro);
@@ -1005,6 +1017,8 @@ public class cadastrovendasc extends JDialog {
 			Object unitario = listapdsaii.getValueAt(linhaSel, 5);
 			Object vrtotal1 = listapdsaii.getValueAt(linhaSel, 6);
 			Object quantidade = listapdsaii.getValueAt(linhaSel, 7);
+			Object prazo = listapdsaii.getValueAt(linhaSel, 8);
+			Object troca = listapdsaii.getValueAt(linhaSel, 9);
 
 			try {
 				if (idT == null) {
@@ -1021,6 +1035,8 @@ public class cadastrovendasc extends JDialog {
 				pi.setUnitario(Double.parseDouble(aces1.gravamoedadouble(unitario.toString())));
 				pi.setVrtot(Double.parseDouble(aces1.gravamoedadouble(vrtotal1.toString())));
 				pi.setQuantidade(Double.parseDouble(quantidade.toString()));
+				pi.setPrazo((Date) prazo);
+				pi.setTroca((Boolean) troca);
 
 				new cadastravendasi(p, ci, Integer.parseInt(item.toString()), listapdsaii).setVisible(true);
 
@@ -1033,6 +1049,8 @@ public class cadastrovendasc extends JDialog {
 				unitario = ci.getUnitario();
 				vrtotal1 = ci.getVrtot();
 				quantidade = ci.getQuantidade();
+				prazo = ci.getPrazo();
+				troca = ci.getTroca();
 
 				if (ci.getItem() != null && !ci.getItem().toString().isEmpty()) {
 					Object id = idT;
@@ -1044,6 +1062,8 @@ public class cadastrovendasc extends JDialog {
 					listapdsaii.setValueAt(aces1.valordinheiro(Double.parseDouble(unitario.toString())),linhaSel, 5);
 					listapdsaii.setValueAt(aces1.valordinheiro(Double.parseDouble(vrtotal1.toString())),linhaSel, 6);
 					listapdsaii.setValueAt(decimalqtde.format(quantidade), linhaSel, 7);
+					listapdsaii.setValueAt(prazo, linhaSel, 8);
+					listapdsaii.setValueAt(troca, linhaSel, 9);
 					table.changeSelection(linhaSel, 0, false, false);
 					qttotal.setText(quantidadeTotal());
 					vrtotal.setText(aces1.valordinheiro(valorTotal()));

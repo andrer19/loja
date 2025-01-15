@@ -42,6 +42,9 @@ public class Pdsaii {
 	@Temporal(TemporalType.DATE)
 	private Date dtatend,prazo, emissao;
 	
+	@Column(nullable = false, columnDefinition = "TINYINT(1)")
+	private Boolean troca;
+	
 	@Column(nullable=false,columnDefinition ="ENUM('F','T')")
 	private String sql_deleted;
 
@@ -62,6 +65,7 @@ public class Pdsaii {
          unitario = 0.0;
          vrtot = 0.0;
          vrdesc = 0.0;
+         troca = false;
          sql_deleted = "F";
 		 
 		 
@@ -202,8 +206,14 @@ public class Pdsaii {
 	public void setEmissao(Date emissao) {
 		this.emissao = emissao;
 	}
-	
-	
+
+	public Boolean getTroca() {
+		return troca;
+	}
+
+	public void setTroca(Boolean troca) {
+		this.troca = troca;
+	}
 
 	
 }

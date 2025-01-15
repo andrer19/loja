@@ -260,6 +260,7 @@ public class listadevendas extends JDialog {
 		listavendas.addColumn("EMISSAO");
 		listavendas.addColumn("PAGAMENTO");
 		listavendas.addColumn("VALORPEDIDO");
+		
 
 		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
 		tableModel.setNumRows(0);

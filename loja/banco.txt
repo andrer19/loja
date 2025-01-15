@@ -1,1 +1,1 @@
-javax.persistence.jdbc.url = jdbc:mysql://diretor:3306/loja?useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true
+javax.persistence.jdbc.url = jdbc:mysql://diretor:3306/lojagabriel?useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true

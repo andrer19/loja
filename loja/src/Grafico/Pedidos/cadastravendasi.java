@@ -60,23 +60,27 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.JCheckBox;
 
 @SuppressWarnings("serial")
 public class cadastravendasi extends JDialog {
 	private JPanel contentPane;
-	private JTextField item,unidade,descpro,quantidade,unitario,vrmercadoria,produto;
-	
+
+	private JTextField item, unidade, descpro, quantidade, unitario, vrmercadoria, produto;
+
+	JCheckBox chtroca;
+
 	JButton btncadastrar, btnlimpar;
-	
+
 	PdsaiiBean c = new PdsaiiBean();
-	
+
 	Cadpro p = new Cadpro();
 	CadproBean pbean = new CadproBean();
 	AcessoBean aces1 = new AcessoBean();
 	Double precop = 0.0;
 
 	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	
+
 	LogusuRepository repositorylog = new LogusuRepository(EntityManagerUtil.manager);
 
 	public cadastravendasi(final Pdsaic c2, final Pdsaii ci, int itemp, DefaultTableModel listapdsaii)
@@ -87,7 +91,7 @@ public class cadastravendasi extends JDialog {
 		setResizable(false);
 		setModal(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(10, 5, 546, 295);
+		setBounds(10, 5, 546, 316);
 		contentPane = new JPanel();
 		setLocationRelativeTo(null);
 		setContentPane(contentPane);
@@ -95,9 +99,10 @@ public class cadastravendasi extends JDialog {
 		aces1.fundotela(contentPane);
 		int novoitem = itemp + 1;
 		setPrecop(0.0);
-		
+
 		JLabel lblitem = new JLabel("ITEM");
-		aces1.padraojlabel(lblitem);;
+		aces1.padraojlabel(lblitem);
+		;
 		lblitem.setBounds(10, 13, 41, 14);
 		contentPane.add(lblitem);
 
@@ -110,7 +115,7 @@ public class cadastravendasi extends JDialog {
 		aces1.padraojlabel(lblproduto);
 		lblproduto.setBounds(10, 38, 63, 14);
 		contentPane.add(lblproduto);
-		
+
 		produto = new JTextField();
 		produto.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		produto.addMouseListener(new MouseAdapter() {
@@ -138,18 +143,21 @@ public class cadastravendasi extends JDialog {
 								aces1.moedabanco(p.getVRVENDA(), unitario);
 								unidade.setText(p.getUN());
 								setPrecop(p.getVRVENDA());
+								aces1.bloqueado(produto);
+								chtroca.setEnabled(true);
 								aces1.liberado(unidade);
 								aces1.liberado(quantidade);
-								aces1.bloqueado(produto);
 								quantidade.requestFocus();
 								quantidade.selectAll();
 							} else {
 								produto.requestFocus();
 							}
 						} catch (Exception e) {
-							
-							JOptionPane.showMessageDialog(null, "ERRO AO TENTAR INCLUIR O ITEM NA TELA DO PEDIDO DE VENDAS " + e.getMessage());
-							aces1.demologger.error("ERRO AO TENTAR INCLUIR O ITEM NA TELA DO PEDIDO DE VENDAS " + e.getMessage());
+
+							JOptionPane.showMessageDialog(null,
+									"ERRO AO TENTAR INCLUIR O ITEM NA TELA DO PEDIDO DE VENDAS " + e.getMessage());
+							aces1.demologger.error(
+									"ERRO AO TENTAR INCLUIR O ITEM NA TELA DO PEDIDO DE VENDAS " + e.getMessage());
 						}
 					} else {
 						p = validaproduto(produto.getText());
@@ -169,26 +177,55 @@ public class cadastravendasi extends JDialog {
 		aces1.padraojlabel(lbldescricao);
 		lbldescricao.setBounds(10, 63, 86, 14);
 		contentPane.add(lbldescricao);
-		
+
 		descpro = new JTextField();
 		aces1.bloqueado(descpro);
 		descpro.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		descpro.setBounds(145, 60, 377, 20);
 		contentPane.add(descpro);
-		
+
+		JLabel lbltroca = new JLabel("TROCA");
+		aces1.padraojlabel(lbltroca);
+		lbltroca.setBounds(10, 88, 86, 14);
+		contentPane.add(lbltroca);
+
+		chtroca = new JCheckBox("");
+		chtroca.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_TAB) {
+					if (chtroca.isEnabled()) {
+						validatroca();
+					}
+				}
+			}
+		});
+		chtroca.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (chtroca.isEnabled()) {
+					validatroca();
+				}
+			}
+		});
+		chtroca.setEnabled(false);
+		chtroca.setBackground(aces1.corpadrao());
+		chtroca.setBounds(141, 83, 24, 23);
+		contentPane.add(chtroca);
+
 		JLabel lblunidade = new JLabel("UNIDADE");
 		aces1.padraojlabel(lblunidade);
-		lblunidade.setBounds(10, 88, 80, 14);
+		lblunidade.setBounds(10, 113, 80, 14);
 		contentPane.add(lblunidade);
 
 		unidade = new JTextField();
 		aces1.bloqueado(unidade);
-		unidade.setBounds(145, 85, 35, 20);
+		unidade.setBounds(145, 110, 35, 20);
 		contentPane.add(unidade);
-		
+
 		JLabel lblquantidade = new JLabel("QUANTIDADE");
 		aces1.padraojlabel(lblquantidade);
-		lblquantidade.setBounds(10, 113, 105, 14);
+		lblquantidade.setBounds(10, 138, 105, 14);
 		contentPane.add(lblquantidade);
 
 		quantidade = new JTextField();
@@ -207,41 +244,48 @@ public class cadastravendasi extends JDialog {
 						Double qtdep = 0.0, qtdep1 = 0.0;
 
 						qtdep = Double.parseDouble(quantidade.getText().trim());
-						for (int x = 0; x < listapdsaii.getRowCount(); x++) {
-							if (listapdsaii.getValueAt(x, 2) != null
-									&& !listapdsaii.getValueAt(x, 2).toString().isEmpty()) {
-								if (listapdsaii.getValueAt(x, 0) == null) {
-									if (listapdsaii.getValueAt(x, 2).toString().equals(produto.getText())) {
-										qtdep = qtdep + Double.parseDouble(listapdsaii.getValueAt(x, 7).toString());
-										qtdep1 = qtdep1 + Double.parseDouble(listapdsaii.getValueAt(x, 7).toString());
-									}
-								}
 
+						if (aces1.retornaBoolean(chtroca) == false) {
+
+							for (int x = 0; x < listapdsaii.getRowCount(); x++) {
+								if (listapdsaii.getValueAt(x, 2) != null
+										&& !listapdsaii.getValueAt(x, 2).toString().isEmpty()) {
+									if (listapdsaii.getValueAt(x, 0) == null) {
+										if (listapdsaii.getValueAt(x, 2).toString().equals(produto.getText())) {
+											qtdep = qtdep + Double.parseDouble(listapdsaii.getValueAt(x, 7).toString());
+											qtdep1 = qtdep1
+													+ Double.parseDouble(listapdsaii.getValueAt(x, 7).toString());
+										}
+									}
+
+								}
 							}
-						}
-						if (Verificaqtde(p.getQTATUAL(), qtdep, qtdep1) == true) {
-							aces1.bloqueado(quantidade);
-							unitario.requestFocus();
-							aces1.liberado(unitario);
-							unitario.selectAll();
-						} else {
-							aces1.bloqueado(unitario);
-							quantidade.requestFocus();
+							if (Verificaqtde(p.getQTATUAL(), qtdep, qtdep1) == true) {
+								aces1.bloqueado(quantidade);
+								unitario.requestFocus();
+								aces1.liberado(unitario);
+								unitario.selectAll();
+							} else {
+								aces1.bloqueado(unitario);
+								quantidade.requestFocus();
+							}
+						}else {
+							btncadastrar.requestFocus();
+							
 						}
 					}
 
 				}
 			}
 		});
-		quantidade.setBounds(145, 110, 97, 20);
+		quantidade.setBounds(145, 135, 97, 20);
 		contentPane.add(quantidade);
 		aces1.bloqueado(quantidade);
 		aces1.numeros(quantidade);
-		quantidade.setColumns(10);
 
 		JLabel lblunitario = new JLabel("UNIT\u00C1RIO");
 		aces1.padraojlabel(lblunitario);
-		lblunitario.setBounds(10, 138, 86, 14);
+		lblunitario.setBounds(10, 163, 86, 14);
 		contentPane.add(lblunitario);
 
 		unitario = new JTextField();
@@ -250,7 +294,8 @@ public class cadastravendasi extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent evt) {
 				if (evt.getKeyCode() == KeyEvent.VK_TAB || evt.getKeyCode() == KeyEvent.VK_ENTER) {
-					if (unitario.getText().equals(null) || unitario.getText().trim().isEmpty() || unitario.getText().equals("0,00")) {
+					if (unitario.getText().equals(null) || unitario.getText().trim().isEmpty()
+							|| unitario.getText().equals("0,00")) {
 						JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
 						aces1.bloqueado(vrmercadoria);
 						btncadastrar.setEnabled(false);
@@ -260,32 +305,31 @@ public class cadastravendasi extends JDialog {
 						Double preco1 = (getPrecop() / 100) * 5;
 						precof = getPrecop() - preco1;
 
-							double unitario1 = Double.parseDouble(aces1.gravamoedadouble(unitario.getText().trim()));
-							double quantidade1 = Double.parseDouble(quantidade.getText().replace(",", ".").trim());
-							double valor = unitario1 * quantidade1;
-							vrmercadoria.setText(aces1.valordinheiro(valor));
-							aces1.bloqueado(unitario);
-							btncadastrar.setEnabled(true);
-							btncadastrar.requestFocus();
+						double unitario1 = Double.parseDouble(aces1.gravamoedadouble(unitario.getText().trim()));
+						double quantidade1 = Double.parseDouble(quantidade.getText().replace(",", ".").trim());
+						double valor = unitario1 * quantidade1;
+						vrmercadoria.setText(aces1.valordinheiro(valor));
+						aces1.bloqueado(unitario);
+						btncadastrar.setEnabled(true);
+						btncadastrar.requestFocus();
 					}
 				}
 			}
 		});
 		aces1.bloqueado(unitario);
 		unitario.setDocument(new MonetarioDocument());
-		unitario.setBounds(145, 135, 97, 20);
+		unitario.setBounds(145, 160, 97, 20);
 		contentPane.add(unitario);
 
 		JLabel lblvalormercadoria = new JLabel("VALOR MERCADORIA");
 		aces1.padraojlabel(lblvalormercadoria);
-		lblvalormercadoria.setBounds(10, 163, 131, 14);
+		lblvalormercadoria.setBounds(10, 188, 131, 14);
 		contentPane.add(lblvalormercadoria);
 
 		vrmercadoria = new JTextField();
 		aces1.bloqueado(vrmercadoria);
-		vrmercadoria.setBounds(145, 160, 97, 20);
+		vrmercadoria.setBounds(145, 185, 97, 20);
 		contentPane.add(vrmercadoria);
-
 
 		btncadastrar = new JButton();
 		btncadastrar.addMouseListener(new MouseAdapter() {
@@ -304,7 +348,7 @@ public class cadastravendasi extends JDialog {
 			}
 		});
 		btncadastrar.setEnabled(false);
-		btncadastrar.setBounds(205, 200, 55, 46);
+		btncadastrar.setBounds(205, 225, 55, 46);
 		btncadastrar.setIcon(new ImageIcon(cadastravendasi.class.getResource("/imagens/salvar.png")));
 		aces1.butonfundo(btncadastrar);
 		contentPane.add(btncadastrar);
@@ -312,13 +356,13 @@ public class cadastravendasi extends JDialog {
 		btnlimpar = new JButton();
 		btnlimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				ci.setItem("");
 				ci.setProduto("");
 				dispose();
 			}
 		});
-		btnlimpar.setBounds(283, 200, 55, 46);
+		btnlimpar.setBounds(283, 225, 55, 46);
 		btnlimpar.setIcon(new ImageIcon(cadastravendasi.class.getResource("/imagens/fechar.png")));
 		aces1.butonfundo(btnlimpar);
 		contentPane.add(btnlimpar);
@@ -332,6 +376,10 @@ public class cadastravendasi extends JDialog {
 			descpro.setText(ci.getDescpro());
 			aces1.moedabanco(ci.getUnitario(), unitario);
 			vrmercadoria.setText(aces1.formataMoeda(ci.getVrtot()).replace("R$", ""));
+			if (ci.getTroca() == true) {
+				chtroca.setSelected(true);
+			}
+			chtroca.setEnabled(false);
 			aces1.bloqueado(produto);
 			aces1.bloqueado(quantidade);
 			aces1.bloqueado(unitario);
@@ -402,9 +450,11 @@ public class cadastravendasi extends JDialog {
 					unidade.setText(cadpron.getUN());
 					aces1.moedabanco(cadpron.getVRVENDA(), unitario);
 					setPrecop(p.getVRVENDA());
+					chtroca.setEnabled(true);
 					aces1.liberado(unidade);
 					aces1.liberado(quantidade);
 					quantidade.requestFocus();
+					quantidade.selectAll();
 					aces1.bloqueado(produto);
 				}
 			} else {
@@ -419,8 +469,7 @@ public class cadastravendasi extends JDialog {
 	}
 
 	public void gravaitem(Pdsaii p) {
-		DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
-		
+
 		try {
 			if (!btncadastrar.isEnabled()) {
 
@@ -432,12 +481,12 @@ public class cadastravendasi extends JDialog {
 				p.setQuantidade(Double.parseDouble(quantidade.getText().trim()));
 				p.setUnitario(Double.parseDouble(aces1.gravamoedadouble(unitario.getText().trim())));
 				p.setVrtot(Double.parseDouble(aces1.gravamoedadouble(vrmercadoria.getText().trim())));
+				p.setTroca(aces1.retornaBoolean(chtroca));
 
 			}
 			if (p.getProduto().isEmpty() || p.getUnitario() == null || p.getQuantidade() == null) {
 				JOptionPane.showMessageDialog(null, "Dados em branco");
 				quantidade.requestFocus();
-				btncadastrar.setEnabled(false);
 			} else {
 				item.setText("");
 				produto.setText("");
@@ -471,6 +520,28 @@ public class cadastravendasi extends JDialog {
 
 	}
 
+	public void validatroca() {
+
+		if (aces1.retornaBoolean(chtroca) == true) {
+
+			aces1.moedabanco(null, unitario);
+			vrmercadoria.setText(aces1.valordinheiro(0.0));
+			btncadastrar.setEnabled(true);
+			btncadastrar.requestFocus();
+			chtroca.setEnabled(false);
+			aces1.bloqueado(unitario);
+			aces1.liberado(quantidade);
+		} else {
+
+			aces1.liberado(quantidade);
+			quantidade.requestFocus();
+			quantidade.selectAll();
+			aces1.bloqueado(unitario);
+
+		}
+
+	}
+
 	public Double getPrecop() {
 		return precop;
 	}
@@ -478,5 +549,4 @@ public class cadastravendasi extends JDialog {
 	public void setPrecop(Double precop) {
 		this.precop = precop;
 	}
-
 }
