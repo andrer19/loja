@@ -71,13 +71,14 @@ public class Telarelatvendas extends JDialog {
 	Cademp cademp = new Cademp();
 	LocalBean loc = new LocalBean();
 	Date datai1 = null, dataf1 = null;
+	private JTextField descpro;
 
 	public Telarelatvendas() throws ParseException {
 		setResizable(false);
 		setModal(true);
 		setTitle("      RELAT\u00D3RIO DE VENDAS");
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(470, 250, 263, 180);
+		setBounds(470, 250, 434, 208);
 		contentPane = new JPanel();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(aces1.caminhoireport() + "\\LOJA\\imagens\\logoinicial.png"));
 		setContentPane(contentPane);
@@ -87,10 +88,11 @@ public class Telarelatvendas extends JDialog {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		df.setLenient(false);
 
-		JLabel lbldatainicial = new JLabel("EMISS\u00C3O DE:");
-		lbldatainicial.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		JLabel lbldatainicial = new JLabel("EMISS\u00C3O DE");
+		//lbldatainicial.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		aces1.padraojlabel(lbldatainicial);
 		lbldatainicial.setForeground(Color.BLUE);
-		lbldatainicial.setBounds(26, 20, 100, 19);
+		lbldatainicial.setBounds(10, 23, 100, 14);
 		contentPane.add(lbldatainicial);
 
 		javax.swing.text.MaskFormatter dataini = new javax.swing.text.MaskFormatter("##/##/####");
@@ -121,9 +123,64 @@ public class Telarelatvendas extends JDialog {
 		});
 		datainicial.setCaretPosition(0);
 		aces1.liberado(datainicial);
-		datainicial.setBounds(135, 19, 95, 20);
+		datainicial.setBounds(160, 20, 100, 20);
 		contentPane.add(datainicial);
 
+		JLabel lbldatafinal = new JLabel("EMISS\u00C3O AT\u00C9");
+		aces1.padraojlabel(lbldatafinal);
+		lbldatafinal.setForeground(Color.BLUE);
+		lbldatafinal.setBounds(10, 48, 110, 14);
+		contentPane.add(lbldatafinal);
+
+		javax.swing.text.MaskFormatter datafim = new javax.swing.text.MaskFormatter("##/##/####");
+		datafinal = new javax.swing.JFormattedTextField(datafim);
+		datafinal.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		datafinal.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
+					try {
+						df.parse(datafinal.getText());
+						descpro.requestFocus();
+						btnfim = true;
+						if (btnfim == true && btnini == true) {
+							btnrelat.setEnabled(true);
+						}
+
+					} catch (ParseException ex) {
+						JOptionPane.showMessageDialog(null, "Data Inválida");
+						btnfim = false;
+						btnrelat.setEnabled(false);
+						// }
+					}
+				}
+			}
+		});
+
+		aces1.liberado(datafinal);
+		datafinal.setBounds(160, 45, 100, 20);
+		contentPane.add(datafinal);
+		
+		JLabel lbldescricao = new JLabel("DESCRI\u00C7\u00C3O PRODUTO");
+		aces1.padraojlabel(lbldescricao);
+		lbldescricao.setForeground(Color.BLUE);
+		lbldescricao.setBounds(10, 73, 146, 14);
+		contentPane.add(lbldescricao);
+		
+		descpro = new JTextField();
+		descpro.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
+					btnrelat.requestFocus();
+				}
+			}
+		});
+		aces1.liberado(descpro);
+		descpro.setDocument(new Grafico.geral.Letramaiuscula());
+		descpro.setBounds(160, 70, 248, 20);
+		contentPane.add(descpro);
+		
 		btnrelat = new JButton();
 		btnrelat.addKeyListener(new KeyAdapter() {
 			@Override
@@ -162,12 +219,11 @@ public class Telarelatvendas extends JDialog {
 		btnrelat.setIcon(new ImageIcon(Telarelatvendas.class.getResource("/imagens/excel.png")));
 		btnrelat.setToolTipText("GERAR RELATÓRIO");
 		aces1.butonfundo(btnrelat);
-		btnrelat.setBounds(68, 85, 55, 46);
+		btnrelat.setBounds(130, 110, 55, 46);
 		btnrelat.setEnabled(false);
 		contentPane.add(btnrelat);
 
 		JButton btnsair = new JButton();
-		;
 		btnsair.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
@@ -183,43 +239,8 @@ public class Telarelatvendas extends JDialog {
 		btnsair.setIcon(new ImageIcon(Telarelatvendas.class.getResource("/imagens/fechar.png")));
 		btnsair.setToolTipText("SAIR");
 		aces1.butonfundo(btnsair);
-		btnsair.setBounds(137, 85, 55, 46);
+		btnsair.setBounds(200, 110, 55, 46);
 		contentPane.add(btnsair);
-
-		JLabel lbldatafinal = new JLabel("EMISS\u00C3O AT\u00C9:");
-		lbldatafinal.setForeground(Color.BLUE);
-		lbldatafinal.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbldatafinal.setBounds(26, 51, 110, 19);
-		contentPane.add(lbldatafinal);
-
-		javax.swing.text.MaskFormatter datafim = new javax.swing.text.MaskFormatter("##/##/####");
-		datafinal = new javax.swing.JFormattedTextField(datafim);
-		datafinal.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
-		datafinal.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
-					try {
-						df.parse(datafinal.getText());
-						btnrelat.requestFocus();
-						btnfim = true;
-						if (btnfim == true && btnini == true) {
-							btnrelat.setEnabled(true);
-						}
-
-					} catch (ParseException ex) {
-						JOptionPane.showMessageDialog(null, "Data Inválida");
-						btnfim = false;
-						btnrelat.setEnabled(false);
-						// }
-					}
-				}
-			}
-		});
-
-		aces1.liberado(datafinal);
-		datafinal.setBounds(135, 50, 95, 20);
-		contentPane.add(datafinal);
 
 		// fechar janela com esc
 		JRootPane rootPane = this.getRootPane();
@@ -253,7 +274,7 @@ public class Telarelatvendas extends JDialog {
 			    public void run() {  
 			    	Barradeprogresso bar = new Barradeprogresso();  
 			        bar.iniciaBar(); 
-			        bar.relavenda(datai1, dataf1);
+			        bar.relavenda(datai1, dataf1,descpro.getText().trim());
 			        bar.paraBar();  
 			    }  
 			});
@@ -265,5 +286,4 @@ public class Telarelatvendas extends JDialog {
 		}
 
 	}
-
 }

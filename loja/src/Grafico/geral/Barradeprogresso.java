@@ -44,11 +44,11 @@ JProgressBar bar = new JProgressBar();
 		dialog.dispose();
 	}	
 	
-	public void relavenda(Date data1, Date data2) {	
+	public void relavenda(Date data1, Date data2, String filterdesc) {	
 		CriaExcel cexcel = new CriaExcel();
 		
 		try {
-			cexcel.criarexcelvenda("pedidovenda", data1, data2);
+			cexcel.criarexcelvenda("pedidovenda", data1, data2, filterdesc);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

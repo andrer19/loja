@@ -466,6 +466,18 @@ public class AcessoBean {
 		return data;
 
 	}
+	
+	public String retornadatastringselect(Date valor) {
+		DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+		String data = null;
+		if (valor == null) {
+			data = "";
+		} else {
+			data = formato.format(valor);
+		}
+		return data;
+
+	}
 
 	public Date gravadata(String p) throws ParseException {
 		Date valor = null;

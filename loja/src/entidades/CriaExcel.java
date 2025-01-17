@@ -168,7 +168,7 @@ public class CriaExcel {
 
 	// ==================================================================================================
 
-	public void criarexcelvenda(String tabela, Date datai, Date dataf) throws IOException {
+	public void criarexcelvenda(String tabela, Date datai, Date dataf, String filterdesc) throws IOException {
 
 		Workbook workbook = new XSSFWorkbook();
 		Sheet sheetVendas = workbook.createSheet("PEDIDOVENDAS");
@@ -213,7 +213,7 @@ public class CriaExcel {
 		}
 
 		PdsaiiRepository repository = new PdsaiiRepository(manager);
-		listavenda = repository.relatvenda(datai, dataf);
+		listavenda = repository.relatvendacomlike(datai, dataf, filterdesc);
 
 		for (Pdsaii pdsaii : listavenda) {
 

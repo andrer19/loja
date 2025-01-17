@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 
 import org.hibernate.Session;
 
+import beans.AcessoBean;
 import entidades.Cadmov;
 import entidades.Cadpro;
 import entidades.Pdenti;
@@ -25,6 +26,7 @@ import filter.EntityManagerUtil;
 public class PdsaiiRepository {
 
 	Date data = new Date();
+	AcessoBean aces1 = new AcessoBean();
 
 	public PdsaiiRepository(EntityManager manager) {
 
@@ -162,7 +164,7 @@ public class PdsaiiRepository {
 	public List<Pdsaii> getLista(Long idpedido) {
 
 		List<Pdsaii> pdsaiilista = new ArrayList<Pdsaii>();
-		
+
 		EntityManagerUtil.conexao();
 		EntityManagerUtil.begin();
 		Query query = EntityManagerUtil.manager
@@ -254,6 +256,35 @@ public class PdsaiiRepository {
 		@SuppressWarnings("unchecked")
 		List<Object[]> result = query.getResultList();
 		pdenti1 = query.getResultList();
+		EntityManagerUtil.commit();
+		EntityManagerUtil.close();
+
+		return pdenti1;
+	}
+
+	public List<Pdsaii> relatvendacomlike(Date datai, Date dataf, String filtrodesc) {
+
+		List<Pdsaii> pdenti1 = new ArrayList<Pdsaii>();
+			
+		String sql = "select x from Pdsaii x where x.emissao >= '" + aces1.retornadatastringselect(datai) + "' and x.emissao <= '" + aces1.retornadatastringselect(dataf) 
+		+ "' and x.sql_deleted = 'F' and x.vrtot > 0";
+		String filtrodescricao = "";
+		String order = " ORDER BY pedido,emissao DESC";
+
+		if (filtrodesc != null && !filtrodesc.isEmpty()) {
+			filtrodescricao = " and x.descpro LIKE '%" + filtrodesc.trim() + "%' ";
+			sql = sql + filtrodescricao;
+		}
+
+		sql = sql + order;
+
+		EntityManagerUtil.conexao();
+		EntityManagerUtil.begin();
+		Query query = EntityManagerUtil.manager.createQuery(sql);
+
+		if (!query.getResultList().isEmpty()) {
+			pdenti1 = query.getResultList();
+		}
 		EntityManagerUtil.commit();
 		EntityManagerUtil.close();
 
