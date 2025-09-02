@@ -3,15 +3,14 @@ package entidades;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
 public class Cademp {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(nullable=false,columnDefinition = "varchar(100)  default ''")

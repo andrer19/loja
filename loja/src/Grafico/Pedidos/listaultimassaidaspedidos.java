@@ -181,8 +181,8 @@ public class listaultimassaidaspedidos extends JDialog {
 		for (Pdsaii prod : list) {
 			listahistoricopdsaii.addRow(new Object[] { prod.getIdpdsaii(),
 					prod.getPedido(),prod.getPedc().getCliente().getDESCCLI(), prod.getProduto(),
-					String.format("%.0f", prod.getQuantidade()),prod.getUn(), 
-					moeda.format(prod.getUnitario()), moeda.format(prod.getVrtot())					
+					aces1.mascaraquantidadecomvirgula(prod.getQuantidade()),prod.getUn(), 
+					aces1.valordinheiro(prod.getUnitario()), aces1.valordinheiro(prod.getVrtot())					
 			});
 
 		}

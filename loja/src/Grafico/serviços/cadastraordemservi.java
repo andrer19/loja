@@ -138,14 +138,25 @@ public class cadastraordemservi extends JDialog {
 						JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
 						valormercadoria.requestFocus();
 					} else {
+						validatotal();
 						btncadastrar.setEnabled(true);
 						btncadastrar.requestFocus();
 					}
 				}
 			}
 		});
+		valormercadoria.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				validatotal();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				valormercadoria.selectAll();
+			}
+		});
 		aces1.bloqueado(valormercadoria);
-		valormercadoria.setDocument(new MonetarioDocument());
 		valormercadoria.setBounds(145, 115, 97, 20);
 		contentPane.add(valormercadoria);
 
@@ -189,7 +200,8 @@ public class cadastraordemservi extends JDialog {
 
 			item.setText(ci.getItem().toString());
 			descricao.setText(ci.getDescricao());
-			aces1.moedabanco(ci.getVrtot(), valormercadoria);
+			valormercadoria.setText(aces1.valordinheiro(ci.getVrtot()));
+
 		}
 
 		addWindowListener(new WindowAdapter() {
@@ -251,6 +263,21 @@ public class cadastraordemservi extends JDialog {
 			aces1.demologger.error("ERRO ITEM NA LISTA ORDEM DE SERVIÇO " + e1.getMessage());
 		}
 
+	}
+	
+	public void validatotal() {
+		
+		
+		if (valormercadoria.getText().equals(null) || valormercadoria.getText().trim().isEmpty()) {
+			valormercadoria.setText(aces1.valordinheiro(0.0));
+		} else {
+			
+			double mercadoria1 = aces1.retornadouble(aces1.removeponto(valormercadoria.getText().trim()));
+			valormercadoria.setText(aces1.valordinheiro(mercadoria1));
+			
+		}
+
+		
 	}
 
 	public Double getPrecop() {

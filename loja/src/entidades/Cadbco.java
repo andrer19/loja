@@ -4,13 +4,14 @@ package entidades;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Cadbco {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long sql_rowid;
 	private String codemp,codbco,descbco,agencia,numcta,praca,numbco,numche;
 	private Double sdoatual;

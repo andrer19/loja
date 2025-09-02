@@ -14,7 +14,6 @@ import javax.swing.JProgressBar;
 import beans.AcessoBean;
 import entidades.CriaExcel;
 import entidades.Entidadegenerica;
-import javafx.scene.control.ProgressBar;
 
 public class Barradeprogresso extends Thread {
 

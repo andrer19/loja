@@ -97,8 +97,6 @@ public class listadevendas extends JDialog {
 
 	public JTable table;
 	private JPanel contentPane;
-	private GenericLazyDataTable listapdsaic;
-	private GenericService genericService;
 	private JToolBar botoes;
 	DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
 	public DefaultTableModel listavendas = new DefaultTableModel() {
@@ -465,24 +463,12 @@ public class listadevendas extends JDialog {
 
 		PdsaicBean lista = new PdsaicBean();
 		List<Pdsaic> list = (List<Pdsaic>) lista.getPdsaics();
-		genericService = new PdsaicService();
-		listapdsaic = new GenericLazyDataTable(genericService);
-		Locale BRAZIL = new Locale("pt", "BR");
-		DecimalFormatSymbols REAL = new DecimalFormatSymbols(BRAZIL);
-		DecimalFormat moeda = new DecimalFormat("###,###,##0.00", REAL);
-
-		/*for (Pdsaic com : list) {
-
-			listavendas.addRow(new Object[] { com.getIdpdsaic(), com.getNumdoc(), com.getCliente().getCODCLI(),
-					com.getCliente().getDESCCLI(), datestring.format(com.getEmissao()), com.getFormpagto(),
-					moeda.format(com.getVrtot()) });
-
-		}*/
+		
 		for (Pdsaic com : list) {
 
 			listavendas.addRow(new Object[] { com.getIdpdsaic(), com.getNumdoc(), com.getPedido(),
-					com.getContato(), datestring.format(com.getEmissao()), com.getFormpagto(),
-					moeda.format(com.getVrtot()) });
+					com.getContato(), aces1.retornadatastring(com.getEmissao()), com.getFormpagto(),
+					aces1.valordinheiro(com.getVrtot()) });
 
 		}
 
@@ -588,6 +574,8 @@ public class listadevendas extends JDialog {
 				parametros.put("hora", aces1.hora());
 				parametros.put("enderempresa", empresa.getEnder() + ", " + empresa.getNum() + " - "
 						+ empresa.getBairro() + " - " + empresa.getCidade() + " - " + empresa.getEstado());
+				parametros.put("decunitario", TelaPrincipal.decunit);
+				parametros.put("decquantidade", TelaPrincipal.decqtde);
 
 				relat.PDFSEMVISUALIZAR(parametros, jrmlx, nomearquivo, "\\pdf\\");
 				File arquivo = new File("\\\\" + caminho.getCaminho() + "\\pdf\\" + nomearquivo + ".pdf");

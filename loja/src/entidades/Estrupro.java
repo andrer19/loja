@@ -3,13 +3,14 @@ package entidades;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Estrupro {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idestrupro;
 	
 	private String CODEMP,CODPRO,UN,CODPRO1,UN1,CODCLI,GUERRA,CODCLIENTE,DESCMAT,

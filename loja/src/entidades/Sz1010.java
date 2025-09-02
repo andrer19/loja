@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
@@ -13,7 +14,7 @@ import javax.persistence.Id;
 public class Sz1010 {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sql_rowid;
 	private String z1_filial,z1_num,z1_serie,z1_doc,z1_fornec,z1_loja,z1_nomefor,
 	z1_certif,z1_obs,z1_hora,z1_codpro,z1_descpro,z1_razao;

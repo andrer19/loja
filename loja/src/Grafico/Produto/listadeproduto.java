@@ -197,8 +197,8 @@ public class listadeproduto extends JDialog {
 						c.setForeground(new Color(255, 0, 0));
 					}
 
-					if (Integer.parseInt(table.getValueAt(rowIndex, 4).toString()) < Integer
-							.parseInt(table.getValueAt(rowIndex, 7).toString())) {
+					if (aces1.retornadouble(aces1.removeponto(table.getValueAt(rowIndex, 4).toString())) <
+							aces1.retornadouble(aces1.removeponto(table.getValueAt(rowIndex, 7).toString()))) {
 						c.setForeground(new Color(255, 127, 0));
 					}
 
@@ -550,15 +550,12 @@ public class listadeproduto extends JDialog {
 
 		CadproBean lista = new CadproBean();
 		List<Cadpro> list = (List<Cadpro>) lista.getCodpros();
-		DecimalFormat format = new DecimalFormat("##");
-		Locale BRAZIL = new Locale("pt", "BR");
-		DecimalFormatSymbols REAL = new DecimalFormatSymbols(BRAZIL);
-		DecimalFormat moeda = new DecimalFormat("###,###,##0.00", REAL);
+		
 
 		for (Cadpro prod : list) {
 			listaproduto.addRow(new Object[] { prod.getIdcadpro(), prod.getCODPRO(), prod.getDESCPRO(),
-					moeda.format(prod.getVRVENDA()), format.format(prod.getQTATUAL()), prod.getUN(), prod.getATIVO(),
-					format.format(prod.getECONOMICO())
+					aces1.valordinheiro(prod.getVRVENDA()), aces1.mascaraquantidadecomvirgula(prod.getQTATUAL()), prod.getUN(), prod.getATIVO(),
+					aces1.mascaraquantidadecomvirgula(prod.getECONOMICO())
 
 			});
 

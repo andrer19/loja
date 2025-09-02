@@ -55,6 +55,7 @@ import javax.swing.text.MaskFormatter;
 
 import org.apache.poi.ss.formula.functions.T;
 
+import Grafico.geral.TelaPrincipal;
 import entidades.Acesso;
 import entidades.Cadcamin;
 import entidades.Cademp;
@@ -287,9 +288,32 @@ public class AcessoBean {
 
 	// ==================================funcaopadrao==========================================================
 
+	 public String removeponto(String v) {
+			
+			if (v.equals(null) || v.isEmpty()) {
+				v = "0";
+			}
+
+			v = v.replace(".", "");
+
+			return v.trim();
+
+		}
+
+	
 	public String valordinheiro(Double valor) {
 
-		String d = new DecimalFormat("#,##0.00").format(valor);
+        String casasdecimais = "";
+		
+		int casas = TelaPrincipal.decunit;
+		
+		for(int i=0;i < casas;i++) {
+			
+			casasdecimais += "0";
+		}
+
+		String d = new DecimalFormat("#,##0." + casasdecimais).format(valor);
+
 
 		return d;
 	}
@@ -496,7 +520,8 @@ public class AcessoBean {
 		if (p.equals(null) || p.isEmpty()) {
 			valor = 0.0;
 		} else {
-			valor = Double.parseDouble(p.replace(",", "."));
+			p = p.replace(",", ".");
+			valor = Double.parseDouble(p);
 		}
 		return valor;
 
@@ -1029,6 +1054,77 @@ public class AcessoBean {
 		}
 
 	}
+	
+public String mascaraquantidade(Double valor) {
+		
+        String casasdecimaisqtde = "";
+        
+        DecimalFormat df;
+		
+		int casas = TelaPrincipal.decqtde;
+		
+		for(int i=0;i < casas;i++) {
+			
+			casasdecimaisqtde += "#";
+		}
+		
+		if(TelaPrincipal.decqtde > 0) {
+		    df = new DecimalFormat("#." + casasdecimaisqtde); 
+		}else {
+			df = new DecimalFormat("#");
+		}
+
+		String d = df.format(valor).replace(",", ".").trim(); 
+
+		return d;
+	}
+	
+    public String mascaraquantidadecomvirgula(Double valor) {
+		
+        String casasdecimaisqtde = "", d = "";
+		
+		int casas = TelaPrincipal.decqtde;
+		
+		for(int i=0;i < casas;i++) {
+			
+			casasdecimaisqtde += "0";
+		}
+		
+		if(TelaPrincipal.decqtde > 0) {
+		d = new DecimalFormat("#,##0." + casasdecimaisqtde).format(valor);
+		}else {
+			d = String.format("%.0f", valor);//new DecimalFormat("#,##").format(valor);
+		}
+
+		return d;
+	}
+    
+    public String converteintparastring(int p) {
+		String valor = "0";
+		if (p != 0) {
+			valor = String.valueOf(p);
+		}
+		return valor;
+
+	}
+
+    public void numeroscomvirgula(JTextField branco) {
+		branco.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				String caracteres = "abcdefghijklmnopqrstuvxzwyABCDEFGHIJKLMNOPQRSTUVXZWY";
+				char charTeste = '"';
+				String especiais = "               ``   *& %$#          <>:;?/\\\\|{}[]! @#$% &*()_.-+=. ~^`' "
+						+ charTeste;
+				if (caracteres.contains(e.getKeyChar() + "") || especiais.contains(e.getKeyChar() + "")) {
+					e.consume();
+				}
+			}
+
+		});
+	}
+
+
 
 	// ============================================================================================
 

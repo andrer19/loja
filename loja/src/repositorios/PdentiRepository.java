@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 
 import org.hibernate.Session;
 
+import beans.AcessoBean;
 import entidades.Cadmov;
 import entidades.Cadpro;
 import entidades.Pdentc;
@@ -25,6 +26,8 @@ import filter.EntityManagerUtil;
 public class PdentiRepository {
 
 	Date data = new Date();
+	
+	AcessoBean aces1 = new AcessoBean();
 
 	public PdentiRepository(EntityManager manager) {
 	}
@@ -53,10 +56,11 @@ public class PdentiRepository {
 
 				cadpro = repoprod.buscaproduto(p.getProduto().trim());
 
+				
 				double qtde1 = cadpro.getQTATUAL();
-				double qtde2 = Double.parseDouble(cadpro.getMATERIAL());
+				double qtde2 = aces1.retornadouble(aces1.removeponto(cadpro.getMATERIAL()));
 				qtde1 = qtde1 + p.getQuantidade();
-				Double qtdecomprada = Double.parseDouble(cadpro.getMATERIAL()) + p.getQuantidade();
+				Double qtdecomprada = aces1.retornadouble(aces1.removeponto(cadpro.getMATERIAL())) + p.getQuantidade();
 
 				cadpro.setQTATUAL(qtde1);
 				cadpro.setQTINICIAL(p.getQuantidade());

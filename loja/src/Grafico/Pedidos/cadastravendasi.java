@@ -74,7 +74,7 @@ public class cadastravendasi extends JDialog {
 
 	PdsaiiBean c = new PdsaiiBean();
 
-	Cadpro p = new Cadpro();
+	Cadpro prod = new Cadpro();
 	CadproBean pbean = new CadproBean();
 	AcessoBean aces1 = new AcessoBean();
 	Double precop = 0.0;
@@ -128,21 +128,21 @@ public class cadastravendasi extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent evt) {
 				if (evt.getKeyCode() == KeyEvent.VK_TAB) {
-					p = validaproduto(produto.getText());
-					setPrecop(p.getVRVENDA());
+					prod = validaproduto(produto.getText());
+					setPrecop(prod.getVRVENDA());
 
 				}
 
 				if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
 					if (produto.getText() == null || produto.getText().isEmpty()) {
 						try {
-							new listaprocuraproduto(p).setVisible(true);
-							if (p.getIdcadpro() != null) {
-								produto.setText(p.getCODPRO());
-								descpro.setText(p.getDESCPRO());
-								aces1.moedabanco(p.getVRVENDA(), unitario);
-								unidade.setText(p.getUN());
-								setPrecop(p.getVRVENDA());
+							new listaprocuraproduto(prod).setVisible(true);
+							if (prod.getIdcadpro() != null) {
+								produto.setText(prod.getCODPRO());
+								descpro.setText(prod.getDESCPRO());
+								unitario.setText(aces1.valordinheiro(prod.getVRVENDA()));
+								unidade.setText(prod.getUN());
+								setPrecop(prod.getVRVENDA());
 								aces1.bloqueado(produto);
 								chtroca.setEnabled(true);
 								aces1.liberado(unidade);
@@ -160,8 +160,8 @@ public class cadastravendasi extends JDialog {
 									"ERRO AO TENTAR INCLUIR O ITEM NA TELA DO PEDIDO DE VENDAS " + e.getMessage());
 						}
 					} else {
-						p = validaproduto(produto.getText());
-						setPrecop(p.getVRVENDA());
+						prod = validaproduto(produto.getText());
+						setPrecop(prod.getVRVENDA());
 					}
 
 				}
@@ -234,54 +234,26 @@ public class cadastravendasi extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent evt) {
 				if (evt.getKeyCode() == KeyEvent.VK_TAB || evt.getKeyCode() == KeyEvent.VK_ENTER) {
-					if (quantidade.getText().equals("") || quantidade.getText().equals(null)
-							|| quantidade.getText().equals("0")) {
-						JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
-						aces1.bloqueado(unitario);
-						quantidade.requestFocus();
-
-					} else {
-						Double qtdep = 0.0, qtdep1 = 0.0;
-
-						qtdep = Double.parseDouble(quantidade.getText().trim());
-
-						if (aces1.retornaBoolean(chtroca) == false) {
-
-							for (int x = 0; x < listapdsaii.getRowCount(); x++) {
-								if (listapdsaii.getValueAt(x, 2) != null
-										&& !listapdsaii.getValueAt(x, 2).toString().isEmpty()) {
-									if (listapdsaii.getValueAt(x, 0) == null) {
-										if (listapdsaii.getValueAt(x, 2).toString().equals(produto.getText())) {
-											qtdep = qtdep + Double.parseDouble(listapdsaii.getValueAt(x, 7).toString());
-											qtdep1 = qtdep1
-													+ Double.parseDouble(listapdsaii.getValueAt(x, 7).toString());
-										}
-									}
-
-								}
-							}
-							if (Verificaqtde(p.getQTATUAL(), qtdep, qtdep1) == true) {
-								aces1.bloqueado(quantidade);
-								unitario.requestFocus();
-								aces1.liberado(unitario);
-								unitario.selectAll();
-							} else {
-								aces1.bloqueado(unitario);
-								quantidade.requestFocus();
-							}
-						}else {
-							btncadastrar.requestFocus();
-							
-						}
-					}
-
+					validaquantidade(ci, true, listapdsaii);
 				}
 			}
 		});
+		quantidade.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				validaquantidade(ci, false, listapdsaii);
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				quantidade.selectAll();
+			}
+		});
+
 		quantidade.setBounds(145, 135, 97, 20);
 		contentPane.add(quantidade);
 		aces1.bloqueado(quantidade);
-		aces1.numeros(quantidade);
+		aces1.numeroscomvirgula(quantidade);
 
 		JLabel lblunitario = new JLabel("UNIT\u00C1RIO");
 		aces1.padraojlabel(lblunitario);
@@ -294,30 +266,22 @@ public class cadastravendasi extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent evt) {
 				if (evt.getKeyCode() == KeyEvent.VK_TAB || evt.getKeyCode() == KeyEvent.VK_ENTER) {
-					if (unitario.getText().equals(null) || unitario.getText().trim().isEmpty()
-							|| unitario.getText().equals("0,00")) {
-						JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
-						aces1.bloqueado(vrmercadoria);
-						btncadastrar.setEnabled(false);
-						unitario.requestFocus();
-					} else {
-						Double precof = 0.0;
-						Double preco1 = (getPrecop() / 100) * 5;
-						precof = getPrecop() - preco1;
-
-						double unitario1 = Double.parseDouble(aces1.gravamoedadouble(unitario.getText().trim()));
-						double quantidade1 = Double.parseDouble(quantidade.getText().replace(",", ".").trim());
-						double valor = unitario1 * quantidade1;
-						vrmercadoria.setText(aces1.valordinheiro(valor));
-						aces1.bloqueado(unitario);
-						btncadastrar.setEnabled(true);
-						btncadastrar.requestFocus();
-					}
+					validaunitario();
 				}
 			}
 		});
+		unitario.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				validaunitario();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				unitario.selectAll();
+			}
+		});
 		aces1.bloqueado(unitario);
-		unitario.setDocument(new MonetarioDocument());
 		unitario.setBounds(145, 160, 97, 20);
 		contentPane.add(unitario);
 
@@ -362,6 +326,17 @@ public class cadastravendasi extends JDialog {
 				dispose();
 			}
 		});
+		btnlimpar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent evt) {
+				if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+					ci.setItem("");
+					ci.setProduto("");
+					dispose();
+
+				}
+			}
+		});
 		btnlimpar.setBounds(283, 225, 55, 46);
 		btnlimpar.setIcon(new ImageIcon(cadastravendasi.class.getResource("/imagens/fechar.png")));
 		aces1.butonfundo(btnlimpar);
@@ -372,10 +347,10 @@ public class cadastravendasi extends JDialog {
 			item.setText(ci.getItem().toString());
 			produto.setText(ci.getProduto());
 			unidade.setText(ci.getUn());
-			quantidade.setText(String.format("%.0f", ci.getQuantidade()));
+			quantidade.setText(aces1.mascaraquantidadecomvirgula(ci.getQuantidade()));
 			descpro.setText(ci.getDescpro());
-			aces1.moedabanco(ci.getUnitario(), unitario);
-			vrmercadoria.setText(aces1.formataMoeda(ci.getVrtot()).replace("R$", ""));
+			unitario.setText(aces1.valordinheiro(ci.getUnitario()));
+			vrmercadoria.setText(aces1.valordinheiro(ci.getVrtot()));
 			if (ci.getTroca() == true) {
 				chtroca.setSelected(true);
 			}
@@ -426,9 +401,9 @@ public class cadastravendasi extends JDialog {
 
 	}
 
-	public Cadpro validaproduto(String prod) {
+	public Cadpro validaproduto(String produtop) {
 		Cadpro cadpron = new Cadpro();
-		if (prod.equals("") || prod.equals(null)) {
+		if (produtop.equals("") || produtop.equals(null)) {
 			JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
 			aces1.bloqueado(unidade);
 			aces1.bloqueado(quantidade);
@@ -437,7 +412,7 @@ public class cadastravendasi extends JDialog {
 			produto.requestFocus();
 		} else {
 
-			cadpron = c.Validapro(prod);
+			cadpron = c.Validapro(produtop);
 			if (cadpron.getIdcadpro() != null) {
 				if (cadpron.getATIVO() == true) {
 					JOptionPane.showMessageDialog(null, "Produto Desativado");
@@ -448,11 +423,12 @@ public class cadastravendasi extends JDialog {
 				} else {
 					descpro.setText(cadpron.getDESCPRO());
 					unidade.setText(cadpron.getUN());
-					aces1.moedabanco(cadpron.getVRVENDA(), unitario);
-					setPrecop(p.getVRVENDA());
+					unitario.setText(aces1.valordinheiro(cadpron.getVRVENDA()));
+					setPrecop(prod.getVRVENDA());
 					chtroca.setEnabled(true);
 					aces1.liberado(unidade);
 					aces1.liberado(quantidade);
+					quantidade.setText(aces1.mascaraquantidade(0.0));
 					quantidade.requestFocus();
 					quantidade.selectAll();
 					aces1.bloqueado(produto);
@@ -478,9 +454,10 @@ public class cadastravendasi extends JDialog {
 				p.setProduto(produto.getText().trim());
 				p.setDescpro(descpro.getText().trim());
 				p.setUn(unidade.getText().trim());
-				p.setQuantidade(Double.parseDouble(quantidade.getText().trim()));
-				p.setUnitario(Double.parseDouble(aces1.gravamoedadouble(unitario.getText().trim())));
-				p.setVrtot(Double.parseDouble(aces1.gravamoedadouble(vrmercadoria.getText().trim())));
+				p.setQuantidade(aces1.retornadouble(
+						aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(quantidade.getText().trim())))));
+				p.setUnitario(aces1.retornadouble(aces1.removeponto(unitario.getText().trim())));
+				p.setVrtot(aces1.retornadouble(aces1.removeponto(vrmercadoria.getText().trim())));
 				p.setTroca(aces1.retornaBoolean(chtroca));
 
 			}
@@ -506,15 +483,17 @@ public class cadastravendasi extends JDialog {
 
 	}
 
-	public Boolean Verificaqtde(Double qtdepro, Double qtde, Double qtdeparam) {
+	public Boolean Verificaqtde(Double qtdepro, Double qtde, Double qtdeparam, Boolean mostra) {
 		Boolean valida = true;
 		Double qtdeatual = qtdepro;
+
 		if (qtde > qtdepro) {
 			valida = false;
 			qtdeatual = qtdepro - qtdeparam;
 
-			JOptionPane.showMessageDialog(null,
-					"PRODUTO NÃO POSSUI SALDO SUFICIENTE, SALDO ATUAL " + String.format("%.0f", qtdeatual));
+			if (mostra == true) {
+				JOptionPane.showMessageDialog(null, "PRODUTO NÃO POSSUI SALDO SUFICIENTE, SALDO ATUAL " + aces1.mascaraquantidadecomvirgula(qtdeatual));
+			}
 		}
 		return valida;
 
@@ -538,6 +517,85 @@ public class cadastravendasi extends JDialog {
 			quantidade.selectAll();
 			aces1.bloqueado(unitario);
 
+		}
+
+	}
+
+	public void validaquantidade(Pdsaii p, Boolean mostra, DefaultTableModel listapdsaiip) {
+
+		if (quantidade.getText().equals("") || quantidade.getText().equals(null) || quantidade.getText().equals("0")) {
+			JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
+			aces1.bloqueado(unitario);
+			quantidade.requestFocus();
+
+		} else {
+			Double qtdep = 0.0, qtdep1 = 0.0;
+
+			qtdep = aces1.retornadouble(
+					aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(quantidade.getText().trim()))));
+
+			if (aces1.retornaBoolean(chtroca) == false) {
+
+				for (int x = 0; x < listapdsaiip.getRowCount(); x++) {
+					if (listapdsaiip.getValueAt(x, 2) != null && !listapdsaiip.getValueAt(x, 2).toString().isEmpty()) {
+						if (listapdsaiip.getValueAt(x, 0) == null) {
+							if (listapdsaiip.getValueAt(x, 2).toString().equals(produto.getText())) {
+								qtdep = qtdep + aces1.retornadouble(aces1.mascaraquantidade(aces1
+										.retornadouble(aces1.removeponto(listapdsaiip.getValueAt(x, 7).toString()))));
+								qtdep1 = qtdep1 + aces1.retornadouble(aces1.mascaraquantidade(aces1
+										.retornadouble(aces1.removeponto(listapdsaiip.getValueAt(x, 7).toString()))));
+							}
+						}
+
+					}
+				}
+				if (Verificaqtde(prod.getQTATUAL(), qtdep, qtdep1, mostra) == true) {
+					aces1.bloqueado(quantidade);
+					unitario.requestFocus();
+					aces1.liberado(unitario);
+					unitario.selectAll();
+				} else {
+					aces1.bloqueado(unitario);
+					quantidade.requestFocus();
+				}
+			} else {
+				btncadastrar.requestFocus();
+
+			}
+		}
+
+	}
+
+	public void validaunitario() {
+
+		if (unitario.getText().equals(null) || unitario.getText().trim().isEmpty()
+				|| unitario.getText().equals("0,00")) {
+			JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
+			aces1.bloqueado(vrmercadoria);
+			btncadastrar.setEnabled(false);
+			unitario.requestFocus();
+		} else {
+			Double precof = 0.0;
+			Double preco1 = (getPrecop() / 100) * 5;
+			precof = getPrecop() - preco1;
+
+			double unitario1 = aces1.retornadouble(aces1.removeponto(unitario.getText().trim()));
+			double quantidade1 = aces1.retornadouble(
+					aces1.mascaraquantidade(aces1.retornadouble(aces1.gravamoedadouble(quantidade.getText()))));
+			double valor = unitario1 * quantidade1;
+			vrmercadoria.setText(aces1.valordinheiro(valor));
+			aces1.bloqueado(unitario);
+			btncadastrar.setEnabled(true);
+			btncadastrar.requestFocus();
+			
+			if (unitario.getText().equals(null) || unitario.getText().trim().isEmpty()) {
+				unitario.setText(aces1.valordinheiro(0.0));
+			} else {
+				
+				double init1 = aces1.retornadouble(aces1.removeponto(unitario.getText().trim()));
+				unitario.setText(aces1.valordinheiro(init1));
+				
+			}
 		}
 
 	}

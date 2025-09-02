@@ -57,6 +57,7 @@ import beans.AcessoBean;
 import beans.CadempBean;
 import entidades.Acesso;
 import entidades.Cademp;
+import entidades.Cadmanuemp;
 import entidades.Usuario;
 import filter.EntityManagerUtil;
 import repositorios.LogusuRepository;
@@ -298,6 +299,33 @@ public class Listaempresa extends JDialog {
 				table.changeSelection(0, 0, false, false);
 			}
 		});
+		
+		
+		btnmanutencao = new JButton();
+		btnmanutencao.addActionListener(new ActionListener() {
+			@SuppressWarnings("unused")
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					Cadmanuemp manuemp1 = new Cadmanuemp();
+					manuemp1 = E.rastreioemp();
+					new cadastramanuemp(manuemp1, u).setVisible(true);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "ERRO AO CARREGAR TELA DE MANUTEN  O " + e.getMessage());
+					aces1.demologger.error("ERRO AO CARREGAR TELA DE MANUTEN  O " + e.getMessage());
+				}
+			}
+		});
+		btnmanutencao.setIcon(new ImageIcon(Listaempresa.class.getResource("/imagens/manutencao.png")));
+		btnmanutencao.setToolTipText("MANUTENÇÃO DA EMPRESA");
+		aces1.butonfundo(btnmanutencao);
+		if (validaempresa() != null && acesso.getNivel8() == true) {
+			btnmanutencao.setEnabled(true);
+		} else {
+			btnmanutencao.setEnabled(false);
+		}
+		botoes.add(btnmanutencao);
+		aces1.espacobotao(botoes);
+
 
 		// fechar janela com esc
 		JRootPane rootPane = this.getRootPane();

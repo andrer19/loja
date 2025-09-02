@@ -264,14 +264,14 @@ public class PdsaiiBean {
 
 		parametros.put("id", idpedido);
 		parametros.put("logo", aces1.retornalogorelat());
-		parametros.put("razao", cademp.getRazao());
-		parametros.put("enderempresa",
-				cademp.getEnder() + "," + cademp.getNum() + " - " + cademp.getBairro() + " - " + cademp.getCidade());
-		parametros.put("foneempresa", cademp.getFone());
+		parametros.put("razao", cademp.getRazao().trim());
+		parametros.put("foneempresa", cademp.getFone().trim());
 		parametros.put("data", aces1.datastring());
 		parametros.put("hora", aces1.hora());
-		parametros.put("enderempresa", cademp.getEnder() + ", " + cademp.getNum() + " - " + cademp.getBairro() + " - "
-				+ cademp.getCidade() + " - " + cademp.getEstado());
+		parametros.put("enderempresa", cademp.getEnder().trim() + ", " + cademp.getNum().trim() + " - " + cademp.getBairro().trim() + " - "
+				+ cademp.getCidade().trim() + " - " + cademp.getEstado().trim());
+		parametros.put("decunitario", TelaPrincipal.decunit);
+		parametros.put("decquantidade", TelaPrincipal.decqtde);
 		relat.visualizaireport(nomearquivo, parametros);
 
 	}
@@ -289,14 +289,14 @@ public class PdsaiiBean {
 		
 		parametros.put("id", idpedidovenda);
 		parametros.put("logo", aces1.retornalogorelat());
-		parametros.put("razao", cademp.getRazao());
-		parametros.put("enderempresa",
-				cademp.getEnder() + "," + cademp.getNum() + " - " + cademp.getBairro() + " - " + cademp.getCidade());
-		parametros.put("foneempresa", cademp.getFone());
+		parametros.put("razao", cademp.getRazao().trim());
+		parametros.put("foneempresa", cademp.getFone().trim());
 		parametros.put("data", aces1.datastring());
 		parametros.put("hora", aces1.hora());
-		parametros.put("enderempresa", cademp.getEnder() + ", " + cademp.getNum() + " - " + cademp.getBairro() + " - "
-				+ cademp.getCidade() + " - " + cademp.getEstado());
+		parametros.put("enderempresa", cademp.getEnder().trim() + ", " + cademp.getNum().trim() + " - " + cademp.getBairro().trim() + " - "
+				+ cademp.getCidade().trim() + " - " + cademp.getEstado().trim());
+		parametros.put("decunitario", TelaPrincipal.decunit);
+		parametros.put("decquantidade", TelaPrincipal.decqtde);
 		relat.visualizaireport(nomearquivo, parametros);
 
 	}

@@ -294,7 +294,7 @@ public class cadastroordemservc extends JDialog {
 						List<Cadosi> listacadosi1 = new ArrayList<Cadosi>();
 						try {
 							int conseguiu_excluir = 0;
-							String nome = "Deseja realmente excluir o item: " + table.getValueAt(linha, 1).toString()
+							String nome = "DESEJA REALMENTE EXCLUIR O ITEM " + table.getValueAt(linha, 1).toString()
 									+ " ?";
 							int opcao_escolhida = JOptionPane.showConfirmDialog(null, nome, "Exclusão ",
 									JOptionPane.YES_NO_OPTION);
@@ -656,11 +656,10 @@ public class cadastroordemservc extends JDialog {
 	}
 
 	private Double valorTotal() {
-		DecimalFormat decimal = new DecimalFormat("0.00");
+
 		Double Orcamento = 0.0;
 		for (int i = 0; i < listacadosi.getRowCount(); i++) {
-			Orcamento += Double
-					.parseDouble((listacadosi.getValueAt(i, 3).toString().replace(".", "").replace(",", ".")));
+			Orcamento += aces1.retornadouble(aces1.removeponto((listacadosi.getValueAt(i, 3).toString())));
 		}
 
 		return Orcamento;
@@ -677,7 +676,7 @@ public class cadastroordemservc extends JDialog {
 
 			cadastro.setEmissao(aces1.retornadata(emissao.getText()));
 			cadastro.setNumdoc(ordemservico.getText().trim());
-			cadastro.setVrtot(Double.parseDouble(aces1.gravamoedadouble(vrtotal.getText())));
+			cadastro.setVrtot(aces1.retornadouble(aces1.removeponto(aces1.valordinheiro(aces1.retornadouble(aces1.removeponto(vrtotal.getText()))))));
 			cadastro.setCliente(cadclip);
 			cadastro.setObs(obs.getText().trim());
 			cadastro.setFormpagto(formapagamento.getSelectedItem().toString().trim());
@@ -746,8 +745,7 @@ public class cadastroordemservc extends JDialog {
 						ciitem.setId((Long) listacadosi.getValueAt(x, 0));
 						ciitem.setItem(listacadosi.getValueAt(x, 1).toString());
 						ciitem.setDescricao(String.valueOf(listacadosi.getValueAt(x, 2)));
-						ciitem.setVrtot(
-								Double.parseDouble(aces1.gravamoedadouble(listacadosi.getValueAt(x, 3).toString())));
+						ciitem.setVrtot(aces1.retornadouble(aces1.removeponto(listacadosi.getValueAt(x, 3).toString())));
 						ciitem.setEmissao(cadastro.getEmissao());
 						listacadosi1.add(ciitem);
 						ciitem.setOrdemc(cadastro);
@@ -808,7 +806,7 @@ public class cadastroordemservc extends JDialog {
 				pi.setId(idT);
 				pi.setItem(item.toString());
 				pi.setDescricao(String.valueOf(descricao));
-				pi.setVrtot(Double.parseDouble(aces1.gravamoedadouble(vrtotal1.toString())));
+				pi.setVrtot(aces1.retornadouble(aces1.removeponto(vrtotal1.toString())));
 
 				new cadastraordemservi(p, itemordem, Integer.parseInt(item.toString()), listacadosi).setVisible(true);
 
@@ -823,7 +821,7 @@ public class cadastroordemservc extends JDialog {
 					listacadosi.setValueAt(id, linhaSel, 0);
 					listacadosi.setValueAt(item, linhaSel, 1);
 					listacadosi.setValueAt(descricao, linhaSel, 2);
-					listacadosi.setValueAt(aces1.valordinheiro(Double.parseDouble(vrtotal1.toString())), linhaSel, 3);
+					listacadosi.setValueAt(aces1.valordinheiro(aces1.retornadouble(vrtotal1.toString())), linhaSel, 3);
 					table.changeSelection(linhaSel, 0, false, false);
 					vrtotal.setText(aces1.valordinheiro(valorTotal()));
 				}

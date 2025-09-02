@@ -127,8 +127,6 @@ public class listadeordemserviços extends JDialog {
 	Cadcamin caminho = new Cadcamin();
 	Acesso acesso = new Acesso();
 
-	Locale local1 = new Locale("pt", "BR");
-	DateFormat datestring = new SimpleDateFormat("dd/MM/yyyy", local1);
 
 	LogusuRepository repositorylog = new LogusuRepository(EntityManagerUtil.manager);
 	private JButton btncrelatordemserv;
@@ -465,15 +463,13 @@ public class listadeordemserviços extends JDialog {
 
 		CadoscBean lista = new CadoscBean();
 		List<Cadosc> list = lista.getLista();
-		Locale BRAZIL = new Locale("pt", "BR");
-		DecimalFormatSymbols REAL = new DecimalFormatSymbols(BRAZIL);
-		DecimalFormat moeda = new DecimalFormat("###,###,##0.00", REAL);
+
 
 		for (Cadosc com : list) {
 
 			listaservicos.addRow(new Object[] { com.getId(), com.getNumdoc(), com.getCodclifor(),
-					com.getDescclifor(), datestring.format(com.getEmissao()), com.getFormpagto(),
-					moeda.format(com.getVrtot()) });
+					com.getDescclifor(), aces1.retornadatastring(com.getEmissao()), com.getFormpagto(),
+					aces1.valordinheiro(com.getVrtot()) });
 
 		}
 
@@ -512,7 +508,7 @@ public class listadeordemserviços extends JDialog {
 			int linha = table.getSelectedRow();
 			try {
 
-				String nome = "Deseja realmente excluir a ordem de serviço: " + table.getValueAt(linha, 1).toString() + " ?";
+				String nome = "DESEJA REALMENTE EXCLUIR A ORDEM DE SERVIÇO " + table.getValueAt(linha, 1).toString() + " ?";
 				int opcao_escolhida = JOptionPane.showConfirmDialog(null, nome, aces1.logexcluir + " ", JOptionPane.YES_NO_OPTION);
 				if (opcao_escolhida == JOptionPane.YES_OPTION) {
 					ordembean.remove(Long.parseLong(table.getValueAt(linha, 0).toString()), u1);
@@ -579,6 +575,8 @@ public class listadeordemserviços extends JDialog {
 				parametros.put("hora", aces1.hora());
 				parametros.put("enderempresa", empresa.getEnder() + ", " + empresa.getNum() + " - " + empresa.getBairro() + " - "
 						+ empresa.getCidade() + " - " + empresa.getEstado());
+				parametros.put("decunitario", TelaPrincipal.decunit);
+				parametros.put("decquantidade", TelaPrincipal.decqtde);
 
 				relat.PDFSEMVISUALIZAR(parametros, jrmlx, nomearquivo, "\\pdf\\");
 				File arquivo = new File("\\\\" + caminho.getCaminho() + "\\pdf\\" + nomearquivo + ".pdf");

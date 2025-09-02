@@ -63,23 +63,24 @@ import java.awt.event.FocusEvent;
 @SuppressWarnings("serial")
 public class cadastroproduto extends JDialog {
 	private JPanel contentPane;
-	private JTextField codpro,vrvenda,qtatual,unidade,descpro,vrcusto,qtdecomprada,qtdevendida,lotecon,qtdembalagem,pesopeca,pesobruto,troca;
-	
+	private JTextField codpro, vrvenda, qtatual, unidade, descpro, vrcusto, qtdecomprada, qtdevendida, lotecon,
+			qtdembalagem, pesopeca, pesobruto, troca;
+
 	private JCheckBox chinativo;
-	
+
 	private JTextArea complemento;
-	
+
 	JButton btncadastrar, btnlimpar;
-	
+
 	CadproBean c = new CadproBean();
 	AcessoBean aces1 = new AcessoBean();
-	
+
 	String dtult;
 	String dtultalt;
 	java.sql.Date data3;
 
 	LogusuRepository repositorylog = new LogusuRepository(EntityManagerUtil.manager);
-	
+
 	Locale BRAZIL = new Locale("pt", "BR");
 	DecimalFormatSymbols REAL = new DecimalFormatSymbols(BRAZIL);
 	DecimalFormat moeda = new DecimalFormat("R$ ###,###,##0.00", REAL);
@@ -124,9 +125,6 @@ public class cadastroproduto extends JDialog {
 							if (acesso.getNivel7() == true) {
 								aces1.liberado(vrvenda);
 							}
-							qtdecomprada.setText("0");
-							qtdevendida.setText("0");
-							qtatual.setText("0");
 							aces1.liberado(lotecon);
 							aces1.liberado(qtdembalagem);
 							aces1.liberado(pesopeca);
@@ -157,7 +155,7 @@ public class cadastroproduto extends JDialog {
 		aces1.bloqueado(codpro);
 		codpro.setBounds(134, 11, 248, 20);
 		contentPane.add(codpro);
-		
+
 		JLabel lbldescpro = new JLabel("DESCRIÇÃO");
 		aces1.padraojlabel(lbldescpro);
 		lbldescpro.setBounds(13, 39, 80, 14);
@@ -210,7 +208,7 @@ public class cadastroproduto extends JDialog {
 		aces1.letras(unidade);
 		unidade.setBounds(134, 61, 43, 20);
 		contentPane.add(unidade);
-		
+
 		JLabel lblvrcusto = new JLabel("VR CUSTO");
 		aces1.padraojlabel(lblvrcusto);
 		lblvrcusto.setBounds(180, 64, 70, 14);
@@ -222,17 +220,28 @@ public class cadastroproduto extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
+					validavalorcompra();
 					vrvenda.requestFocus();
 					vrvenda.selectAll();
 				}
 			}
 		});
-		vrcusto.setDocument(new MonetarioDocument());
+		vrcusto.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				validavalorcompra();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				vrcusto.selectAll();
+			}
+		});
 		aces1.bloqueado(vrcusto);
-		aces1.numeros(vrcusto);
+		aces1.numeroscomvirgula(vrcusto);
 		vrcusto.setBounds(248, 61, 107, 20);
 		contentPane.add(vrcusto);
-		
+
 		JLabel lblvenda = new JLabel("VR VENDA");
 		aces1.padraojlabel(lblvenda);
 		lblvenda.setBounds(361, 64, 68, 14);
@@ -244,17 +253,29 @@ public class cadastroproduto extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
+					validavalorvenda();
 					lotecon.requestFocus();
 					lotecon.selectAll();
+
 				}
 			}
 		});
+		vrvenda.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				validavalorvenda();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				vrvenda.selectAll();
+			}
+		});
 		aces1.bloqueado(vrvenda);
-		aces1.numeros(vrvenda);
-		vrvenda.setDocument(new MonetarioDocument());
+		aces1.numeroscomvirgula(vrvenda);
 		vrvenda.setBounds(429, 61, 118, 20);
 		contentPane.add(vrvenda);
-		
+
 		JLabel lblqtatual = new JLabel("QUANT. ATUAL");
 		aces1.padraojlabel(lblqtatual);
 		lblqtatual.setBounds(13, 89, 105, 14);
@@ -271,13 +292,10 @@ public class cadastroproduto extends JDialog {
 				}
 			}
 		});
-		if (pro.getIdcadpro() == null) {
-			qtatual.setText("0");
-		}
 		qtatual.setBounds(134, 86, 62, 20);
 		contentPane.add(qtatual);
 		aces1.bloqueado(qtatual);
-		
+
 		JLabel lblqtdecomprada = new JLabel("ULTIMA COMPRA");
 		aces1.padraojlabel(lblqtdecomprada);
 		lblqtdecomprada.setBounds(202, 89, 106, 14);
@@ -294,7 +312,7 @@ public class cadastroproduto extends JDialog {
 			}
 		});
 		aces1.bloqueado(qtdecomprada);
-		aces1.numeros(qtdecomprada);
+		aces1.numeroscomvirgula(qtdecomprada);
 		qtdecomprada.setBounds(310, 86, 62, 20);
 		contentPane.add(qtdecomprada);
 
@@ -311,11 +329,8 @@ public class cadastroproduto extends JDialog {
 				// lotecon.selectAll();
 			}
 		});
-		if (pro.getIdcadpro() == null) {
-			qtdevendida.setText("0");
-		}
 		aces1.bloqueado(qtdevendida);
-		aces1.numeros(qtdevendida);
+		aces1.numeroscomvirgula(qtdevendida);
 		qtdevendida.setBounds(478, 86, 69, 20);
 		contentPane.add(qtdevendida);
 
@@ -356,9 +371,6 @@ public class cadastroproduto extends JDialog {
 				}
 			}
 		});
-		if (pro.getIdcadpro() == null) {
-			qtdembalagem.setText("0");
-		}
 		aces1.bloqueado(qtdembalagem);
 		aces1.numeros(qtdembalagem);
 		qtdembalagem.setBounds(317, 111, 53, 20);
@@ -375,13 +387,25 @@ public class cadastroproduto extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
+					validapesoliquido();
 					pesobruto.requestFocus();
 					pesobruto.selectAll();
 				}
 			}
 		});
+		pesopeca.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				validapesoliquido();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				pesopeca.selectAll();
+			}
+		});
 		aces1.bloqueado(pesopeca);
-		aces1.numeroscomponto(pesopeca);
+		aces1.numeroscomvirgula(pesopeca);
 		pesopeca.setBounds(447, 111, 100, 20);
 		contentPane.add(pesopeca);
 
@@ -396,17 +420,27 @@ public class cadastroproduto extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_TAB || e.getKeyCode() == KeyEvent.VK_ENTER) {
+					validapesobruto();
 					chinativo.requestFocus();
 				}
 			}
 		});
-		if (pro.getIdcadpro() == null) {
-			pesobruto.setText("0");
-		}
+		pesobruto.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				validapesobruto();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				pesobruto.selectAll();
+			}
+		});
 		aces1.bloqueado(pesobruto);
+		aces1.numeroscomvirgula(pesobruto);
 		pesobruto.setBounds(134, 136, 71, 20);
 		contentPane.add(pesobruto);
-		
+
 		chinativo = new JCheckBox("PRODUTO INATIVO");
 		chinativo.setFont(new Font("Tahoma", Font.BOLD, 11));
 		chinativo.setForeground(new Color(0, 0, 0));
@@ -422,7 +456,7 @@ public class cadastroproduto extends JDialog {
 		});
 		chinativo.setBounds(249, 139, 135, 14);
 		contentPane.add(chinativo);
-		
+
 		JLabel lbltroca = new JLabel("TROCA");
 		aces1.padraojlabel(lbltroca);
 		lbltroca.setBounds(420, 139, 53, 14);
@@ -503,42 +537,33 @@ public class cadastroproduto extends JDialog {
 
 		if (pro.getIdcadpro() != null) {
 
-			DecimalFormat format = new DecimalFormat("####");
-
 			if (pro.getATIVO() == true) {
 				chinativo.setSelected(true);
 			}
 
-			if (pro.getQTINICIAL() != null) {
-				qtdecomprada.setText(format.format(pro.getQTINICIAL()).toString());
-			}
-			qtdevendida.setText(pro.getMATERIAL().replace(".0", ""));
+			qtdecomprada.setText(aces1.mascaraquantidadecomvirgula(pro.getQTINICIAL()));
+
+			qtdevendida.setText(
+					aces1.mascaraquantidadecomvirgula(aces1.retornadouble(pro.getMATERIAL())));
 			codpro.setText(pro.getCODPRO());
 			descpro.setText(pro.getDESCPRO());
 			unidade.setText(pro.getUN());
 
-			if (pro.getVRCOMPRA() != null) {
-				aces1.moedabanco(pro.getVRCOMPRA(), vrcusto);
-			}
-			if (pro.getVRVENDA() != null) {
-				aces1.moedabanco(pro.getVRVENDA(), vrvenda);
-			}
+			vrcusto.setText(aces1.valordinheiro(pro.getVRCOMPRA()));
 
-			if (pro.getQTATUAL() != null) {
-				qtatual.setText(format.format(pro.getQTATUAL()).toString());
-			}
-			if (pro.getECONOMICO() != null) {
-				lotecon.setText(format.format(pro.getECONOMICO()).toString());
-			}
-			if (pro.getQTCXA() != null) {
-				qtdembalagem.setText(format.format(pro.getQTCXA()).toString());
-			}
-			if (pro.getPESOLIQ() != null) {
-				pesopeca.setText(Double.toString(pro.getPESOLIQ()));
-			}
-			if (pro.getPESOBRUTO() != null) {
-				pesobruto.setText(Double.toString(pro.getPESOBRUTO()));
-			}
+			vrvenda.setText(aces1.valordinheiro(pro.getVRVENDA()));
+
+			qtatual.setText(aces1.mascaraquantidadecomvirgula(pro.getQTATUAL()));
+
+			lotecon.setText(aces1.mascaraquantidadecomvirgula(pro.getECONOMICO()));
+
+			qtdembalagem.setText(aces1.mascaraquantidadecomvirgula(
+						aces1.retornadouble(aces1.removeponto(pro.getQTCXA().toString()))));
+			
+			pesopeca.setText(aces1.mascaraquantidadecomvirgula(pro.getPESOLIQ()));
+
+			pesobruto.setText(aces1.mascaraquantidadecomvirgula(pro.getPESOBRUTO()));
+			
 			complemento.setText(pro.getFOTO());
 			troca.setText(Double.toString(pro.getTroca()));
 
@@ -558,12 +583,17 @@ public class cadastroproduto extends JDialog {
 			aces1.liberadojTextArea(complemento);
 			aces1.liberado(troca);
 			btncadastrar.setEnabled(true);
-		}else {
+		} else {
 			aces1.liberado(codpro);
-			vrcusto.setText("0");
-			vrvenda.setText("0");
-			qtdecomprada.setText("0");
-			lotecon.setText("0");
+			vrcusto.setText(aces1.valordinheiro(0.0));
+			vrvenda.setText(aces1.valordinheiro(0.0));
+			qtatual.setText(aces1.mascaraquantidadecomvirgula(0.0));
+			lotecon.setText(aces1.mascaraquantidadecomvirgula(0.0));
+			qtdembalagem.setText(aces1.mascaraquantidadecomvirgula(0.0));
+			pesopeca.setText(aces1.mascaraquantidadecomvirgula(0.0));
+			pesobruto.setText(aces1.mascaraquantidadecomvirgula(0.0));
+			qtdecomprada.setText(aces1.mascaraquantidadecomvirgula(0.0));
+			qtdevendida.setText(aces1.mascaraquantidadecomvirgula(0.0));
 		}
 
 		addWindowListener(new WindowAdapter() {
@@ -602,7 +632,7 @@ public class cadastroproduto extends JDialog {
 		try {
 			Cadpro p = new Cadpro();
 			String log = "ATIVADO";
-			
+
 			if (p1.getIdcadpro() != null) {
 				p = c.procura(p1.getIdcadpro());
 			}
@@ -610,20 +640,21 @@ public class cadastroproduto extends JDialog {
 			p.setCODPRO(codpro.getText().trim());
 			p.setDESCPRO(descpro.getText().trim());
 			p.setUN(unidade.getText().trim());
-			p.setVRVENDA(aces1.retornadouble(aces1.gravamoedadouble(vrvenda.getText())));
-			p.setQTATUAL(aces1.retornadouble(qtatual.getText()));
-			p.setVRCOMPRA(aces1.retornadouble(aces1.gravamoedadouble(vrcusto.getText())));
+			p.setVRVENDA(aces1.retornadouble(aces1.removeponto(vrvenda.getText())));
+			p.setQTATUAL(Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(qtatual.getText())))));
+			p.setVRCOMPRA(aces1.retornadouble(aces1.removeponto(vrcusto.getText())));
 			p.setECONOMICO(aces1.retornadouble(lotecon.getText()));
 			p.setATIVO(aces1.retornaBoolean(chinativo));
-			p.setQTINICIAL(aces1.retornadouble(qtdecomprada.getText()));
+			p.setQTINICIAL((Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(qtdecomprada.getText()))))));
 			p.setMATERIAL(qtdevendida.getText().trim());
-			p.setPESOLIQ(aces1.retornadouble(pesopeca.getText()));
-			p.setPESOBRUTO(aces1.retornadouble(pesobruto.getText()));
-			p.setQTCXA(aces1.retornadouble(qtdembalagem.getText()));
+			p.setPESOLIQ((Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(pesopeca.getText()))))));
+			p.setPESOBRUTO((Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(pesobruto.getText()))))));
+			p.setQTCXA((Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(qtdembalagem.getText()))))));
 			p.setFOTO(complemento.getText().trim());
 			p.setTroca(aces1.retornadouble(troca.getText()));
 
-			if (p.getCODPRO().equals(null) || p.getCODPRO().trim().isEmpty() || p.getDESCPRO().equals(null) || p.getDESCPRO().trim().isEmpty()) {
+			if (p.getCODPRO().equals(null) || p.getCODPRO().trim().isEmpty() || p.getDESCPRO().equals(null)
+					|| p.getDESCPRO().trim().isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Dados em branco");
 			} else {
 
@@ -660,8 +691,8 @@ public class cadastroproduto extends JDialog {
 
 							EntityManagerUtil.conexao();
 							LogusuRepository repositorylog = new LogusuRepository(EntityManagerUtil.manager);
-							repositorylog.adicionaLog(aces1.logalterar, "PRODUTO " + p.getCODPRO().trim() + " FOI " + log,
-									p.getIdcadpro(), up);
+							repositorylog.adicionaLog(aces1.logalterar,
+									"PRODUTO " + p.getCODPRO().trim() + " FOI " + log, p.getIdcadpro(), up);
 						}
 
 						if (!p1.getVRVENDA().equals(p.getVRVENDA())) {
@@ -694,5 +725,57 @@ public class cadastroproduto extends JDialog {
 			JOptionPane.showMessageDialog(null, "ERRO AO GRAVAR O PRODUTO " + e1.getMessage());
 			aces1.demologger.error("ERRO AO GRAVAR O PRODUTO " + e1.getMessage());
 		}
+	}
+
+	public void validavalorcompra() {
+
+		if (vrcusto.getText().equals(null) || vrcusto.getText().trim().isEmpty()) {
+			vrcusto.setText(aces1.valordinheiro(0.0));
+		} else {
+
+			double vrcompra1 = aces1.retornadouble(aces1.removeponto(vrcusto.getText().trim()));
+			vrcusto.setText(aces1.valordinheiro(vrcompra1));
+
+		}
+
+	}
+
+	public void validavalorvenda() {
+
+		if (vrvenda.getText().equals(null) || vrvenda.getText().trim().isEmpty()) {
+			vrvenda.setText(aces1.valordinheiro(0.0));
+		} else {
+
+			double vrvenda1 = aces1.retornadouble(aces1.removeponto(vrvenda.getText().trim()));
+			vrvenda.setText(aces1.valordinheiro(vrvenda1));
+
+		}
+
+	}
+	
+	public void validapesoliquido() {
+
+		if (pesopeca.getText().equals(null) || pesopeca.getText().trim().isEmpty()) {
+			pesopeca.setText(aces1.mascaraquantidadecomvirgula(0.0));
+		} else {
+
+			double pesopeca1 = aces1.retornadouble(aces1.removeponto(pesopeca.getText().trim()));
+			pesopeca.setText(aces1.mascaraquantidadecomvirgula(pesopeca1));
+
+		}
+
+	}
+	
+	public void validapesobruto() {
+
+		if (pesobruto.getText().equals(null) || pesobruto.getText().trim().isEmpty()) {
+			pesobruto.setText(aces1.mascaraquantidadecomvirgula(0.0));
+		} else {
+
+			double pesobruto1 = aces1.retornadouble(aces1.removeponto(pesobruto.getText().trim()));
+			pesobruto.setText(aces1.mascaraquantidadecomvirgula(pesobruto1));
+
+		}
+
 	}
 }

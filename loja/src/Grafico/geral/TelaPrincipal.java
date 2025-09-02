@@ -63,9 +63,11 @@ import org.apache.log4j.BasicConfigurator;
 
 import entidades.Acesso;
 import entidades.Cademp;
+import entidades.Cadmanuemp;
 import entidades.Usuario;
 import repositorios.AcessoRepository;
 import beans.AcessoBean;
+import beans.CadempBean;
 import beans.ModulosBean;
 import Configuracao.clsRedimensionarImagem;
 
@@ -106,6 +108,9 @@ public class TelaPrincipal extends JFrame {
 	private JButton btnordemservico;
 	private JToolBar menus;
 	private JMenuBar menusuario;
+	
+	public static int decunit = 0, decqtde = 0;
+	
 	public static String rotinau = "USUARIO";
 	public static String rotinap = "PRODUTO";
 	public static String rotinac = "CLIENTE";
@@ -662,6 +667,11 @@ public class TelaPrincipal extends JFrame {
 		gbc_menusuario.gridx = 0;
 		gbc_menusuario.gridy = 2;
 		contentPrincipal.add(menusuario, gbc_menusuario);
+		
+        decunit = decimaisunitario();
+		
+		decqtde = decimaisqtde();
+
 
 		// fechar janela com esc
 		addWindowListener(new WindowAdapter() {
@@ -678,8 +688,34 @@ public class TelaPrincipal extends JFrame {
 		Dimension dimensao = t.getScreenSize();
 		//this.setSize((dimensao.width + 5), (dimensao.height - 38));
 		this.setBounds(-7, 0, (dimensao.width + 14), (dimensao.height - 30));
+
+	}
+	
+	private int decimaisunitario() {
+		int casaunit = 0;
+		Cadmanuemp manuemp = new Cadmanuemp();
+		CadempBean empbean = new CadempBean();
+
+		manuemp = empbean.rastreioemp();
+
+		casaunit = manuemp.getDecunit();
+
+		return casaunit;
+
+	}
+	
+	private int decimaisqtde() {
+		int casaqtde = 0;
+		Cadmanuemp manuemp = new Cadmanuemp();
+		CadempBean empbean = new CadempBean();
+
+		manuemp = empbean.rastreioemp();
+
 		
+		casaqtde = manuemp.getDecqtde();
 		
+
+		return casaqtde;
 
 	}
 

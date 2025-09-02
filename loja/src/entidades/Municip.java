@@ -3,6 +3,7 @@ package entidades;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.Index;
@@ -11,7 +12,7 @@ import org.hibernate.annotations.Index;
 public class Municip {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Index(name = "idx_id")
 	private Long id;
 	

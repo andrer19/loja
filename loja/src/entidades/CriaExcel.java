@@ -267,14 +267,12 @@ public class CriaExcel {
 			celldescricao.setCellStyle(styles.get("itemlista"));
 
 			Cell cellunitario = row.createCell(cellnum++);
-			cellunitario.setCellType(Cell.CELL_TYPE_NUMERIC);
-			cellunitario.setCellValue(pdsaii.getUnitario());
+			cellunitario.setCellValue(aces1.valordinheiro(pdsaii.getUnitario()));
 			cellunitario.setCellStyle(styles.get("itemlista"));
 
 			Cell cellvrtotal = row.createCell(cellnum++);
-			cellvrtotal.setCellType(Cell.CELL_TYPE_NUMERIC);
 			if (pdsaii.getVrtot() > 0.0) {
-				cellvrtotal.setCellValue(convertValorToMoney(pdsaii.getVrtot()));
+				cellvrtotal.setCellValue(aces1.valordinheiro(pdsaii.getVrtot()));
 			} else {
 				cellvrtotal.setCellValue("0");
 			}
@@ -314,8 +312,7 @@ public class CriaExcel {
 		cellbranco5.setCellStyle(styles.get("somafinal"));
 
 		Cell cellsomatotal = row.createCell(cellnum++);
-		cellsomatotal.setCellType(Cell.CELL_TYPE_NUMERIC);
-		cellsomatotal.setCellValue(convertValorToMoney(somatotal));
+		cellsomatotal.setCellValue(aces1.valordinheiro(somatotal));
 		cellsomatotal.setCellStyle(styles.get("somafinal"));
 
 		if (tabela.equals("pedidovenda")) {
@@ -450,17 +447,15 @@ public class CriaExcel {
 			celldescricao.setCellStyle(styles.get("itemlista"));
 
 			Cell cellunitario = row.createCell(cellnum++);
-			cellunitario.setCellType(Cell.CELL_TYPE_NUMERIC);
-			cellunitario.setCellValue(pdenti.getUnitario());
+			cellunitario.setCellValue(aces1.valordinheiro(pdenti.getUnitario()));
 			cellunitario.setCellStyle(styles.get("itemlista"));
 
 			Cell cellvrtotal = row.createCell(cellnum++);
-			cellvrtotal.setCellType(Cell.CELL_TYPE_NUMERIC);
 			// JOptionPane.showMessageDialog(null, "somatotal " + pdenti.getVrtot());
 			if (pdenti.getVrtot() > 0.0) {
-				cellvrtotal.setCellValue(convertValorToMoney(pdenti.getVrtot()));
+				cellvrtotal.setCellValue(aces1.valordinheiro(pdenti.getVrtot()));
 			} else {
-				cellvrtotal.setCellValue("0");
+				cellvrtotal.setCellValue(aces1.valordinheiro(0.0));
 			}
 			cellvrtotal.setCellStyle(styles.get("itemlista"));
 
@@ -498,9 +493,8 @@ public class CriaExcel {
 		cellbranco5.setCellStyle(styles.get("somafinal"));
 
 		Cell cellsomatotal = row.createCell(cellnum++);
-		cellsomatotal.setCellType(Cell.CELL_TYPE_NUMERIC);
 
-		cellsomatotal.setCellValue(convertValorToMoney(somatotal));
+		cellsomatotal.setCellValue(aces1.valordinheiro(somatotal));
 
 		cellsomatotal.setCellStyle(styles.get("somafinal"));
 
@@ -746,7 +740,6 @@ public class CriaExcel {
 		sheetp.addMergedRegion(new CellRangeAddress(mescla, mescla, 0, colunam));
 
 		Cell cellsomatotal = row.createCell(cellnum++);
-		cellsomatotal.setCellType(Cell.CELL_TYPE_NUMERIC);
 		//cellsomatotal.setCellValue(convertValorToMoney(somatotal));
 		cellsomatotal.setCellValue(aces1.valordinheiro(somatotal));
 		cellsomatotal.setCellStyle(styles.get("somafinal"));
@@ -913,7 +906,8 @@ public class CriaExcel {
 		cabecalhoStyle.setAlignment(HorizontalAlignment.CENTER);
 		cabecalhoStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 		cabecalhoStyle.setWrapText(true);
-		cabecalhoStyle.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
+		//XSSFColor header = new XSSFColor(new Color(156, 189, 230));
+		cabecalhoStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
 		cabecalhoStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		cabecalhoStyle.setBorderRight(BorderStyle.THIN);
 		cabecalhoStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());

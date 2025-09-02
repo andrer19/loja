@@ -3,13 +3,14 @@ package entidades;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Cadnat {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idcadnat;
 	
 	private String NUMERO,CFOP,DESCNAT,BASEICM,BASEPIS,BASECOFINS,BASECFE,TIPOPRECO,TIPO,OBSERVACAO,

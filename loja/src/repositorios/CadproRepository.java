@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
+import beans.AcessoBean;
 import entidades.Cadcli;
 import entidades.Cadfor;
 import entidades.Cadmov;
@@ -23,6 +24,7 @@ import filter.EntityManagerUtil;
 public class CadproRepository {
 
 	Date data = new Date();
+	AcessoBean aces1 = new AcessoBean();
 
 	public CadproRepository(EntityManager manager) {
 
@@ -91,7 +93,7 @@ public class CadproRepository {
 		double qtde1 = cadpro1.getQTATUAL();
 		qtde1 = qtde1 - pdsaii.getQuantidade();
 		double qtde2 = cadpro1.getQTATUAL();
-		Double qtdevendida = Double.parseDouble(cadpro1.getMATERIAL()) + pdsaii.getQuantidade();
+		Double qtdevendida = aces1.retornadouble(aces1.removeponto(cadpro1.getMATERIAL())) + pdsaii.getQuantidade();
 
 		cadpro1.setQTATUAL(qtde1);
 		cadpro1.setMATERIAL(qtdevendida.toString());

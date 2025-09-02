@@ -115,6 +115,7 @@ public class cadastrocomprasc extends JDialog {
 	String rotina = TelaPrincipal.rotinaco;;
 	AcessoBean aces1 = new AcessoBean();
 	private Long idp;
+	Double item = 0.0;
 
 	List<Pdenti> pdentiremove = new ArrayList<Pdenti>();
 	
@@ -363,45 +364,7 @@ public class cadastrocomprasc extends JDialog {
 			public void keyPressed(KeyEvent evt) {
 				if (acesso.getInclusao() == true) {
 					if (evt.getKeyCode() == KeyEvent.VK_INSERT) {
-						try {
-
-							int item = 0;
-
-							if (listapdenti.getRowCount() == 1) {
-								int linha = table.convertRowIndexToModel(table.getSelectedRow());
-								if (listapdenti.getValueAt(linha, 2) == null
-										|| listapdenti.getValueAt(linha, 2) == "") {
-									listapdenti.removeRow(linha);
-								} else {
-									item = listapdenti.getRowCount();
-								}
-							} else {
-								item = listapdenti.getRowCount();
-							}
-							Pdenti pi = new Pdenti();
-							new cadastracomprasi(p, pi, item).setVisible(true);
-							if (pi.getItem() != null && !pi.getItem().trim().isEmpty()) {
-								String iditem = ci.getItem() + 1;
-								listapdenti.addRow(new Object[] { null, pi.getItem(), pi.getProduto(), pi.getDescpro(),
-										pi.getUn(),
-										aces1.valordinheiro(pi.getUnitario()),
-										aces1.valordinheiro(pi.getVrtot()),
-										decimalqtde.format(pi.getQuantidade()), pi.getPrazo() });
-								qttotal.setText(quantidadeTotal());
-								vrtotal.setText(aces1.valordinheiro(valorTotal()));
-								vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
-								table.setRowSelectionAllowed(true);
-								int linha = listapdenti.getRowCount();
-								int conta = linha - 1;
-								table.changeSelection(conta, linha, false, false);
-								table.setSelectionBackground(Color.GREEN);
-								table.changeSelection(0, 0, false, false);
-
-							}
-						} catch (Exception e) {
-							JOptionPane.showMessageDialog(null, "Erro insert lista de compras: " + e.getMessage());
-							e.printStackTrace();
-						}
+						novoItemPedidoCompras(p);
 					}
 				}
 
@@ -416,87 +379,7 @@ public class cadastrocomprasc extends JDialog {
 				}
 
 				if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-					if (table.getSelectedRow() != -1 && table.getRowCount() > 0) {
-						int linha = table.convertRowIndexToModel(table.getSelectedRow());
-						List<Pdenti> listapdenti1 = new ArrayList<Pdenti>();
-						try {
-							if (acesso.getExclusao() == true) {
-								int conseguiu_excluir = 0;
-								String nome = "Deseja realmente excluir o item: "
-										+ table.getValueAt(linha, 1).toString() + " ?";
-								int opcao_escolhida = JOptionPane.showConfirmDialog(null, nome, "Exclusão ",
-										JOptionPane.YES_NO_OPTION);
-								if (opcao_escolhida == JOptionPane.YES_OPTION) {
-									conseguiu_excluir = 1;
-								}
-
-								if (conseguiu_excluir == 1) {
-									if (listapdenti.getValueAt(linha, 0) != null) {
-										Pdenti removeitem = new Pdenti();
-										removeitem = cdao
-												.procura(Long.parseLong(listapdenti.getValueAt(linha, 0).toString()));
-										pdentiremove.add(removeitem);
-
-									}
-									listapdenti.removeRow(linha);
-
-									for (int x = 0; x < listapdenti.getRowCount(); x++) {
-										int soma = x + 1;
-										Pdenti mudaitem = new Pdenti();
-
-										if (listapdenti.getValueAt(x, 0) != null) {
-											mudaitem.setIdpdenti(
-													Long.parseLong(listapdenti.getValueAt(x, 0).toString()));
-
-										}
-
-										mudaitem.setPedido(pedido.getText());
-										mudaitem.setIdpdenti((Long) listapdenti.getValueAt(x, 0));
-										mudaitem.setItem(String.valueOf(soma));
-										mudaitem.setProduto(String.valueOf(listapdenti.getValueAt(x, 2)));
-										mudaitem.setDescpro(String.valueOf(listapdenti.getValueAt(x, 3)));
-										mudaitem.setUn(String.valueOf(listapdenti.getValueAt(x, 4)));
-										mudaitem.setUnitario(Double.parseDouble(
-												aces1.gravamoedadouble(listapdenti.getValueAt(x, 5).toString())));
-										mudaitem.setVrtot(Double.parseDouble(
-												aces1.gravamoedadouble(listapdenti.getValueAt(x, 6).toString())));
-										mudaitem.setQuantidade(
-												Double.parseDouble(listapdenti.getValueAt(x, 7).toString()));
-
-										listapdenti1.add(mudaitem);
-										mudaitem = new Pdenti();
-
-									}
-
-									listapdenti.setRowCount(0);
-
-									for (Pdenti com : listapdenti1) {
-										listapdenti.addRow(new Object[] { com.getIdpdenti(), com.getItem(),
-												com.getProduto(), com.getDescpro(), com.getUn(),
-												aces1.valordinheiro(com.getUnitario()),
-												aces1.valordinheiro(com.getVrtot()),
-												decimalqtde.format(com.getQuantidade()), com.getPrazo() });
-
-									}
-
-									table.setModel(listapdenti);
-									table.changeSelection(linha, 0, false, false);
-									qttotal.setText(quantidadeTotal());
-									vrtotal.setText(aces1.valordinheiro(valorTotal()));
-									vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
-									table.changeSelection(0, 0, false, false);
-								}
-							} else {
-								JOptionPane.showMessageDialog(null, aces1.getExcluir());
-							}
-
-						} catch (Exception e1) {
-							JOptionPane.showMessageDialog(null, "ERRO AO TENTAR EXCLUIR O ITEM " + e1.getMessage());
-							aces1.demologger.error("ERRO AO TENTAR EXCLUIR O ITEM " + e1.getMessage());
-						}
-					} else {
-						JOptionPane.showMessageDialog(null, "SELECIONE UM PEDIDO DE COMPRAS !!!!!!!!");
-					}
+					excluirItemPedidoCompras(acesso);
 				}
 
 			}
@@ -694,8 +577,8 @@ public class cadastrocomprasc extends JDialog {
 			emissao.setText(dateFormat.format(p.getEmissao()));
 			entrega.setText(dateFormat.format(p.getVencto()));
 			pedido.setText(p.getNumdoc().trim());
-			vrmercadoria.setText(aces1.formataMoeda(totalmercadoria()).replace("R$", ""));
-			vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
+			vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
+			vrtotal.setText(aces1.valordinheiro(valorTotal()));
 			obs.setText(p.getObs().trim());
 			vendedor.setText(p.getVendedor().trim());
 			cadforp = p.getForn();
@@ -713,7 +596,8 @@ public class cadastrocomprasc extends JDialog {
 		if (listapdenti.getRowCount() == 0) {
 			Pdenti pi = new Pdenti();
 			listapdenti.addRow(new Object[] { pi.getIdpdenti(), pi.getItem(), pi.getProduto(), pi.getDescpro(),
-					pi.getUn(), pi.getUnitario(), pi.getVrtot(), pi.getQuantidade(), pi.getPrazo() });
+					pi.getUn(), aces1.valordinheiro(pi.getUnitario()), aces1.valordinheiro(pi.getVrtot()),
+					aces1.mascaraquantidadecomvirgula(pi.getQuantidade()), pi.getPrazo() });
 		}
 		table.changeSelection(0, 0, false, false);
 
@@ -776,11 +660,13 @@ public class cadastrocomprasc extends JDialog {
 		PdentiBean lista = new PdentiBean();
 		List<Pdenti> list = (List<Pdenti>) lista.getPdentis(pe);
 
+		item = 0.0;
 		for (Pdenti com : list) {
-			listapdenti.addRow(new Object[] { com.getIdpdenti(), com.getItem(), com.getProduto(), com.getDescpro(),
+			item += 1;
+			listapdenti.addRow(new Object[] { com.getIdpdenti(), aces1.retornaString(item), com.getProduto(), com.getDescpro(),
 					com.getUn(),aces1.valordinheiro(com.getUnitario()),
 					aces1.valordinheiro(com.getVrtot()),
-					decimalqtde.format(com.getQuantidade()), com.getPrazo() });
+					aces1.mascaraquantidadecomvirgula(com.getQuantidade()), com.getPrazo() });
 
 		}
 
@@ -788,18 +674,18 @@ public class cadastrocomprasc extends JDialog {
 
 	private String quantidadeTotal() {
 		Double Orcamento = 0.0;
-		DecimalFormat decimalqtde = new DecimalFormat("0");
+		
 		for (int i = 0; i < listapdenti.getRowCount(); i++) {
-			Orcamento += Double.parseDouble(listapdenti.getValueAt(i, 7).toString());
+			Orcamento += aces1.retornadouble(aces1.removeponto(listapdenti.getValueAt(i, 7).toString()));
 		}
-		return decimalqtde.format(Orcamento);
+		return aces1.mascaraquantidadecomvirgula(Orcamento);
 	}
 
 	// soma os valores e arredonda
 	private Double valorTotal() {
 		Double total = 0.0;
 		for (int i = 0; i < listapdenti.getRowCount(); i++) {
-			total += Double.parseDouble((listapdenti.getValueAt(i, 6).toString().replace(".", "").replace(",", ".")));
+			total += aces1.retornadouble(aces1.removeponto(listapdenti.getValueAt(i, 6).toString()));
 		}
 		return total;
 	}
@@ -807,7 +693,7 @@ public class cadastrocomprasc extends JDialog {
 	private Double totalmercadoria() {
 		Double Orcamento = 0.0;
 		for (int i = 0; i < listapdenti.getRowCount(); i++) {
-			Orcamento += Double.parseDouble((listapdenti.getValueAt(i, 6).toString().replace(".", "").replace(",", ".")));
+			Orcamento += aces1.retornadouble(aces1.removeponto(listapdenti.getValueAt(i, 6).toString()));
 		}
 
 		return Orcamento;
@@ -822,15 +708,17 @@ public class cadastrocomprasc extends JDialog {
 				cadastro = c1.procura(idp);
 			}
 
+			
 			cadastro.setEmissao(aces1.retornadata(emissao.getText()));
 			cadastro.setVencto(aces1.retornadata(entrega.getText()));
 			cadastro.setNumdoc(pedido.getText().trim());
-			cadastro.setVrmerc(Double.parseDouble(aces1.gravamoedadouble(vrmercadoria.getText())));
-			cadastro.setVrtot(Double.parseDouble(aces1.gravamoedadouble(vrtotal.getText())));
+			cadastro.setVrmerc(aces1.retornadouble(aces1.removeponto(vrmercadoria.getText())));
+			cadastro.setVrtot(aces1.retornadouble(aces1.removeponto(vrtotal.getText())));
 			cadastro.setForn(cadforp);
 			cadastro.setObs(obs.getText().trim());
 			cadastro.setContato(contato.getText().trim());
 			cadastro.setVendedor(vendedor.getText().trim());
+			
 
 			int l = 0;
 
@@ -899,10 +787,11 @@ public class cadastrocomprasc extends JDialog {
 						ciitem.setDescpro(String.valueOf(listapdenti.getValueAt(x, 3)).trim());
 						ciitem.setUn(String.valueOf(listapdenti.getValueAt(x, 4)).trim());
 						ciitem.setUnitario(
-								Double.parseDouble(aces1.gravamoedadouble(listapdenti.getValueAt(x, 5).toString())));
+								aces1.retornadouble(aces1.removeponto(listapdenti.getValueAt(x, 5).toString())));
 						ciitem.setVrtot(
-								Double.parseDouble(aces1.gravamoedadouble(listapdenti.getValueAt(x, 6).toString())));
-						ciitem.setQuantidade(Double.parseDouble(listapdenti.getValueAt(x, 7).toString()));
+								aces1.retornadouble(aces1.removeponto(listapdenti.getValueAt(x, 6).toString())));
+						ciitem.setQuantidade(Double.parseDouble(aces1.mascaraquantidade(
+								aces1.retornadouble(aces1.removeponto(listapdenti.getValueAt(x, 7).toString())))));
 						ciitem.setEmissao(cadastro.getEmissao());
 						ciitem.setPedc(cadastro);
 						listapdenti1.add(ciitem);
@@ -967,9 +856,10 @@ public class cadastrocomprasc extends JDialog {
 				pi.setProduto(String.valueOf(produto));
 				pi.setDescpro(String.valueOf(descpro));
 				pi.setUn(String.valueOf(un));
-				pi.setUnitario(Double.parseDouble(aces1.gravamoedadouble(unitario.toString())));
-				pi.setVrtot(Double.parseDouble(aces1.gravamoedadouble(vrtotal1.toString())));
-				pi.setQuantidade(Double.parseDouble(quantidade.toString()));
+				pi.setUnitario(aces1.retornadouble(aces1.removeponto(unitario.toString())));
+				pi.setVrtot(aces1.retornadouble(aces1.removeponto(vrtotal1.toString())));
+				pi.setQuantidade(aces1.retornadouble(
+						aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(quantidade.toString())))));
 
 				new cadastracomprasi(p, ci, Integer.parseInt(item.toString())).setVisible(true);
 
@@ -992,9 +882,9 @@ public class cadastrocomprasc extends JDialog {
 					listapdenti.setValueAt(produto, linhaSel, 2);
 					listapdenti.setValueAt(descpro, linhaSel, 3);
 					listapdenti.setValueAt(un, linhaSel, 4);
-					listapdenti.setValueAt(aces1.valordinheiro(Double.parseDouble(unitario.toString())),linhaSel, 5);
-					listapdenti.setValueAt(aces1.valordinheiro(Double.parseDouble(vrtotal1.toString())),linhaSel, 6);
-					listapdenti.setValueAt(decimalqtde.format(quantidade), linhaSel, 7);
+					listapdenti.setValueAt(aces1.valordinheiro(aces1.retornadouble(unitario.toString())),linhaSel, 5);
+					listapdenti.setValueAt(aces1.valordinheiro(aces1.retornadouble(vrtotal1.toString())),linhaSel, 6);
+					listapdenti.setValueAt(aces1.mascaraquantidadecomvirgula(aces1.retornadouble(quantidade.toString())), linhaSel, 7);
 					listapdenti.setValueAt(prazo, linhaSel, 8);
 					table.changeSelection(linhaSel, 0, false, false);
 					qttotal.setText(quantidadeTotal());
@@ -1009,6 +899,135 @@ public class cadastrocomprasc extends JDialog {
 			JOptionPane.showMessageDialog(null, "SELECIONE UM PEDIDO DE COMPRAS !!!!!!!!!!");
 		}
 
+	}
+	
+	public void novoItemPedidoCompras(Pdentc px) {
+		
+		try {
+
+			int item = 0;
+
+			if (listapdenti.getRowCount() == 1) {
+				int linha = table.convertRowIndexToModel(table.getSelectedRow());
+				if (listapdenti.getValueAt(linha, 2) == null
+						|| listapdenti.getValueAt(linha, 2) == "") {
+					listapdenti.removeRow(linha);
+				} else {
+					item = listapdenti.getRowCount();
+				}
+			} else {
+				item = listapdenti.getRowCount();
+			}
+			Pdenti pi = new Pdenti();
+			new cadastracomprasi(px, pi, item).setVisible(true);
+			if (pi.getItem() != null && !pi.getItem().trim().isEmpty()) {
+				String iditem = ci.getItem() + 1;
+				listapdenti.addRow(new Object[] { null, pi.getItem(), pi.getProduto(), pi.getDescpro(),
+						pi.getUn(),
+						aces1.valordinheiro(pi.getUnitario()),
+						aces1.valordinheiro(pi.getVrtot()),
+						aces1.mascaraquantidadecomvirgula(pi.getQuantidade()), pi.getPrazo() });
+				qttotal.setText(quantidadeTotal());
+				vrtotal.setText(aces1.valordinheiro(valorTotal()));
+				vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
+				table.setRowSelectionAllowed(true);
+				int linha = listapdenti.getRowCount();
+				int conta = linha - 1;
+				table.changeSelection(conta, linha, false, false);
+				table.setSelectionBackground(Color.GREEN);
+				table.changeSelection(0, 0, false, false);
+
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro insert lista de compras: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	public void excluirItemPedidoCompras(Acesso acessox) {
+		
+		if (table.getSelectedRow() != -1 && table.getRowCount() > 0) {
+			int linha = table.convertRowIndexToModel(table.getSelectedRow());
+			List<Pdenti> listapdenti1 = new ArrayList<Pdenti>();
+			try {
+				if (acessox.getExclusao() == true) {
+					int conseguiu_excluir = 0;
+					String nome = "DESEJA REALMENTE EXCLUIR O ITEM "
+							+ table.getValueAt(linha, 1).toString() + " ?";
+					int opcao_escolhida = JOptionPane.showConfirmDialog(null, nome, "Exclusão ",
+							JOptionPane.YES_NO_OPTION);
+					if (opcao_escolhida == JOptionPane.YES_OPTION) {
+						conseguiu_excluir = 1;
+					}
+
+					if (conseguiu_excluir == 1) {
+						if (listapdenti.getValueAt(linha, 0) != null) {
+							Pdenti removeitem = new Pdenti();
+							removeitem = cdao
+									.procura(Long.parseLong(listapdenti.getValueAt(linha, 0).toString()));
+							pdentiremove.add(removeitem);
+
+						}
+						listapdenti.removeRow(linha);
+
+						for (int x = 0; x < listapdenti.getRowCount(); x++) {
+							int soma = x + 1;
+							Pdenti mudaitem = new Pdenti();
+
+							if (listapdenti.getValueAt(x, 0) != null) {
+								mudaitem.setIdpdenti(
+										Long.parseLong(listapdenti.getValueAt(x, 0).toString()));
+
+							}
+
+							mudaitem.setPedido(pedido.getText());
+							mudaitem.setIdpdenti((Long) listapdenti.getValueAt(x, 0));
+							mudaitem.setItem(String.valueOf(soma));
+							mudaitem.setProduto(String.valueOf(listapdenti.getValueAt(x, 2)));
+							mudaitem.setDescpro(String.valueOf(listapdenti.getValueAt(x, 3)));
+							mudaitem.setUn(String.valueOf(listapdenti.getValueAt(x, 4)));
+							mudaitem.setUnitario(aces1.retornadouble(aces1.removeponto(listapdenti.getValueAt(x, 5).toString())));
+							mudaitem.setVrtot(aces1.retornadouble(aces1.removeponto(listapdenti.getValueAt(x, 6).toString())));
+							mudaitem.setQuantidade(Double.parseDouble(aces1.mascaraquantidade(
+											aces1.retornadouble(aces1.removeponto(listapdenti.getValueAt(x, 7).toString())))));
+
+							listapdenti1.add(mudaitem);
+							mudaitem = new Pdenti();
+
+						}
+
+						listapdenti.setRowCount(0);
+
+						for (Pdenti com : listapdenti1) {
+							listapdenti.addRow(new Object[] { com.getIdpdenti(), com.getItem(),
+									com.getProduto(), com.getDescpro(), com.getUn(),
+									aces1.valordinheiro(com.getUnitario()),
+									aces1.valordinheiro(com.getVrtot()),
+									aces1.mascaraquantidadecomvirgula(com.getQuantidade()), com.getPrazo() });
+
+						}
+
+						table.setModel(listapdenti);
+						table.changeSelection(linha, 0, false, false);
+						qttotal.setText(quantidadeTotal());
+						vrtotal.setText(aces1.valordinheiro(valorTotal()));
+						vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
+						table.requestFocus();
+						table.changeSelection(0, 0, false, false);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, aces1.getExcluir());
+				}
+
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, "ERRO AO TENTAR EXCLUIR O ITEM " + e1.getMessage());
+				aces1.demologger.error("ERRO AO TENTAR EXCLUIR O ITEM " + e1.getMessage());
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "SELECIONE UM PEDIDO DE COMPRAS !!!!!!!!");
+		}
+
+		
 	}
 
 }

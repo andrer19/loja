@@ -118,12 +118,12 @@ public class AcessoRepository {
 			acesso.setNivel6(true);
 			acesso.setNivel7(true);
 			acesso.setNivel8(true);
+			acesso.setUsuario(user);;
 
 		} else {
 			EntityManagerUtil.conexao();
 			EntityManagerUtil.begin();
-			//Query query = EntityManagerUtil.manager.createQuery("SELECT x FROM Acesso x WHERE x.usuario = '"
-					//+ user.getId() + "' and x.modulo = '" + m + "' and x.sql_deleted = 'F'");
+
 			Query query = EntityManagerUtil.manager.createNativeQuery("SELECT id,modulo FROM acesso WHERE usuario_id = '"
 					+ user.getId() + "' and modulo = '" + m + "' and sql_deleted = 'F'");
 			List<Object[]> result = query.getResultList();
@@ -131,11 +131,6 @@ public class AcessoRepository {
 				acesso = new Acesso();
 				acesso = procura(Long.parseLong(row[0].toString()));
 			}
-
-			//acesso = (Acesso) query.getSingleResult();
-			
-			//EntityManagerUtil.commit();
-			//EntityManagerUtil.close();
 		}
 
 		return acesso;

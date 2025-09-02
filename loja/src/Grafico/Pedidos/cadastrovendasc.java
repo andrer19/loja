@@ -21,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -117,6 +119,8 @@ public class cadastrovendasc extends JDialog {
 	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	DecimalFormat decimal = new DecimalFormat("0.00");
 	DecimalFormat decimalqtde = new DecimalFormat("0");
+	
+	Double item = 0.0;
 
 	DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
 	public DefaultTableModel listapdsaii = new DefaultTableModel() {
@@ -192,7 +196,7 @@ public class cadastrovendasc extends JDialog {
 						cadclip = f1.procura(f.getIdcadcli());
 						cliente.setText(cadclip.getCODCLI());
 						desccli.setText(cadclip.getDESCCLI());
-						aces1.moedabanco(cadclip.getTxent(), txentrega);
+						txentrega.setText(aces1.valordinheiro(cadclip.getTxent()));
 						aces1.bloqueado(emissao);
 						try {
 							emissao.setText(aces1.retornadatastring(aces1.dataatual()));
@@ -308,42 +312,7 @@ public class cadastrovendasc extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent evt) {
 				if (evt.getKeyCode() == KeyEvent.VK_INSERT) {
-					try {
-						int item = 0;
-
-						if (listapdsaii.getRowCount() == 1) {
-							int linha = table.convertRowIndexToModel(table.getSelectedRow());
-							if (listapdsaii.getValueAt(linha, 2) == null
-									|| listapdsaii.getValueAt(linha, 2).toString().isEmpty()) {
-								listapdsaii.removeRow(linha);
-							} else {
-								item = listapdsaii.getRowCount();
-							}
-						} else {
-							item = listapdsaii.getRowCount();
-						}
-						Pdsaii pi = new Pdsaii();
-						new cadastravendasi(p, pi, item, listapdsaii).setVisible(true);
-						if (pi.getItem() != null && !pi.getItem().toString().isEmpty()) {
-							String iditem = ci.getItem().toString() + 1;
-							listapdsaii.addRow(
-									new Object[] { null, pi.getItem(), pi.getProduto(), pi.getDescpro(), pi.getUn(),
-											aces1.valordinheiro(pi.getUnitario()),aces1.valordinheiro(pi.getVrtot()),
-											decimalqtde.format(pi.getQuantidade()), pi.getPrazo(), pi.getTroca() });
-							qttotal.setText(quantidadeTotal());
-							vrtotal.setText(aces1.valordinheiro(valorTotal()));
-							vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
-							table.setRowSelectionAllowed(true);
-							int linha = listapdsaii.getRowCount();
-							int conta = linha - 1;
-							table.changeSelection(conta, linha, false, false);
-							table.setSelectionBackground(Color.GREEN);
-							table.changeSelection(0, 0, false, false);
-
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					novoitempedidovendas(p);
 				}
 
 				if (evt.getKeyCode() == KeyEvent.VK_TAB) {
@@ -355,81 +324,7 @@ public class cadastrovendasc extends JDialog {
 				}
 
 				if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-					if (table.getSelectedRow() != -1 && table.getRowCount() > 0) {
-						int linha = table.convertRowIndexToModel(table.getSelectedRow());
-						List<Pdsaii> listapdsaii1 = new ArrayList<Pdsaii>();
-						try {
-							int conseguiu_excluir = 0;
-							String nome = "Deseja realmente excluir o item: " + table.getValueAt(linha, 1).toString()
-									+ " ?";
-							int opcao_escolhida = JOptionPane.showConfirmDialog(null, nome, "Exclusão ",
-									JOptionPane.YES_NO_OPTION);
-							if (opcao_escolhida == JOptionPane.YES_OPTION) {
-								conseguiu_excluir = 1;
-							}
-
-							if (conseguiu_excluir == 1) {
-								if (listapdsaii.getValueAt(linha, 0) != null) {
-									Pdsaii removeitem = new Pdsaii();
-									removeitem = cdao
-											.procura(Long.parseLong(listapdsaii.getValueAt(linha, 0).toString()));
-									pdsaiiremove.add(removeitem);
-								}
-								listapdsaii.removeRow(linha);
-
-								for (int x = 0; x < listapdsaii.getRowCount(); x++) {
-									int soma = x + 1;
-									
-									Pdsaii mudaitem = new Pdsaii();
-
-									if (listapdsaii.getValueAt(x, 0) != null) {
-										mudaitem.setIdpdsaii(Long.parseLong(listapdsaii.getValueAt(x, 0).toString()));
-									}
-
-									mudaitem.setItem(String.valueOf(soma));
-									mudaitem.setProduto(listapdsaii.getValueAt(x, 2).toString());
-									mudaitem.setDescpro(String.valueOf(listapdsaii.getValueAt(x, 3).toString()));
-									mudaitem.setUn(String.valueOf(listapdsaii.getValueAt(x, 4).toString()));
-									mudaitem.setUnitario(Double.parseDouble(
-											aces1.gravamoedadouble(listapdsaii.getValueAt(x, 5).toString())));
-									mudaitem.setVrtot(Double.parseDouble(
-											aces1.gravamoedadouble(listapdsaii.getValueAt(x, 6).toString())));
-									mudaitem.setQuantidade(Double.parseDouble(listapdsaii.getValueAt(x, 7).toString()));
-									mudaitem.setPrazo((Date) listapdsaii.getValueAt(x, 8));
-									mudaitem.setTroca((Boolean) listapdsaii.getValueAt(x, 9));
-									mudaitem.setPedido(pedido.getText());
-									listapdsaii1.add(mudaitem);
-									mudaitem = new Pdsaii();
-
-								}
-								cdao.acertaitem(listapdsaii1, u);
-								listapdsaii.setRowCount(0);
-
-								for (Pdsaii com : listapdsaii1) {
-									listapdsaii.addRow(new Object[] { com.getIdpdsaii(), com.getItem(),
-											com.getProduto(), com.getDescpro(), com.getUn(),
-											aces1.valordinheiro(com.getUnitario()),
-											aces1.valordinheiro(com.getVrtot()),
-											decimalqtde.format(com.getQuantidade()), com.getPrazo(),com.getTroca() });
-
-								}
-
-								table.setModel(listapdsaii);
-								table.changeSelection(linha, 0, false, false);
-								qttotal.setText(quantidadeTotal());
-								vrtotal.setText(aces1.valordinheiro(valorTotal()));
-								vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
-								table.changeSelection(0, 0, false, false);
-
-							}
-
-						} catch (Exception e1) {
-							JOptionPane.showMessageDialog(null, "ERRO AO TENTAR EXCLUIR O ITEM " + e1.getMessage());
-							aces1.demologger.error("ERRO AO TENTAR EXCLUIR O ITEM " + e1.getMessage());
-						}
-					} else {
-						JOptionPane.showMessageDialog(null, "SELECIONE UM PEDIDO DE VENDAS !!!!!!!");
-					}
+					excluiritempedidovenda();
 				}
 
 			}
@@ -490,10 +385,9 @@ public class cadastrovendasc extends JDialog {
 		lblvrtotal.setBounds(600, 255, 92, 14);
 		contentPane.add(lblvrtotal);
 
-		vrtotal = new JTextField("0,00");
+		vrtotal = new JTextField("0.0");
 		vrtotal.setFont(new Font("Tahoma", Font.PLAIN, 23));
 		vrtotal.setForeground(Color.BLUE);
-		vrtotal.setColumns(10);
 		vrtotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 		vrtotal.setDisabledTextColor(Color.blue);
 		vrtotal.setEnabled(false);
@@ -576,7 +470,8 @@ public class cadastrovendasc extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent etx) {
 				if (etx.getKeyCode() == KeyEvent.VK_TAB || etx.getKeyCode() == KeyEvent.VK_ENTER) {
-					vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
+					validataxaentrega(txentrega.getText());
+					vrtotal.setText(aces1.valordinheiro(valorTotal()));
 					if (listapdsaii.getRowCount() <= 1) {
 
 						int linha = table.convertRowIndexToModel(table.getSelectedRow());
@@ -615,8 +510,18 @@ public class cadastrovendasc extends JDialog {
 				}
 			}
 		});
+		txentrega.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				txentrega.selectAll();
+			}
+		});
 		aces1.liberado(txentrega);
-		txentrega.setDocument(new MonetarioDocument());
 		txentrega.setBounds(325, 315, 83, 20);
 		contentPane.add(txentrega);
 
@@ -633,7 +538,7 @@ public class cadastrovendasc extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent etx) {
 				if (etx.getKeyCode() == KeyEvent.VK_TAB || etx.getKeyCode() == KeyEvent.VK_ENTER) {
-					vrtotal.setText(aces1.formataMoeda(valorTotal()).replace("R$", ""));
+					vrtotal.setText(aces1.valordinheiro(valorTotal()));
 					if (listapdsaii.getRowCount() <= 1) {
 
 						int linha = table.convertRowIndexToModel(table.getSelectedRow());
@@ -743,11 +648,7 @@ public class cadastrovendasc extends JDialog {
 			emissao.setText(aces1.retornadatastring(p.getEmissao()));
 			entrega.setText(aces1.retornadatastring(p.getVencto()));
 			pedido.setText(p.getNumdoc().trim());
-			if (p.getTxent() == null) {
-				txentrega.setText("0.0");
-			} else {
-				aces1.moedabanco(p.getTxent(), txentrega);
-			}
+			txentrega.setText(aces1.valordinheiro(p.getTxent()));
 			vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
 			vrtotal.setText(aces1.valordinheiro(valorTotal()));
 			obs.setText(p.getOBS().trim());
@@ -768,7 +669,7 @@ public class cadastrovendasc extends JDialog {
 		if (listapdsaii.getRowCount() == 0) {
 			Pdsaii pi = new Pdsaii();
 			listapdsaii.addRow(new Object[] { pi.getIdpdsaii(), pi.getItem(), pi.getProduto(), pi.getDescpro(),
-					pi.getUn(), pi.getUnitario(), pi.getVrtot(), pi.getQuantidade(), pi.getPrazo(), pi.getTroca() });
+					pi.getUn(), aces1.valordinheiro(pi.getUnitario()), aces1.valordinheiro(pi.getVrtot()), aces1.mascaraquantidadecomvirgula(pi.getQuantidade()), pi.getPrazo(), pi.getTroca() });
 		}
 		table.changeSelection(0, 0, false, false);
 
@@ -832,10 +733,12 @@ public class cadastrovendasc extends JDialog {
 		if (idpedido != null) {
 			List<Pdsaii> list = lista.getPdsaiis(idpedido);
 
+			item = 0.0;
 			for (Pdsaii com : list) {
-				listapdsaii.addRow(new Object[] { com.getIdpdsaii(), com.getItem(), com.getProduto().trim(), com.getDescpro().trim(),
+				item += 1;
+				listapdsaii.addRow(new Object[] { com.getIdpdsaii(), aces1.retornaString(item), com.getProduto().trim(), com.getDescpro().trim(),
 						com.getUn().trim(), aces1.valordinheiro(com.getUnitario()),aces1.valordinheiro(com.getVrtot()),
-						decimalqtde.format(com.getQuantidade()), com.getPrazo(),com.getTroca() });
+						aces1.mascaraquantidadecomvirgula(com.getQuantidade()), com.getPrazo(),com.getTroca() });
 
 			}
 		}
@@ -845,20 +748,20 @@ public class cadastrovendasc extends JDialog {
 	private String quantidadeTotal() {
 		Double Orcamento = 0.0;
 		for (int i = 0; i < listapdsaii.getRowCount(); i++) {
-			Orcamento += Double.parseDouble(listapdsaii.getValueAt(i, 7).toString().replace(".", "").replace(",", "."));
+			Orcamento += aces1.retornadouble(aces1.removeponto(listapdsaii.getValueAt(i, 7).toString()));
 		}
-		return decimalqtde.format(Orcamento);
+		return aces1.mascaraquantidadecomvirgula(Orcamento);
 	}
 
 	private Double valorTotal() {
 		DecimalFormat decimal = new DecimalFormat("0.00");
 		Double Orcamento = 0.0;
 		for (int i = 0; i < listapdsaii.getRowCount(); i++) {
-			Orcamento += Double.parseDouble((listapdsaii.getValueAt(i, 6).toString().replace(".", "").replace(",", ".")));
+			Orcamento += aces1.retornadouble(aces1.removeponto(listapdsaii.getValueAt(i, 6).toString()));
 		}
 		
 		if (txentrega.getText() != null && !txentrega.getText().isEmpty()) {
-			Orcamento += Double.parseDouble(txentrega.getText().replace(".", "").replace(",", "."));
+			Orcamento += aces1.retornadouble(aces1.removeponto(txentrega.getText().trim()));
 		}
 		
 		return Orcamento;
@@ -867,7 +770,7 @@ public class cadastrovendasc extends JDialog {
 	private Double totalmercadoria() {
 		Double Orcamento = 0.0;
 		for (int i = 0; i < listapdsaii.getRowCount(); i++) {
-			Orcamento += Double.parseDouble(aces1.gravamoedadouble(listapdsaii.getValueAt(i, 6).toString().trim()));
+			Orcamento += aces1.retornadouble(aces1.removeponto(listapdsaii.getValueAt(i, 6).toString().trim()));
 		}
 
 		return Orcamento;
@@ -882,18 +785,23 @@ public class cadastrovendasc extends JDialog {
 				cadastro = c1.procura(idp);
 			}
 
+			
 			cadastro.setEmissao(aces1.retornadata(emissao.getText()));
 			cadastro.setVencto(aces1.retornadata(entrega.getText()));
 			cadastro.setNumdoc(pedido.getText().trim());
-			cadastro.setVrmerc(Double.parseDouble(aces1.gravamoedadouble(vrmercadoria.getText())));
-			cadastro.setVrtot(Double.parseDouble(aces1.gravamoedadouble(vrtotal.getText())));
+			cadastro.setVrmerc(aces1.retornadouble(
+					aces1.removeponto(aces1.valordinheiro(aces1.retornadouble(aces1.removeponto(vrmercadoria.getText().trim()))))));
+			cadastro.setVrtot(aces1.retornadouble(
+					aces1.removeponto(aces1.valordinheiro(aces1.retornadouble(aces1.removeponto(vrtotal.getText().trim()))))));
 			cadastro.setCliente(cadclip);
 			cadastro.setOBS(obs.getText().trim());
 			cadastro.setContato(contato.getText().trim());
 			cadastro.setVendedor(vendedor.getText().trim());
-			cadastro.setTxent(Double.parseDouble(aces1.gravamoedadouble(txentrega.getText())));
+			cadastro.setTxent(aces1.retornadouble(
+					aces1.removeponto(aces1.valordinheiro(aces1.retornadouble(aces1.removeponto(txentrega.getText()))))));
 			cadastro.setFormpagto(formapagamento.getSelectedItem().toString().trim());
-			cadastro.setVrdesc(Double.parseDouble(aces1.gravamoedadouble(vrmercadoria.getText())));
+			cadastro.setVrdesc(aces1.retornadouble(
+					aces1.removeponto(aces1.valordinheiro(aces1.retornadouble(aces1.removeponto(vrmercadoria.getText()))))));
 
 			int l = 0;
 
@@ -958,10 +866,11 @@ public class cadastrovendasc extends JDialog {
 						ciitem.setDescpro(String.valueOf(listapdsaii.getValueAt(x, 3)));
 						ciitem.setUn(String.valueOf(listapdsaii.getValueAt(x, 4)));
 						ciitem.setUnitario(
-								Double.parseDouble(aces1.gravamoedadouble(listapdsaii.getValueAt(x, 5).toString())));
+								aces1.retornadouble(aces1.removeponto(listapdsaii.getValueAt(x, 5).toString())));
 						ciitem.setVrtot(
-								Double.parseDouble(aces1.gravamoedadouble(listapdsaii.getValueAt(x, 6).toString())));
-						ciitem.setQuantidade(Double.parseDouble(listapdsaii.getValueAt(x, 7).toString()));
+								aces1.retornadouble(aces1.removeponto(listapdsaii.getValueAt(x, 6).toString())));
+						ciitem.setQuantidade(Double.parseDouble(aces1.mascaraquantidade(
+								aces1.retornadouble(aces1.removeponto(listapdsaii.getValueAt(x, 7).toString())))));
 						ciitem.setPrazo((Date) listapdsaii.getValueAt(x, 8));
 						ciitem.setTroca((Boolean) listapdsaii.getValueAt(x, 9));
 						ciitem.setEmissao(cadastro.getEmissao());
@@ -1032,9 +941,10 @@ public class cadastrovendasc extends JDialog {
 				pi.setProduto(String.valueOf(produto));
 				pi.setDescpro(String.valueOf(descpro));
 				pi.setUn(String.valueOf(un));
-				pi.setUnitario(Double.parseDouble(aces1.gravamoedadouble(unitario.toString())));
-				pi.setVrtot(Double.parseDouble(aces1.gravamoedadouble(vrtotal1.toString())));
-				pi.setQuantidade(Double.parseDouble(quantidade.toString()));
+				pi.setUnitario(aces1.retornadouble(aces1.removeponto(unitario.toString())));
+				pi.setVrtot(aces1.retornadouble(aces1.removeponto(vrtotal1.toString())));
+				pi.setQuantidade(aces1.retornadouble(
+						aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(quantidade.toString())))));
 				pi.setPrazo((Date) prazo);
 				pi.setTroca((Boolean) troca);
 
@@ -1059,9 +969,9 @@ public class cadastrovendasc extends JDialog {
 					listapdsaii.setValueAt(produto, linhaSel, 2);
 					listapdsaii.setValueAt(descpro, linhaSel, 3);
 					listapdsaii.setValueAt(un, linhaSel, 4);
-					listapdsaii.setValueAt(aces1.valordinheiro(Double.parseDouble(unitario.toString())),linhaSel, 5);
-					listapdsaii.setValueAt(aces1.valordinheiro(Double.parseDouble(vrtotal1.toString())),linhaSel, 6);
-					listapdsaii.setValueAt(decimalqtde.format(quantidade), linhaSel, 7);
+					listapdsaii.setValueAt(aces1.valordinheiro(aces1.retornadouble(unitario.toString())),linhaSel, 5);
+					listapdsaii.setValueAt(aces1.valordinheiro(aces1.retornadouble(vrtotal1.toString())),linhaSel, 6);
+					listapdsaii.setValueAt(aces1.mascaraquantidadecomvirgula(aces1.retornadouble(quantidade.toString())), linhaSel, 7);
 					listapdsaii.setValueAt(prazo, linhaSel, 8);
 					listapdsaii.setValueAt(troca, linhaSel, 9);
 					table.changeSelection(linhaSel, 0, false, false);
@@ -1116,6 +1026,144 @@ public class cadastrovendasc extends JDialog {
 			cliente.requestFocus();
 			aces1.liberado(cliente);
 		}
+
+	}
+	
+	public void validataxaentrega(String taxap) {
+
+		if (taxap.equals(null) || taxap.trim().isEmpty()) {
+			txentrega.setText(aces1.valordinheiro(0.0));
+		} else {
+			
+			double taxa1 = aces1.retornadouble(aces1.removeponto(taxap.trim()));
+			txentrega.setText(aces1.valordinheiro(taxa1));
+			
+		}
+
+	}
+
+	
+	public void novoitempedidovendas(Pdsaic param) {
+
+		try {
+			int item = 0;
+
+			if (listapdsaii.getRowCount() == 1) {
+				int linha = table.convertRowIndexToModel(table.getSelectedRow());
+				if (listapdsaii.getValueAt(linha, 2) == null
+						|| listapdsaii.getValueAt(linha, 2).toString().isEmpty()) {
+					listapdsaii.removeRow(linha);
+				} else {
+					item = listapdsaii.getRowCount();
+				}
+			} else {
+				item = listapdsaii.getRowCount();
+			}
+			Pdsaii pi = new Pdsaii();
+			new cadastravendasi(param, pi, item, listapdsaii).setVisible(true);
+			if (pi.getItem() != null && !pi.getItem().toString().isEmpty()) {
+				String iditem = ci.getItem().toString() + 1;
+				listapdsaii.addRow(
+						new Object[] { null, pi.getItem(), pi.getProduto(), pi.getDescpro(), pi.getUn(),
+								aces1.valordinheiro(pi.getUnitario()),aces1.valordinheiro(pi.getVrtot()),
+								aces1.mascaraquantidadecomvirgula(pi.getQuantidade()), pi.getPrazo(), pi.getTroca() });
+				qttotal.setText(quantidadeTotal());
+				vrtotal.setText(aces1.valordinheiro(valorTotal()));
+				vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
+				table.setRowSelectionAllowed(true);
+				int linha = listapdsaii.getRowCount();
+				int conta = linha - 1;
+				table.changeSelection(conta, linha, false, false);
+				table.setSelectionBackground(Color.GREEN);
+				table.changeSelection(0, 0, false, false);
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void excluiritempedidovenda() {
+		
+		if (table.getSelectedRow() != -1 && table.getRowCount() > 0) {
+			int linha = table.convertRowIndexToModel(table.getSelectedRow());
+			List<Pdsaii> listapdsaii1 = new ArrayList<Pdsaii>();
+			try {
+				int conseguiu_excluir = 0;
+				String nome = "DESEJA REALMENTE EXCLUIR O ITEM " + table.getValueAt(linha, 1).toString()
+						+ " ?";
+				int opcao_escolhida = JOptionPane.showConfirmDialog(null, nome, "Exclusão ",
+						JOptionPane.YES_NO_OPTION);
+				if (opcao_escolhida == JOptionPane.YES_OPTION) {
+					conseguiu_excluir = 1;
+				}
+
+				if (conseguiu_excluir == 1) {
+					if (listapdsaii.getValueAt(linha, 0) != null) {
+						Pdsaii removeitem = new Pdsaii();
+						removeitem = cdao
+								.procura(Long.parseLong(listapdsaii.getValueAt(linha, 0).toString()));
+						pdsaiiremove.add(removeitem);
+					}
+					listapdsaii.removeRow(linha);
+
+					for (int x = 0; x < listapdsaii.getRowCount(); x++) {
+						int soma = x + 1;
+						
+						Pdsaii mudaitem = new Pdsaii();
+
+						if (listapdsaii.getValueAt(x, 0) != null) {
+							mudaitem.setIdpdsaii(Long.parseLong(listapdsaii.getValueAt(x, 0).toString()));
+						}
+
+						mudaitem.setItem(String.valueOf(soma));
+						mudaitem.setProduto(listapdsaii.getValueAt(x, 2).toString());
+						mudaitem.setDescpro(String.valueOf(listapdsaii.getValueAt(x, 3).toString()));
+						mudaitem.setUn(String.valueOf(listapdsaii.getValueAt(x, 4).toString()));
+						mudaitem.setUnitario(Double.parseDouble(
+								aces1.gravamoedadouble(listapdsaii.getValueAt(x, 5).toString())));
+						mudaitem.setVrtot(Double.parseDouble(
+								aces1.gravamoedadouble(listapdsaii.getValueAt(x, 6).toString())));
+						mudaitem.setQuantidade(Double.parseDouble(listapdsaii.getValueAt(x, 7).toString()));
+						mudaitem.setPrazo((Date) listapdsaii.getValueAt(x, 8));
+						mudaitem.setTroca((Boolean) listapdsaii.getValueAt(x, 9));
+						mudaitem.setPedido(pedido.getText());
+						listapdsaii1.add(mudaitem);
+						mudaitem = new Pdsaii();
+
+					}
+					listapdsaii.setRowCount(0);
+
+					item = 0.0;
+					for (Pdsaii com : listapdsaii1) {
+						item += 1;
+						listapdsaii.addRow(new Object[] { com.getIdpdsaii(), aces1.retornaString(item),
+								com.getProduto(), com.getDescpro(), com.getUn(),
+								aces1.valordinheiro(com.getUnitario()),
+								aces1.valordinheiro(com.getVrtot()),
+								decimalqtde.format(com.getQuantidade()), com.getPrazo(),com.getTroca() });
+
+					}
+
+					table.setModel(listapdsaii);
+					table.changeSelection(linha, 0, false, false);
+					qttotal.setText(quantidadeTotal());
+					vrtotal.setText(aces1.valordinheiro(valorTotal()));
+					vrmercadoria.setText(aces1.valordinheiro(totalmercadoria()));
+					table.requestFocus();
+					table.changeSelection(0, 0, false, false);
+
+				}
+
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, "ERRO AO TENTAR EXCLUIR O ITEM " + e1.getMessage());
+				aces1.demologger.error("ERRO AO TENTAR EXCLUIR O ITEM " + e1.getMessage());
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "SELECIONE UM PEDIDO DE VENDAS !!!!!!!");
+		}
+
 
 	}
 }

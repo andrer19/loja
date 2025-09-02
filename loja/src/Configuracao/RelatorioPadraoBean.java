@@ -66,8 +66,6 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -75,8 +73,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.JRHtmlExporter;
-import net.sf.jasperreports.engine.export.JRHtmlReportConfiguration;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.export.ExporterInput;
@@ -95,7 +91,6 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfImportedPage;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
-import com.sun.xml.ws.util.UtilException;
 
 import beans.AcessoBean;
 import beans.CadcaminBean;
@@ -161,13 +156,21 @@ public class RelatorioPadraoBean {
 
 			/* Carrega o arquivo */
 			JRPdfExporter exporter = new JRPdfExporter();
-			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+			//exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 			caminhoArquivoRelatorio = caminhoRelatorio + nome + ".pdf";
+			//OutputStream outputStream = null;
 			File arquivoGerado = new File(caminhoArquivoRelatorio);
-			exporter.setParameter(JRExporterParameter.OUTPUT_FILE, arquivoGerado);
+			//exporter.setParameter(JRExporterParameter.OUTPUT_FILE, arquivoGerado);
+			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(arquivoGerado));
+			//SimplePdfExporterConfiguration configuration = new SimplePdfExporterConfiguration();
+			//configuration.setPermissions(PdfWriter.AllowCopy | PdfWriter.AllowPrinting);
+			//exporter.setConfiguration(configuration);
 			exporter.exportReport();
 			File arquivofinal = new File(caminhoArquivoRelatorio);
-			visualizarPdf(arquivofinal);
+			//visualizarPdf(arquivofinal);
+			
+		
 
 		} catch (JRException e) {
 			JOptionPane.showMessageDialog(null,"Não foi possivel gerar o RELATORIO " + e.getMessage());
@@ -200,13 +203,13 @@ public class RelatorioPadraoBean {
 			String caminhoRelatorio = "\\\\" + caminho.getCaminho() + pasta;
 
 			/* Carrega o arquivo */
-			JRPdfExporter exporter = new JRPdfExporter();
+			/*JRPdfExporter exporter = new JRPdfExporter();
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			caminhoArquivoRelatorio = caminhoRelatorio + nome + ".pdf";
 			File arquivoGerado = new File(caminhoArquivoRelatorio);
 			exporter.setParameter(JRExporterParameter.OUTPUT_FILE, arquivoGerado);
 			exporter.exportReport();
-			File arquivofinal = new File(caminhoArquivoRelatorio);
+			File arquivofinal = new File(caminhoArquivoRelatorio);*/
 
 		} catch (JRException e) {
 			JOptionPane.showMessageDialog(null,"NÃO FOI POSSIVEL GERAR O ARQUIVO " + jrxml + " " + e.getMessage());

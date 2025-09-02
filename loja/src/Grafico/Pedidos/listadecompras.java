@@ -425,15 +425,12 @@ public class listadecompras extends JDialog {
 
 		PdentcBean lista = new PdentcBean();
 		List<Pdentc> list = (List<Pdentc>) lista.getPdentcs();
-		Locale BRAZIL = new Locale("pt", "BR");
-		DecimalFormatSymbols REAL = new DecimalFormatSymbols(BRAZIL);
-		DecimalFormat moeda = new DecimalFormat("###,###,##0.00", REAL);
-
+		
+		
 		for (Pdentc com : list) {
-
 			listacompras.addRow(new Object[] { com.getIdpdentc(), com.getNumdoc(), com.getForn().getCODFOR(),
-					com.getForn().getDESCFOR(), datestring.format(com.getEmissao()), datestring.format(com.getVencto()),
-					moeda.format(com.getVrtot()) });
+					com.getForn().getDESCFOR(), aces1.retornadatastring(com.getEmissao()), aces1.retornadatastring(com.getVencto()),
+					aces1.valordinheiro(com.getVrtot()) });
 
 		}
 
@@ -473,7 +470,7 @@ public class listadecompras extends JDialog {
 			int linha = table.getSelectedRow();
 			try {
 
-				String nome = "Deseja realmente excluir o pedido: " + table.getValueAt(linha, 1).toString() + " ?";
+				String nome = "DESEJA REALMENTE EXCLUIR O PEDIDO " + table.getValueAt(linha, 1).toString() + " ?";
 				int opcao_escolhida = JOptionPane.showConfirmDialog(null, nome, aces1.logexcluir + " ", JOptionPane.YES_NO_OPTION);
 				if (opcao_escolhida == JOptionPane.YES_OPTION) {
 					l.remove(Long.parseLong(table.getValueAt(linha, 0).toString()), u);

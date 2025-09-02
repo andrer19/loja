@@ -5,13 +5,14 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Nfentc {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idnfentc;
 	private String CODEMP,NUMDOC,SERIE,CODFOR,PEDIDO,NATOPER,CODPED,MOEDADI,STATUS,OBS1,OBS2,
 	OBS3,OBS4,OBS5,TRANSP,PLACA,XML,CHAVENFE,DESCFOR;

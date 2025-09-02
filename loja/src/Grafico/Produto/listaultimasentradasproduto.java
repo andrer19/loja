@@ -187,8 +187,8 @@ public class listaultimasentradasproduto extends JDialog {
 		for (Pdenti prod : list) {
 			listahistoricopdenti.addRow(new Object[] { prod.getIdpdenti(),
 					prod.getPedido(),prod.getPedc().getForn().getDESCFOR(), prod.getProduto(),
-					String.format("%.0f", prod.getQuantidade()),prod.getUn(), 
-					moeda.format(prod.getUnitario()), moeda.format(prod.getVrtot())					
+					aces1.mascaraquantidadecomvirgula(prod.getQuantidade()),prod.getUn(), 
+					aces1.valordinheiro(prod.getUnitario()), aces1.valordinheiro(prod.getVrtot())					
 							
 			});
 

@@ -256,6 +256,8 @@ public class PdentiBean {
 		parametros.put("enderempresa", cademp.getEnder() + ", " + cademp.getNum() + " - " + cademp.getBairro() + " - "
 				+ cademp.getCidade() + " - " + cademp.getEstado());
 		parametros.put("foneempresa", cademp.getFone());
+		parametros.put("decunitario", TelaPrincipal.decunit);
+		parametros.put("decquantidade", TelaPrincipal.decqtde);
 		relat.visualizaireport(nomearquivo, parametros);
 
 	}

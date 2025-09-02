@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,7 +16,7 @@ import javax.persistence.TemporalType;
 public class Cadpag {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sql_rowid;
 	private String codemp,codfor,numdoc,serie,hist,cheque,banco,codcus,parcela,
 	chpre,bcopre,agepre,ctapre,titpre,obs,status,totparc,situacao,e5_fornec,e5_loja,E5_nomfor;

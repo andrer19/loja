@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.swing.JOptionPane;
 
 import Configuracao.RelatorioPadraoBean;
+import Grafico.geral.TelaPrincipal;
 import repositorios.CadempRepository;
 import repositorios.CadosiRepository;
 import entidades.Cademp;
@@ -149,6 +150,8 @@ public class CadosiBean {
 		parametros.put("hora", aces1.hora());
 		parametros.put("enderempresa", cademp.getEnder() + ", " + cademp.getNum() + " - " + cademp.getBairro() + " - "
 				+ cademp.getCidade() + " - " + cademp.getEstado());
+		parametros.put("decunitario", TelaPrincipal.decunit);
+		parametros.put("decquantidade", TelaPrincipal.decqtde);
 		relat.visualizaireport(nomearquivo, parametros);
 
 	}
