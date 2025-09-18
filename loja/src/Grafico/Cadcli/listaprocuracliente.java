@@ -102,13 +102,13 @@ public class listaprocuracliente extends JDialog {
 			@SuppressWarnings("unused")
 			@Override
 			public void keyTyped(KeyEvent evt) {
-				String caracteres = "0987654321";
-				char charTeste = '"';
-				String especiais = "<>:;?/{}[]!@#$%�&*()_-+=,.�~^`'" + charTeste;
-				if (caracteres.contains(evt.getKeyChar() + "") || especiais.contains(evt.getKeyChar() + "")) {
-					evt.consume();
-				}
-				int i = 0;
+				//String caracteres = "0987654321";
+				//char charTeste = '"';
+				//String especiais = "<>:;?/{}[]!@#$%�&*()_-+=,.�~^`'" + charTeste;
+				//if (caracteres.contains(evt.getKeyChar() + "") || especiais.contains(evt.getKeyChar() + "")) {
+					//evt.consume();
+				//}
+				//int i = 0;
 
 				TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(listaclientes);
 
@@ -117,7 +117,7 @@ public class listaprocuracliente extends JDialog {
 				sorter = new TableRowSorter<TableModel>(model);
 				table.setRowSorter(sorter);
 
-				String text = pesquisar.getText();
+				String text = pesquisar.getText().trim();
 				if (text.length() == 0) {
 					sorter.setRowFilter(null);
 				} else {
