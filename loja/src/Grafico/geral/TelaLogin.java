@@ -68,16 +68,19 @@ public class TelaLogin extends JFrame {
 	CadempBean emp = new CadempBean();
 	Cademp cademp = new Cademp();
 	LocalBean loc = new LocalBean();
+	static telainicial tela = new telainicial();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		tela.setVisible(true);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 
 				try {
 					new TelaLogin().setVisible(true);
+					tela.setVisible(false);
 					login.requestFocus();
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Erro login: " + e.getMessage());

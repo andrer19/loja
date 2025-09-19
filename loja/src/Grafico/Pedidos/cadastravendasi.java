@@ -299,14 +299,18 @@ public class cadastravendasi extends JDialog {
 		btncadastrar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				gravaitem(ci);
+				if (validaQuantidadeNoSalvar()) {
+					gravaitem(ci);
+				}
 			}
 		});
 		btncadastrar.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent evt) {
 				if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-					gravaitem(ci);
+					if (validaQuantidadeNoSalvar()) {
+						gravaitem(ci);
+					}
 
 				}
 			}
@@ -492,7 +496,8 @@ public class cadastravendasi extends JDialog {
 			qtdeatual = qtdepro - qtdeparam;
 
 			if (mostra == true) {
-				JOptionPane.showMessageDialog(null, "PRODUTO NÃO POSSUI SALDO SUFICIENTE, SALDO ATUAL " + aces1.mascaraquantidadecomvirgula(qtdeatual));
+				JOptionPane.showMessageDialog(null, "PRODUTO NÃO POSSUI SALDO SUFICIENTE, SALDO ATUAL "
+						+ aces1.mascaraquantidadecomvirgula(qtdeatual));
 			}
 		}
 		return valida;
@@ -524,7 +529,9 @@ public class cadastravendasi extends JDialog {
 	public void validaquantidade(Pdsaii p, Boolean mostra, DefaultTableModel listapdsaiip) {
 
 		if (quantidade.getText().equals("") || quantidade.getText().equals(null) || quantidade.getText().equals("0")) {
-			JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
+			if (mostra) {
+				JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
+			}
 			aces1.bloqueado(unitario);
 			quantidade.requestFocus();
 
@@ -559,7 +566,15 @@ public class cadastravendasi extends JDialog {
 					quantidade.requestFocus();
 				}
 			} else {
-				btncadastrar.requestFocus();
+				if (quantidade.getText().equals(null) || quantidade.getText().equals("")
+						|| quantidade.getText().equals("0")) {
+					JOptionPane.showMessageDialog(null, "Digite um Valor!!!!");
+					quantidade.requestFocus();
+					btncadastrar.setEnabled(false);
+				} else {
+					btncadastrar.setEnabled(true);
+					btncadastrar.requestFocus();
+				}
 
 			}
 		}
@@ -587,16 +602,34 @@ public class cadastravendasi extends JDialog {
 			aces1.bloqueado(unitario);
 			btncadastrar.setEnabled(true);
 			btncadastrar.requestFocus();
-			
+
 			if (unitario.getText().equals(null) || unitario.getText().trim().isEmpty()) {
 				unitario.setText(aces1.valordinheiro(0.0));
 			} else {
-				
+
 				double init1 = aces1.retornadouble(aces1.removeponto(unitario.getText().trim()));
 				unitario.setText(aces1.valordinheiro(init1));
-				
+
 			}
 		}
+
+	}
+
+	public boolean validaQuantidadeNoSalvar() {
+		boolean existeqtde = false;
+
+		if (quantidade.getText().equals(null) || quantidade.getText().equals("") || quantidade.getText().equals("0")) {
+			JOptionPane.showMessageDialog(null, "ITEM SEM QUANTIDADE !!!!");
+			aces1.liberado(quantidade);
+			btncadastrar.setEnabled(false);
+			quantidade.requestFocus();
+			existeqtde = false;
+		} else {
+			existeqtde = true;
+
+		}
+
+		return existeqtde;
 
 	}
 
