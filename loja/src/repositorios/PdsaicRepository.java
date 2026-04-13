@@ -203,20 +203,14 @@ public class PdsaicRepository {
 	public List<Pdsaic> Listapedidosnativo() {
 		List<Pdsaic> pdsaics = new ArrayList<Pdsaic>();
 		Pdsaic pedidosaida = new Pdsaic();
-		SimpleDateFormat formato = new SimpleDateFormat();
-		Locale local1 = new Locale("pt", "BR");
-		DateFormat datestring = new SimpleDateFormat("yyyy-MM-dd", local1);
-		GregorianCalendar c = new GregorianCalendar();
-		c.setTime(repoacesso.dataatual());
-		c.add(Calendar.DAY_OF_MONTH, -120);
 
 		EntityManagerUtil.conexao();
 		EntityManagerUtil.begin();
 		Query query = EntityManagerUtil.manager.createNativeQuery(
-		"select p.idpdsaic,p.numdoc,c.codcli,c.desccli,p.emissao,p.formpagto,p.vrtot "
+		"select p.idpdsaic,p.numdoc,c.codcli,c.desccli,p.emissao,p.formpagto,p.vrtot,p.vendedor "
 		+ " from Pdsaic p "
 		+ " INNER JOIN cadcli c ON p.cliente = c.idcadcli "
-		+ " where p.emissao >= '" + datestring.format(c.getTime()) + "' and p.sql_deleted = 'F' order by p.numdoc desc;");
+		+ " where p.emissao >= CURDATE() - INTERVAL 120 DAY and p.sql_deleted = 'F' order by p.numdoc desc;");
 		List<Object[]> result = query.getResultList();
 		for (Object[] row : result) {
 			pedidosaida = new Pdsaic();
@@ -227,6 +221,7 @@ public class PdsaicRepository {
 			pedidosaida.setEmissao((Date) row[4]);
 			pedidosaida.setFormpagto((String) row[5]);
 			pedidosaida.setVrtot((Double) row[6]);
+			pedidosaida.setVendedor((String) row[7]);
 			pdsaics.add(pedidosaida);
 
 		}

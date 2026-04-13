@@ -256,6 +256,7 @@ public class listadevendas extends JDialog {
 		listavendas.addColumn("CODIGO");
 		listavendas.addColumn("CLIENTE");
 		listavendas.addColumn("EMISSAO");
+		listavendas.addColumn("VENDEDOR");
 		listavendas.addColumn("PAGAMENTO");
 		listavendas.addColumn("VALORPEDIDO");
 		
@@ -272,10 +273,12 @@ public class listadevendas extends JDialog {
 		table.getColumnModel().getColumn(3).setCellRenderer(centralizado);
 		table.getColumnModel().getColumn(4).setPreferredWidth(90);
 		table.getColumnModel().getColumn(4).setCellRenderer(centralizado);
-		table.getColumnModel().getColumn(5).setPreferredWidth(200);
+		table.getColumnModel().getColumn(5).setPreferredWidth(100);
 		table.getColumnModel().getColumn(5).setCellRenderer(centralizado);
 		table.getColumnModel().getColumn(6).setPreferredWidth(100);
 		table.getColumnModel().getColumn(6).setCellRenderer(centralizado);
+		table.getColumnModel().getColumn(7).setPreferredWidth(100);
+		table.getColumnModel().getColumn(7).setCellRenderer(centralizado);
 		table.getColumnModel().getColumn(0).setMinWidth(0);
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
 
@@ -467,8 +470,8 @@ public class listadevendas extends JDialog {
 		for (Pdsaic com : list) {
 
 			listavendas.addRow(new Object[] { com.getIdpdsaic(), com.getNumdoc(), com.getPedido(),
-					com.getContato(), aces1.retornadatastring(com.getEmissao()), com.getFormpagto(),
-					aces1.valordinheiro(com.getVrtot()) });
+					com.getContato(), aces1.retornadatastring(com.getEmissao()), com.getVendedor().trim()
+					, com.getFormpagto(),aces1.valordinheiro(com.getVrtot())});
 
 		}
 

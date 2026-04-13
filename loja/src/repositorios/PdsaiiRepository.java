@@ -85,10 +85,10 @@ public class PdsaiiRepository {
 
 		double qtde2 = cadprop.getQTATUAL();
 
-		Double qtdevendida = Double.parseDouble(cadprop.getMATERIAL()) - qtde;
+		Double qtdevendida = cadprop.getQtvendida() - qtde;
 
 		cadprop.setQTATUAL(qtde1);
-		cadprop.setMATERIAL(qtdevendida.toString());
+		cadprop.setQtvendida(qtdevendida);
 
 		repoprod.grava(cadprop);
 

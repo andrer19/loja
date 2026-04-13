@@ -429,7 +429,7 @@ public class cadastrovendasc extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent evt) {
 				if (evt.getKeyCode() == KeyEvent.VK_TAB || evt.getKeyCode() == KeyEvent.VK_ENTER) {
-					vendedor.requestFocus();
+					txentrega.requestFocus();
 				}
 			}
 		});
@@ -444,18 +444,7 @@ public class cadastrovendasc extends JDialog {
 		contentPane.add(lblvendedor);
 
 		vendedor = new JTextField();
-		vendedor.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
-		vendedor.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent evt) {
-				if (evt.getKeyCode() == KeyEvent.VK_TAB || evt.getKeyCode() == KeyEvent.VK_ENTER) {
-					txentrega.requestFocus();
-				}
-			}
-
-		});
-		aces1.letras(vendedor);
-		aces1.liberado(vendedor);
+		aces1.bloqueado(vendedor);
 		vendedor.setBounds(160, 315, 150, 20);
 		contentPane.add(vendedor);
 
@@ -664,6 +653,8 @@ public class cadastrovendasc extends JDialog {
 			formapagamento.setEnabled(true);
 			btncadastrar.setEnabled(true);
 
+		}else {
+			vendedor.setText(u.getLogin().trim());
 		}
 
 		if (listapdsaii.getRowCount() == 0) {
@@ -796,7 +787,7 @@ public class cadastrovendasc extends JDialog {
 			cadastro.setCliente(cadclip);
 			cadastro.setOBS(obs.getText().trim());
 			cadastro.setContato(contato.getText().trim());
-			cadastro.setVendedor(vendedor.getText().trim());
+			cadastro.setVendedor(u1.getLogin().trim());
 			cadastro.setTxent(aces1.retornadouble(
 					aces1.removeponto(aces1.valordinheiro(aces1.retornadouble(aces1.removeponto(txentrega.getText()))))));
 			cadastro.setFormpagto(formapagamento.getSelectedItem().toString().trim());

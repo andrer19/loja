@@ -93,10 +93,10 @@ public class CadproRepository {
 		double qtde1 = cadpro1.getQTATUAL();
 		qtde1 = qtde1 - pdsaii.getQuantidade();
 		double qtde2 = cadpro1.getQTATUAL();
-		Double qtdevendida = aces1.retornadouble(aces1.removeponto(cadpro1.getMATERIAL())) + pdsaii.getQuantidade();
+		Double qtdevendida = cadpro1.getQtvendida() + pdsaii.getQuantidade();
 
 		cadpro1.setQTATUAL(qtde1);
-		cadpro1.setMATERIAL(qtdevendida.toString());
+		cadpro1.setQtvendida(qtdevendida);
 
 		EntityManagerUtil.conexao();
 		EntityManagerUtil.begin();

@@ -540,11 +540,8 @@ public class cadastroproduto extends JDialog {
 			if (pro.getATIVO() == true) {
 				chinativo.setSelected(true);
 			}
-
 			qtdecomprada.setText(aces1.mascaraquantidadecomvirgula(pro.getQTINICIAL()));
-
-			qtdevendida.setText(
-					aces1.mascaraquantidadecomvirgula(aces1.retornadouble(pro.getMATERIAL())));
+			qtdevendida.setText(aces1.mascaraquantidadecomvirgula(pro.getQtvendida()));
 			codpro.setText(pro.getCODPRO());
 			descpro.setText(pro.getDESCPRO());
 			unidade.setText(pro.getUN());
@@ -646,7 +643,7 @@ public class cadastroproduto extends JDialog {
 			p.setECONOMICO(aces1.retornadouble(lotecon.getText()));
 			p.setATIVO(aces1.retornaBoolean(chinativo));
 			p.setQTINICIAL((Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(qtdecomprada.getText()))))));
-			p.setMATERIAL(qtdevendida.getText().trim());
+			p.setQtvendida((Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(qtdevendida.getText()))))));
 			p.setPESOLIQ((Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(pesopeca.getText()))))));
 			p.setPESOBRUTO((Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(pesobruto.getText()))))));
 			p.setQTCXA((Double.parseDouble(aces1.mascaraquantidade(aces1.retornadouble(aces1.removeponto(qtdembalagem.getText()))))));

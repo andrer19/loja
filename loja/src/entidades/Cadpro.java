@@ -34,7 +34,7 @@ public class Cadpro {
 	@Column(nullable=false,columnDefinition = "Double default 0")
 	public Double VRVENDA,QTINICIAL,QTATUAL,VRCOMPRA,VRCOMIS,ESTSEG,QTNECES,VRMEDIO,
 	EST1,EST2,VRREPOS,ECONOMICO,ESTMAXIMO,CMM,QTREQ,REDUZICM,PICM,PIPI,VRULTMOV,PRFORNEC,MARKUP,
-	CMEDIO,VRINICIAL,VRATUAL,PESOLIQ,PESOBRUTO,QTCXA,PESOCAIXA,TMP,troca;	
+	CMEDIO,VRINICIAL,VRATUAL,PESOLIQ,PESOBRUTO,QTCXA,PESOCAIXA,TMP,troca,qtvendida;	
 	
 	@Column(nullable = false, columnDefinition = "TINYINT(1)")
 	private Boolean ATIVO,CONTREST,BANCADA;
@@ -91,6 +91,7 @@ public class Cadpro {
 		 PESOCAIXA = 0.0;
 		 TMP = 0.0;
 		 troca = 0.0;
+		 qtvendida= 0.0;
 		 ATIVO = false;
 		 CONTREST = false;
 		 BANCADA = false;
@@ -538,9 +539,12 @@ public class Cadpro {
 		this.troca = troca;
 	}
 
-	
-	
-	
+	public Double getQtvendida() {
+		return qtvendida;
+	}
 
+	public void setQtvendida(Double qtvendida) {
+		this.qtvendida = qtvendida;
+	}
 
 }

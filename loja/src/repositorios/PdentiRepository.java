@@ -58,9 +58,9 @@ public class PdentiRepository {
 
 				
 				double qtde1 = cadpro.getQTATUAL();
-				double qtde2 = aces1.retornadouble(aces1.removeponto(cadpro.getMATERIAL()));
+				double qtde2 = cadpro.getQtvendida();
 				qtde1 = qtde1 + p.getQuantidade();
-				Double qtdecomprada = aces1.retornadouble(aces1.removeponto(cadpro.getMATERIAL())) + p.getQuantidade();
+				Double qtdecomprada = cadpro.getQtvendida() + p.getQuantidade();
 
 				cadpro.setQTATUAL(qtde1);
 				cadpro.setQTINICIAL(p.getQuantidade());
