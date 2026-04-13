@@ -131,10 +131,14 @@ public class PdsaicRepository {
 
 			double qtde2 = prod.getQTATUAL();
 
-			Double qtdevendida = Double.parseDouble(prod.getMATERIAL()) - qtde;
+			Double qtdevendida = prod.getQtvendida() - qtde;
+			
+			if(qtdevendida < 0) {
+				qtdevendida = 0.0;
+			}
 
 			prod.setQTATUAL(qtde1);
-			prod.setMATERIAL(qtdevendida.toString());
+			prod.setQtvendida(qtdevendida);
 			repoprod.atualiza(prod);
 
 			Cadmov mov = new Cadmov();
