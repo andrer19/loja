@@ -120,8 +120,10 @@ public class CadoscRepository {
 		EntityManagerUtil.conexao();
 		EntityManagerUtil.begin();
 		Query query = EntityManagerUtil.manager.createNativeQuery(
-				"select p.id,p.numdoc,c.codcli,c.desccli,p.emissao,p.formpagto,p.vrtot " + " from Cadosc p "
-						+ " INNER JOIN cadcli c ON p.cliente = c.idcadcli " + " where p.emissao >= '"
+				"select p.id,p.numdoc,c.codcli,c.desccli,p.emissao,p.formpagto,p.vrtot,u.login " + " from Cadosc p "
+						+ " INNER JOIN cadcli c ON p.cliente = c.idcadcli "
+						+ " INNER JOIN usuario u ON p.usuario = u.id " 
+						+ " where p.emissao >= '"
 						+ datestring.format(c.getTime()) + "' and p.sql_deleted = 'F' order by p.numdoc desc;");
 		List<Object[]> result = query.getResultList();
 		for (Object[] row : result) {
@@ -133,6 +135,7 @@ public class CadoscRepository {
 			ordem.setEmissao((Date) row[4]);
 			ordem.setFormpagto((String) row[5]);
 			ordem.setVrtot((Double) row[6]);
+			ordem.setNomeusuario((String) row[7]);
 			cadoscs.add(ordem);
 
 		}

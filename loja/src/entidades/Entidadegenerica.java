@@ -7,7 +7,7 @@ import javax.persistence.Column;
 public class Entidadegenerica{
 
 	public String contador, codigo, numdoc, desc, codcfop, desccfop, 
-	codclifor, descclifor,status,hora, obs,emitente,sql_deleted;
+	codclifor, descclifor,status,hora, obs,emitente,sql_deleted, nomeusuario;
 	public Long sql_rowid;
 	
 	@Column(columnDefinition = "TINYINT(1)")
@@ -29,6 +29,7 @@ public class Entidadegenerica{
 		obs = "";
 		emitente = "";
 		sql_deleted = "";
+		nomeusuario = "";
 		custo = 0.0;
 		fatura = false;
 		relatorio = false;
@@ -354,8 +355,12 @@ public class Entidadegenerica{
 		this.totlucro = totlucro;
 	}
 
-	
-	
-	
+	public String getNomeusuario() {
+		return nomeusuario;
+	}
+
+	public void setNomeusuario(String nomeusuario) {
+		this.nomeusuario = nomeusuario;
+	}	
 	
 }

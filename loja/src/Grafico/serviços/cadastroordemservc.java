@@ -683,6 +683,7 @@ public class cadastroordemservc extends JDialog {
 			cadastro.setModelo(modelo.getText().trim());
 			cadastro.setImei(imei.getText().trim());
 			cadastro.setObscliente(obscliente.getText().trim());
+			cadastro.setUsuario(u1);
 			
 
 			int l = 0;

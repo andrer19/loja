@@ -260,6 +260,7 @@ public class listadeordemserviços extends JDialog {
 		listaservicos.addColumn("CODIGO");
 		listaservicos.addColumn("CLIENTE");
 		listaservicos.addColumn("EMISSAO");
+		listaservicos.addColumn("VENDEDOR");
 		listaservicos.addColumn("PAGAMENTO");
 		listaservicos.addColumn("VALOR TOTAL");
 
@@ -275,10 +276,12 @@ public class listadeordemserviços extends JDialog {
 		table.getColumnModel().getColumn(3).setCellRenderer(centralizado);
 		table.getColumnModel().getColumn(4).setPreferredWidth(90);
 		table.getColumnModel().getColumn(4).setCellRenderer(centralizado);
-		table.getColumnModel().getColumn(5).setPreferredWidth(200);
+		table.getColumnModel().getColumn(5).setPreferredWidth(150);
 		table.getColumnModel().getColumn(5).setCellRenderer(centralizado);
-		table.getColumnModel().getColumn(6).setPreferredWidth(100);
+		table.getColumnModel().getColumn(6).setPreferredWidth(200);
 		table.getColumnModel().getColumn(6).setCellRenderer(centralizado);
+		table.getColumnModel().getColumn(7).setPreferredWidth(100);
+		table.getColumnModel().getColumn(7).setCellRenderer(centralizado);
 		table.getColumnModel().getColumn(0).setMinWidth(0);
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
 
@@ -468,8 +471,8 @@ public class listadeordemserviços extends JDialog {
 		for (Cadosc com : list) {
 
 			listaservicos.addRow(new Object[] { com.getId(), com.getNumdoc(), com.getCodclifor(),
-					com.getDescclifor(), aces1.retornadatastring(com.getEmissao()), com.getFormpagto(),
-					aces1.valordinheiro(com.getVrtot()) });
+					com.getDescclifor(), aces1.retornadatastring(com.getEmissao()), com.getNomeusuario().trim(),
+					com.getFormpagto(),	aces1.valordinheiro(com.getVrtot()) });
 
 		}
 

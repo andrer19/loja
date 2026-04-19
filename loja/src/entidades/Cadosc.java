@@ -44,7 +44,11 @@ public class Cadosc extends Entidadegenerica{
 	
 	@OneToOne
 	@JoinColumn(name="cliente",nullable = false)
-	private Cadcli cliente;	
+	private Cadcli cliente;
+	
+	@OneToOne
+	@JoinColumn(name="usuario",nullable = false)
+	private Usuario usuario;
 
 	public Cadosc() {
 		numdoc = "";
@@ -143,6 +147,14 @@ public class Cadosc extends Entidadegenerica{
 
 	public void setCliente(Cadcli cliente) {
 		this.cliente = cliente;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }
