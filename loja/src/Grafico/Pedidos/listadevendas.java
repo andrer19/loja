@@ -273,7 +273,7 @@ public class listadevendas extends JDialog {
 		table.getColumnModel().getColumn(3).setCellRenderer(centralizado);
 		table.getColumnModel().getColumn(4).setPreferredWidth(90);
 		table.getColumnModel().getColumn(4).setCellRenderer(centralizado);
-		table.getColumnModel().getColumn(5).setPreferredWidth(100);
+		table.getColumnModel().getColumn(5).setPreferredWidth(150);
 		table.getColumnModel().getColumn(5).setCellRenderer(centralizado);
 		table.getColumnModel().getColumn(6).setPreferredWidth(100);
 		table.getColumnModel().getColumn(6).setCellRenderer(centralizado);
@@ -470,8 +470,8 @@ public class listadevendas extends JDialog {
 		for (Pdsaic com : list) {
 
 			listavendas.addRow(new Object[] { com.getIdpdsaic(), com.getNumdoc(), com.getPedido(),
-					com.getContato(), aces1.retornadatastring(com.getEmissao()), com.getVendedor().trim()
-					, com.getFormpagto(),aces1.valordinheiro(com.getVrtot())});
+					com.getContato(), aces1.retornadatastring(com.getEmissao()), com.getNomeUser().trim(),
+					com.getFormpagto(),aces1.valordinheiro(com.getVrtot())});
 
 		}
 

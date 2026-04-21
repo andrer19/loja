@@ -638,3 +638,73 @@ java.lang.IllegalStateException: Cannot get a connection as the driver manager i
 2026-04-19 20:19:41,622 -0300 [AWT-EventQueue-0] INFO  (JtaPlatformInitiator.java:52) - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
 2026-04-19 20:19:45,922 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:34) - achou senha bean
 2026-04-19 20:19:46,254 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:56) - achou usuario bean
+2026-04-21 14:11:28,253 -0300 [main] INFO  (telainicial.java:28) - ABERTO TELA DE LOGIN COM SUCESSO
+2026-04-21 14:11:28,863 -0300 [AWT-EventQueue-0] INFO  (LogHelper.java:31) - HHH000204: Processing PersistenceUnitInfo [name: play]
+2026-04-21 14:11:28,990 -0300 [AWT-EventQueue-0] INFO  (Version.java:44) - HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-04-21 14:11:29,379 -0300 [AWT-EventQueue-0] INFO  (JavaReflectionManager.java:56) - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-04-21 14:11:31,047 -0300 [AWT-EventQueue-0] WARN  (DriverManagerConnectionProviderImpl.java:75) - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2026-04-21 14:11:31,072 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:119) - HHH10001005: using driver [com.mysql.cj.jdbc.Driver] at URL [jdbc:mysql://diretornote:3306/lojagabriel?useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true]
+2026-04-21 14:11:31,073 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:128) - HHH10001001: Connection properties: {password=****, user=root}
+2026-04-21 14:11:31,074 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:132) - HHH10001003: Autocommit mode: false
+2026-04-21 14:11:31,085 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:322) - HHH000115: Hibernate connection pool size: 20 (min=1)
+2026-04-21 14:11:31,576 -0300 [AWT-EventQueue-0] INFO  (Dialect.java:175) - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-04-21 14:11:31,640 -0300 [AWT-EventQueue-0] INFO  (ManagedBeanRegistryInitiator.java:76) - HHH10005002: No explicit CDI BeanManager reference was passed to Hibernate, but CDI is available on the Hibernate ClassLoader.
+2026-04-21 14:11:34,970 -0300 [AWT-EventQueue-0] INFO  (DdlTransactionIsolatorNonJtaImpl.java:48) - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@44d86073] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2026-04-21 14:11:35,472 -0300 [AWT-EventQueue-0] INFO  (JtaPlatformInitiator.java:52) - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-04-21 14:11:41,357 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:34) - achou senha bean
+2026-04-21 14:11:41,741 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:56) - achou usuario bean
+2026-04-21 14:21:13,694 -0300 [main] INFO  (telainicial.java:28) - ABERTO TELA DE LOGIN COM SUCESSO
+2026-04-21 14:21:14,169 -0300 [AWT-EventQueue-0] INFO  (LogHelper.java:31) - HHH000204: Processing PersistenceUnitInfo [name: play]
+2026-04-21 14:21:14,269 -0300 [AWT-EventQueue-0] INFO  (Version.java:44) - HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-04-21 14:21:14,588 -0300 [AWT-EventQueue-0] INFO  (JavaReflectionManager.java:56) - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-04-21 14:21:16,009 -0300 [AWT-EventQueue-0] WARN  (DriverManagerConnectionProviderImpl.java:75) - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2026-04-21 14:21:16,029 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:119) - HHH10001005: using driver [com.mysql.cj.jdbc.Driver] at URL [jdbc:mysql://diretornote:3306/lojagabriel?useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true]
+2026-04-21 14:21:16,030 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:128) - HHH10001001: Connection properties: {password=****, user=root}
+2026-04-21 14:21:16,031 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:132) - HHH10001003: Autocommit mode: false
+2026-04-21 14:21:16,040 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:322) - HHH000115: Hibernate connection pool size: 20 (min=1)
+2026-04-21 14:21:16,433 -0300 [AWT-EventQueue-0] INFO  (Dialect.java:175) - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-04-21 14:21:16,476 -0300 [AWT-EventQueue-0] INFO  (ManagedBeanRegistryInitiator.java:76) - HHH10005002: No explicit CDI BeanManager reference was passed to Hibernate, but CDI is available on the Hibernate ClassLoader.
+2026-04-21 14:21:19,863 -0300 [AWT-EventQueue-0] INFO  (DdlTransactionIsolatorNonJtaImpl.java:48) - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@10556fe3] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2026-04-21 14:21:20,439 -0300 [AWT-EventQueue-0] INFO  (JtaPlatformInitiator.java:52) - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-04-21 14:21:27,085 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:34) - achou senha bean
+2026-04-21 14:21:27,495 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:56) - achou usuario bean
+2026-04-21 14:22:39,263 -0300 [main] INFO  (telainicial.java:28) - ABERTO TELA DE LOGIN COM SUCESSO
+2026-04-21 14:22:39,729 -0300 [AWT-EventQueue-0] INFO  (LogHelper.java:31) - HHH000204: Processing PersistenceUnitInfo [name: play]
+2026-04-21 14:22:39,828 -0300 [AWT-EventQueue-0] INFO  (Version.java:44) - HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-04-21 14:22:40,195 -0300 [AWT-EventQueue-0] INFO  (JavaReflectionManager.java:56) - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-04-21 14:22:41,907 -0300 [AWT-EventQueue-0] WARN  (DriverManagerConnectionProviderImpl.java:75) - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2026-04-21 14:22:41,927 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:119) - HHH10001005: using driver [com.mysql.cj.jdbc.Driver] at URL [jdbc:mysql://diretornote:3306/lojagabriel?useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true]
+2026-04-21 14:22:41,929 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:128) - HHH10001001: Connection properties: {password=****, user=root}
+2026-04-21 14:22:41,930 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:132) - HHH10001003: Autocommit mode: false
+2026-04-21 14:22:41,938 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:322) - HHH000115: Hibernate connection pool size: 20 (min=1)
+2026-04-21 14:22:42,370 -0300 [AWT-EventQueue-0] INFO  (Dialect.java:175) - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-04-21 14:22:42,414 -0300 [AWT-EventQueue-0] INFO  (ManagedBeanRegistryInitiator.java:76) - HHH10005002: No explicit CDI BeanManager reference was passed to Hibernate, but CDI is available on the Hibernate ClassLoader.
+2026-04-21 14:22:45,430 -0300 [AWT-EventQueue-0] INFO  (DdlTransactionIsolatorNonJtaImpl.java:48) - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@7f5665d8] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2026-04-21 14:22:45,906 -0300 [AWT-EventQueue-0] INFO  (JtaPlatformInitiator.java:52) - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-04-21 14:22:55,495 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:34) - achou senha bean
+2026-04-21 14:22:55,895 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:56) - achou usuario bean
+2026-04-21 14:23:51,381 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:169) - listou usuario bean
+2026-04-21 14:23:52,994 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:91) - achou id usuario bean
+2026-04-21 14:23:54,542 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:169) - listou usuario bean
+2026-04-21 14:23:55,776 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:91) - achou id usuario bean
+2026-04-21 14:23:58,679 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:169) - listou usuario bean
+2026-04-21 14:24:09,994 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:73) - achou nome usuario bean
+2026-04-21 14:24:21,897 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:34) - achou senha bean
+2026-04-21 14:24:21,910 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:34) - achou senha bean
+2026-04-21 14:24:34,299 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:169) - listou usuario bean
+2026-04-21 14:25:16,536 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:91) - achou id usuario bean
+2026-04-21 14:26:06,674 -0300 [main] INFO  (telainicial.java:28) - ABERTO TELA DE LOGIN COM SUCESSO
+2026-04-21 14:26:07,118 -0300 [AWT-EventQueue-0] INFO  (LogHelper.java:31) - HHH000204: Processing PersistenceUnitInfo [name: play]
+2026-04-21 14:26:07,219 -0300 [AWT-EventQueue-0] INFO  (Version.java:44) - HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-04-21 14:26:07,542 -0300 [AWT-EventQueue-0] INFO  (JavaReflectionManager.java:56) - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-04-21 14:26:08,875 -0300 [AWT-EventQueue-0] WARN  (DriverManagerConnectionProviderImpl.java:75) - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2026-04-21 14:26:08,889 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:119) - HHH10001005: using driver [com.mysql.cj.jdbc.Driver] at URL [jdbc:mysql://diretornote:3306/lojagabriel?useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true]
+2026-04-21 14:26:08,890 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:128) - HHH10001001: Connection properties: {password=****, user=root}
+2026-04-21 14:26:08,892 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:132) - HHH10001003: Autocommit mode: false
+2026-04-21 14:26:08,900 -0300 [AWT-EventQueue-0] INFO  (DriverManagerConnectionProviderImpl.java:322) - HHH000115: Hibernate connection pool size: 20 (min=1)
+2026-04-21 14:26:09,273 -0300 [AWT-EventQueue-0] INFO  (Dialect.java:175) - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2026-04-21 14:26:09,317 -0300 [AWT-EventQueue-0] INFO  (ManagedBeanRegistryInitiator.java:76) - HHH10005002: No explicit CDI BeanManager reference was passed to Hibernate, but CDI is available on the Hibernate ClassLoader.
+2026-04-21 14:26:12,426 -0300 [AWT-EventQueue-0] INFO  (DdlTransactionIsolatorNonJtaImpl.java:48) - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@118d4fe4] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2026-04-21 14:26:12,864 -0300 [AWT-EventQueue-0] INFO  (JtaPlatformInitiator.java:52) - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-04-21 14:26:19,724 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:34) - achou senha bean
+2026-04-21 14:26:20,118 -0300 [AWT-EventQueue-0] INFO  (Usuariobean.java:56) - achou usuario bean

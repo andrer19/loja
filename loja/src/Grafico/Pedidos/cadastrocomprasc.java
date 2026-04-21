@@ -718,6 +718,7 @@ public class cadastrocomprasc extends JDialog {
 			cadastro.setObs(obs.getText().trim());
 			cadastro.setContato(contato.getText().trim());
 			cadastro.setVendedor(vendedor.getText().trim());
+			cadastro.setUsuario(u);
 			
 
 			int l = 0;

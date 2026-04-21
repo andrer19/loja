@@ -1,0 +1,75 @@
+# =========================
+
+# COMPILAÇÃO JAVA
+
+# =========================
+
+*.class
+*.jar
+*.war
+*.ear
+
+# =========================
+
+# BUILD
+
+# =========================
+
+/bin/
+/build/
+/out/
+/target/
+
+# =========================
+
+# LOGS
+
+# =========================
+
+*.log
+
+# =========================
+
+# IDEs
+
+# =========================
+
+## IntelliJ
+
+.idea/
+*.iml
+
+## Eclipse
+
+.project
+.classpath
+.settings/
+
+## NetBeans
+
+/nbproject/private/
+/build/
+/dist/
+/nbbuild/
+/nbdist/
+.nb-gradle/
+
+# =========================
+
+# SISTEMA OPERACIONAL
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# TEMPORÁRIOS
+
+# =========================
+
+*.tmp
+*.swp
+*~
+banco.txt

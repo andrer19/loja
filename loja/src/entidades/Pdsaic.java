@@ -1,6 +1,5 @@
 package entidades;
 
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,54 +11,62 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Index;
 
 @Entity
 public class Pdsaic {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Index(name = "idx_id")
 	private Long idpdsaic;
-	
-	@Column(nullable=false,columnDefinition = "varchar(10)  default ''")
+
+	@Column(nullable = false, columnDefinition = "varchar(10)  default ''")
 	@Index(name = "idx_documento")
 	private String numdoc;
-	
-	@Column(nullable=false,columnDefinition = "varchar(255)  default ''")
-	private String vendedor,contato, formpagto,serie,codemp,pedido;
-	
+
+	@Column(nullable = false, columnDefinition = "varchar(255)  default ''")
+	private String vendedor, contato, formpagto, serie, codemp, pedido;
+
 	@Temporal(TemporalType.DATE)
-	private Date emissao,vencto;
-	
-	@Column(columnDefinition="Double default 0")
-	private Double vrmerc,vricm,vripi,vrtot,vrdesc,vrfrete,codpag,txent;
-	
+	private Date emissao, vencto;
+
+	@Column(columnDefinition = "Double default 0")
+	private Double vrmerc, vricm, vripi, vrtot, vrdesc, vrfrete, codpag, txent;
+
 	@Column(nullable = false, columnDefinition = "TINYINT(1)")
-	private Boolean liberado,status,liquidado;
-	
-	@Column(nullable=false,columnDefinition = "varchar(400)  default ''")
+	private Boolean liberado, status, liquidado;
+
+	@Column(nullable = false, columnDefinition = "varchar(400)  default ''")
 	private String OBS;
 
-	@Column(nullable=false,columnDefinition ="ENUM('F','T')")
+	@Transient
+	private String nomeUser;
+
+	@Column(nullable = false, columnDefinition = "ENUM('F','T')")
 	private String sql_deleted;
 
 	@OneToOne
 	@NotNull
-	@JoinColumn(name="cliente")
+	@JoinColumn(name = "cliente")
 	private Cadcli cliente;
+
+	@OneToOne
+	@JoinColumn(name = "usuario", nullable = false)
+	private Usuario usuario;
 
 	public Pdsaic() {
 		codemp = "01";
-		serie  = "";
-		numdoc  = "";
+		serie = "";
+		numdoc = "";
 		pedido = "";
 		vendedor = "";
-		contato  = "";
+		contato = "";
 		formpagto = "";
-		OBS   = "";
+		OBS = "";
 		vrmerc = 0.0;
 		vricm = 0.0;
 		vripi = 0.0;
@@ -67,12 +74,12 @@ public class Pdsaic {
 		vrdesc = 0.0;
 		vrfrete = 0.0;
 		codpag = 0.0;
-		txent  = 0.0;
+		txent = 0.0;
 		liberado = false;
 		status = false;
 		liquidado = false;
 		sql_deleted = "F";
-		
+
 	}
 
 	public Long getIdpdsaic() {
@@ -265,6 +272,22 @@ public class Pdsaic {
 
 	public void setFormpagto(String formpagto) {
 		this.formpagto = formpagto;
-	}	
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getNomeUser() {
+		return nomeUser;
+	}
+
+	public void setNomeUser(String nomeUser) {
+		this.nomeUser = nomeUser;
+	}
 
 }

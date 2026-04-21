@@ -793,6 +793,7 @@ public class cadastrovendasc extends JDialog {
 			cadastro.setFormpagto(formapagamento.getSelectedItem().toString().trim());
 			cadastro.setVrdesc(aces1.retornadouble(
 					aces1.removeponto(aces1.valordinheiro(aces1.retornadouble(aces1.removeponto(vrmercadoria.getText()))))));
+			cadastro.setUsuario(u1);
 
 			int l = 0;
 

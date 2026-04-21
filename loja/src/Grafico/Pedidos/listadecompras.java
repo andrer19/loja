@@ -242,6 +242,7 @@ public class listadecompras extends JDialog {
 		listacompras.addColumn("FORNECEDOR");
 		listacompras.addColumn("EMISSAO");
 		listacompras.addColumn("ENTREGA");
+		listacompras.addColumn("COMPRADOR");
 		listacompras.addColumn("VALORPEDIDO");
 
 		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
@@ -258,8 +259,10 @@ public class listadecompras extends JDialog {
 		table.getColumnModel().getColumn(4).setCellRenderer(centralizado);
 		table.getColumnModel().getColumn(5).setPreferredWidth(100);
 		table.getColumnModel().getColumn(5).setCellRenderer(centralizado);
-		table.getColumnModel().getColumn(6).setPreferredWidth(100);
+		table.getColumnModel().getColumn(6).setPreferredWidth(150);
 		table.getColumnModel().getColumn(6).setCellRenderer(centralizado);
+		table.getColumnModel().getColumn(7).setPreferredWidth(100);
+		table.getColumnModel().getColumn(7).setCellRenderer(centralizado);
 		table.getColumnModel().getColumn(0).setMinWidth(0);
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
 
@@ -430,7 +433,7 @@ public class listadecompras extends JDialog {
 		for (Pdentc com : list) {
 			listacompras.addRow(new Object[] { com.getIdpdentc(), com.getNumdoc(), com.getForn().getCODFOR(),
 					com.getForn().getDESCFOR(), aces1.retornadatastring(com.getEmissao()), aces1.retornadatastring(com.getVencto()),
-					aces1.valordinheiro(com.getVrtot()) });
+					com.getUsuario().getNome().trim(),aces1.valordinheiro(com.getVrtot()) });
 
 		}
 

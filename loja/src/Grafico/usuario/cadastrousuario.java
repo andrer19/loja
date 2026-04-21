@@ -392,6 +392,7 @@ public class cadastrousuario extends JDialog {
 			}
 			cadastro.setNome(nome.getText());
 			cadastro.setAtivo(aces1.retornaBoolean(chdesativado));
+			cadastro.setEmail(email.getText());
 
 			if (cadastro.getLogin().isEmpty() || cadastro.getSenha().isEmpty() || cadastro.getNome().isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Dados obrigatórios em branco");

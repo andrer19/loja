@@ -211,9 +211,10 @@ public class PdsaicRepository {
 		EntityManagerUtil.conexao();
 		EntityManagerUtil.begin();
 		Query query = EntityManagerUtil.manager.createNativeQuery(
-		"select p.idpdsaic,p.numdoc,c.codcli,c.desccli,p.emissao,p.formpagto,p.vrtot,p.vendedor "
+		"select p.idpdsaic,p.numdoc,c.codcli,c.desccli,p.emissao,p.formpagto,p.vrtot,p.vendedor,u.nome "
 		+ " from Pdsaic p "
 		+ " INNER JOIN cadcli c ON p.cliente = c.idcadcli "
+		+ " INNER JOIN usuario u ON p.usuario = u.id "
 		+ " where p.emissao >= CURDATE() - INTERVAL 120 DAY and p.sql_deleted = 'F' order by p.numdoc desc;");
 		List<Object[]> result = query.getResultList();
 		for (Object[] row : result) {
@@ -226,6 +227,7 @@ public class PdsaicRepository {
 			pedidosaida.setFormpagto((String) row[5]);
 			pedidosaida.setVrtot((Double) row[6]);
 			pedidosaida.setVendedor((String) row[7]);
+			pedidosaida.setNomeUser((String) row[8]);
 			pdsaics.add(pedidosaida);
 
 		}

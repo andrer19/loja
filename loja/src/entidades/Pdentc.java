@@ -64,6 +64,10 @@ public class Pdentc {
 	@JoinColumn(name="fornecedor", nullable = false)
 	private Cadfor forn;
 	
+	@OneToOne
+	@JoinColumn(name="usuario",nullable = false)
+	private Usuario usuario;
+	
 	public Pdentc() {
 		conf = "";
 		codemp = "01";
@@ -341,8 +345,13 @@ public class Pdentc {
 	public void setContato(String contato) {
 		this.contato = contato;
 	}
-	
-	
-		
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
 }
